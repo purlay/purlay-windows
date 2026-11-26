@@ -375,6 +375,7 @@ impl AppModel {
         let body = purlay_core::markdown::excerpt_of(&m.content);
         let link = format!("purlay://open?channel={}&message={}", m.channel_id, m.id);
         let prefs = self.prefs.get();
+        let priority = crate::message::visible_priority(m);
         let avatar_key = m.sender.as_ref().map(|u| u.username.clone()).unwrap_or_else(|| sender.clone());
         let place = if dm { t("banner.dm").to_string() } else { format!("#{}", ch.name.clone().unwrap_or_default()) };
         drop(store);
@@ -399,6 +400,7 @@ impl AppModel {
                 place,
                 body,
                 mention: mentioned && !dm,
+                priority,
                 logo: false,
                 link,
                 channel: m.channel_id.clone(),
@@ -412,6 +414,10 @@ impl AppModel {
         }
         // Purlay's own tone plays beside a silent toast; "Windows default" lets the toast sound.
         let system = prefs.notification_sound && prefs.notification_tone == purlay_core::prefs::NotificationTone::System;
+        let title = match priority {
+            Some(priority) => format!("{} · {title}", priority.label()),
+            None => title,
+        };
         purlay_platform::toast(&title, &body, Some(&link), !system);
         if prefs.notification_sound && !system {
             play_tone(prefs.notification_tone);

@@ -185,6 +185,8 @@ pub const STRINGS: &[(&str, &str, &str)] = &[
     // Messages
     ("msg.edited", "(edited)", "(düzenlendi)"),
     ("msg.deleted", "This message was deleted.", "Bu mesaj silindi."),
+    ("msg.priority.important", "Important", "Önemli"),
+    ("msg.priority.urgent", "Urgent", "Acil"),
     ("msg.sending", "Sending", "Gönderiliyor"),
     ("msg.failed", "Not sent", "Gönderilmedi"),
     ("msg.retry", "Retry", "Yeniden dene"),

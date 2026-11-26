@@ -3,6 +3,7 @@
 
 use crate::i18n::{t, tf};
 use crate::markdown_view::render_markdown;
+use crate::message::{priority_badge, visible_priority};
 use crate::nav::{Nav, Route};
 use crate::sidebar::channel_title;
 use crate::state::AppModel;
@@ -251,7 +252,11 @@ impl Render for InboxPage {
                     _ => tf("inbox.channelMessage", &[&ch.clone().unwrap_or_default()]),
                 };
                 let unread = n.read_at.is_none();
-                let label_el = h_flex().gap_2().child(caption(what, cx)).when(unread, |d| d.child(div().size(px(6.)).rounded_full().bg(k.accent)));
+                let label_el = h_flex()
+                    .gap_2()
+                    .child(caption(what, cx))
+                    .when_some(visible_priority(&n.message), |d, priority| d.child(priority_badge(priority, cx)))
+                    .when(unread, |d| d.child(div().size(px(6.)).rounded_full().bg(k.accent)));
                 let s2 = s.clone();
                 let nid = n.id.clone();
                 drop_borrow_guard();

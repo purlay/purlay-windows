@@ -6,6 +6,7 @@
 //! seconds (not while the pointer rests on it); a click opens the message.
 
 use crate::i18n::t;
+use crate::message::{priority_badge, Priority};
 use crate::theme::c;
 use crate::ui::*;
 use gpui_kit::component::input::{Input, InputEvent, InputState};
@@ -39,6 +40,7 @@ pub struct Banner {
     pub body: String,
     /// Mentions the person.
     pub mention: bool,
+    pub(crate) priority: Option<Priority>,
     /// Purlay's logo instead of a person's avatar (the sample).
     pub logo: bool,
     /// `purlay://open?…`, opened on a click.
@@ -60,6 +62,7 @@ impl Banner {
             place: t("settings.notify.style").into(),
             body: t("settings.notify.sample").into(),
             mention: false,
+            priority: None,
             logo: true,
             link: String::new(),
             channel: Uuid::default(),
@@ -306,6 +309,7 @@ impl Render for BannerView {
             .child(img("purlay/logo.png").size(px(14.)).rounded(px(3.)))
             .child(text_style(div(), purlay_tokens::typography::CAPTION, cx).text_color(k.ink_muted).font_weight(FontWeight::MEDIUM).child("Purlay"))
             .child(caption("·", cx))
+            .when_some(b.priority, |d, priority| d.child(priority_badge(priority, cx)))
             .child(text_style(div(), purlay_tokens::typography::CAPTION, cx).text_color(k.ink_muted).whitespace_nowrap().overflow_hidden().text_ellipsis().child(b.place.clone()))
             .when(b.mention, |d| {
                 d.child(
@@ -399,6 +403,7 @@ impl Render for BannerView {
                                 .gap_1()
                                 .min_w_0()
                                 .child(text_style(div(), purlay_tokens::typography::LABEL, cx).font_weight(FontWeight::SEMIBOLD).text_color(k.ink).whitespace_nowrap().child(b.title.clone()))
+                                .when_some(b.priority, |d, priority| d.child(priority_badge(priority, cx)))
                                 .child(text_style(div(), purlay_tokens::typography::CAPTION, cx).text_color(k.ink_muted).whitespace_nowrap().overflow_hidden().text_ellipsis().child(format!("· {}", b.place)))
                                 .when(b.mention, |d| d.child(ico("at-sign", 12., k.accent_text))),
                         )
