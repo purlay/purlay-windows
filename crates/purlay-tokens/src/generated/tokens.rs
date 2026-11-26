@@ -66,9 +66,17 @@ pub struct Palette {
     pub avatar_5: Rgba,
     /// Avatar zemini.
     pub avatar_6: Rgba,
-    /// Klavye odak halkası. Hem konuşma zemininde hem koyu gezinme tonunda görünür olmalı; açık temada accent mavisi, koyu temalarda nötr açık gri (mavi parlamaz).
+    /// Klavye odak halkası. Hem konuşma zemininde hem gezinme tonunda görünür olmalı. Her iki temada accent ailesinin ılımlı bir mavisi: açıkta accent'tan açık, koyuda zeminin üstünde parlamayan; ne gürültülü ne soluk.
     pub focus_ring: Rgba,
-    /// Odaktaki composer'ın kenarı: yazdığın yer. Açık temada odak halkasıyla aynı; koyu temalarda yazarken parlamayan, sakin bir gri-mavi, ama bir kontrolün sınırı kadar okunur (D-207).
+    /// Kenar: ikincil düğme ve composer'ın dinlenme çizgisi. border-subtle'dan belirgin (beyaz kartın üstünde kaybolmaz), border-strong kadar ağır değil: kenarı tek ipucu olan kontrol alanları (input, checkbox) border-strong kullanır. Odaklanınca composer-edge onun yerine geçer.
+    pub border_default: Rgba,
+    /// Composer'ın dinlenme kenarı: tek ince çizgi, kartı sayfadan ayıracak kadar. Üstüne gelince composer-hover, odaklanınca composer-focus.
+    pub composer_rest: Rgba,
+    /// Composer'ın üstüne gelince kenarı: dinlenme çizgisinden çok hafif belirgin, siyaha/beyaza kaçmaz.
+    pub composer_hover: Rgba,
+    /// Odaktaki composer'ın kenarı: dinlenme çizgisi (border-default) olan griden bir ton koyu nötr gri. Mavi değil: bir saat boyunca yazılan kutunun etrafı sayfanın en parlak şeyi olmasın. Yazdığın yer imleçle de belli; bu, kenarın ikinci ipucu.
+    pub composer_focus: Rgba,
+    /// Seçili seçenek kartının kenarı (Tercihler, kurulum sihirbazı): vurgu mavisi, accent-subtle dolgunun üstünde. Odaktaki composer artık bunu değil composer-focus kullanır.
     pub composer_edge: Rgba,
     /// Hata durumu dolgusu: ikon, durum noktası, dolu rozet ve banner zemini. Light'ta flat kırmızı; üzerine metin on-status ile. Metin olarak yazılacaksa danger-text.
     pub danger: Rgba,
@@ -119,36 +127,40 @@ pub struct Palette {
 }
 
 pub const DARK: Palette = Palette {
-    surface_000: Rgba::new(0.05490196, 0.05490196, 0.0627451, 1.0),
-    surface_050: Rgba::new(0.13333334, 0.13333334, 0.14509805, 1.0),
-    surface_100: Rgba::new(0.101960786, 0.101960786, 0.11372549, 1.0),
-    surface_200: Rgba::new(0.16078432, 0.16078432, 0.1764706, 1.0),
-    code_bg: Rgba::new(0.07450981, 0.07450981, 0.08235294, 1.0),
-    border_subtle: Rgba::new(0.18039216, 0.18039216, 0.2, 1.0),
+    surface_000: Rgba::new(0.03137255, 0.03137255, 0.039215688, 1.0),
+    surface_050: Rgba::new(0.08627451, 0.09019608, 0.11372549, 1.0),
+    surface_100: Rgba::new(0.0627451, 0.07058824, 0.08627451, 1.0),
+    surface_200: Rgba::new(0.105882354, 0.11372549, 0.14117648, 1.0),
+    code_bg: Rgba::new(0.043137256, 0.047058824, 0.05882353, 1.0),
+    border_subtle: Rgba::new(0.12156863, 0.12941177, 0.16078432, 1.0),
     border_strong: Rgba::new(0.4745098, 0.4745098, 0.5058824, 1.0),
     ink: Rgba::new(0.9607843, 0.9607843, 0.96862745, 1.0),
     ink_muted: Rgba::new(0.6627451, 0.6627451, 0.69411767, 1.0),
     ink_subtle: Rgba::new(0.5882353, 0.5882353, 0.627451, 1.0),
-    nav_rail: Rgba::new(0.07450981, 0.07450981, 0.08235294, 1.0),
-    nav_surface: Rgba::new(0.09019608, 0.09019608, 0.09803922, 1.0),
-    nav_hover: Rgba::new(0.14901961, 0.14901961, 0.16470589, 1.0),
-    nav_selected: Rgba::new(0.17254902, 0.17254902, 0.19607843, 1.0),
-    nav_border: Rgba::new(0.16470589, 0.16470589, 0.18039216, 1.0),
+    nav_rail: Rgba::new(0.039215688, 0.043137256, 0.050980393, 1.0),
+    nav_surface: Rgba::new(0.050980393, 0.05490196, 0.06666667, 1.0),
+    nav_hover: Rgba::new(0.09019608, 0.09803922, 0.12156863, 1.0),
+    nav_selected: Rgba::new(0.11764706, 0.1254902, 0.18431373, 1.0),
+    nav_border: Rgba::new(0.09803922, 0.105882354, 0.12941177, 1.0),
     nav_ink: Rgba::new(0.9607843, 0.9607843, 0.96862745, 1.0),
     nav_ink_muted: Rgba::new(0.64705884, 0.64705884, 0.6784314, 1.0),
     accent: Rgba::new(0.14509805, 0.3882353, 0.92156863, 1.0),
     accent_hover: Rgba::new(0.11372549, 0.30588236, 0.84705883, 1.0),
     accent_text: Rgba::new(0.5529412, 0.7058824, 1.0, 1.0),
     on_accent: Rgba::new(1.0, 1.0, 1.0, 1.0),
-    accent_subtle: Rgba::new(0.16862746, 0.16862746, 0.19215687, 1.0),
+    accent_subtle: Rgba::new(0.09411765, 0.105882354, 0.14509805, 1.0),
     avatar_1: Rgba::new(0.14901961, 0.14901961, 0.2901961, 1.0),
     avatar_2: Rgba::new(0.08235294, 0.1882353, 0.12156863, 1.0),
     avatar_3: Rgba::new(0.22745098, 0.13725491, 0.08627451, 1.0),
     avatar_4: Rgba::new(0.09019608, 0.16862746, 0.26666668, 1.0),
     avatar_5: Rgba::new(0.22745098, 0.10980392, 0.18431373, 1.0),
     avatar_6: Rgba::new(0.1882353, 0.16862746, 0.09019608, 1.0),
-    focus_ring: Rgba::new(0.76862746, 0.76862746, 0.8, 1.0),
-    composer_edge: Rgba::new(0.39607844, 0.46666667, 0.627451, 1.0),
+    focus_ring: Rgba::new(0.43529412, 0.56078434, 0.9098039, 1.0),
+    border_default: Rgba::new(0.16470589, 0.1764706, 0.21568628, 1.0),
+    composer_rest: Rgba::new(0.13333334, 0.14509805, 0.1764706, 1.0),
+    composer_hover: Rgba::new(0.1882353, 0.20392157, 0.24705882, 1.0),
+    composer_focus: Rgba::new(0.2627451, 0.28235295, 0.3372549, 1.0),
+    composer_edge: Rgba::new(0.30980393, 0.41568628, 0.7607843, 1.0),
     danger: Rgba::new(0.972549, 0.44313726, 0.44313726, 1.0),
     warning: Rgba::new(0.9607843, 0.61960787, 0.043137256, 1.0),
     success: Rgba::new(0.13333334, 0.77254903, 0.36862746, 1.0),
@@ -203,8 +215,12 @@ pub const LIGHT: Palette = Palette {
     avatar_4: Rgba::new(0.8784314, 0.9254902, 0.972549, 1.0),
     avatar_5: Rgba::new(0.9529412, 0.8901961, 0.93333334, 1.0),
     avatar_6: Rgba::new(0.93333334, 0.91764706, 0.85882354, 1.0),
-    focus_ring: Rgba::new(0.14509805, 0.3882353, 0.92156863, 1.0),
-    composer_edge: Rgba::new(0.14509805, 0.3882353, 0.92156863, 1.0),
+    focus_ring: Rgba::new(0.32941177, 0.4745098, 0.8666667, 1.0),
+    border_default: Rgba::new(0.8627451, 0.8627451, 0.8901961, 1.0),
+    composer_rest: Rgba::new(0.89411765, 0.89411765, 0.91764706, 1.0),
+    composer_hover: Rgba::new(0.827451, 0.827451, 0.85882354, 1.0),
+    composer_focus: Rgba::new(0.72156864, 0.72156864, 0.7607843, 1.0),
+    composer_edge: Rgba::new(0.3529412, 0.5019608, 0.8745098, 1.0),
     danger: Rgba::new(0.9372549, 0.26666668, 0.26666668, 1.0),
     warning: Rgba::new(0.8509804, 0.46666667, 0.023529412, 1.0),
     success: Rgba::new(0.08627451, 0.6392157, 0.2901961, 1.0),
@@ -260,6 +276,10 @@ pub const MIDNIGHT: Palette = Palette {
     avatar_5: Rgba::new(0.31764707, 0.16470589, 0.29803923, 1.0),
     avatar_6: Rgba::new(0.23921569, 0.22745098, 0.14117648, 1.0),
     focus_ring: Rgba::new(0.76862746, 0.76862746, 0.84705883, 1.0),
+    border_default: Rgba::new(0.22745098, 0.22745098, 0.3764706, 1.0),
+    composer_rest: Rgba::new(0.20392157, 0.20392157, 0.3529412, 1.0),
+    composer_hover: Rgba::new(0.25882354, 0.25882354, 0.43137255, 1.0),
+    composer_focus: Rgba::new(0.34509805, 0.34509805, 0.5411765, 1.0),
     composer_edge: Rgba::new(0.4509804, 0.47058824, 0.7411765, 1.0),
     danger: Rgba::new(0.972549, 0.44313726, 0.44313726, 1.0),
     warning: Rgba::new(0.9607843, 0.61960787, 0.043137256, 1.0),
@@ -383,6 +403,14 @@ pub mod size {
     pub const ICON_MD: f32 = 16.0;
     /// İkon, title metniyle (18px) aynı satırda.
     pub const ICON_LG: f32 = 20.0;
+    /// Kenar çubuğunun üst bandındaki iki kontrolün (çalışma alanı kapısı ve seçenekler düğmesi) yüksekliği: 48px'lik bandın içinde 4px'lik boşlukla, hover ve seçili dolgusu bandın kenarına değmez.
+    pub const SWITCHER: f32 = 40.0;
+    /// Havai fişek kıvılcımının yarıçapı (tam piksel; ui/fireworks.tsx kıvılcım katmanını küçültür) (xs); 100 birimlik alanda çizilir, ekran boyutuyla ölçeklenir. Yalnızca ui/fireworks.tsx.
+    pub const SPARK_XS: f32 = 1.0;
+    /// Havai fişek kıvılcımının yarıçapı (tam piksel; ui/fireworks.tsx kıvılcım katmanını küçültür) (sm); 100 birimlik alanda çizilir, ekran boyutuyla ölçeklenir. Yalnızca ui/fireworks.tsx.
+    pub const SPARK_SM: f32 = 2.0;
+    /// Havai fişek kıvılcımının yarıçapı (tam piksel; ui/fireworks.tsx kıvılcım katmanını küçültür) (lg); 100 birimlik alanda çizilir, ekran boyutuyla ölçeklenir. Yalnızca ui/fireworks.tsx.
+    pub const SPARK_LG: f32 = 3.0;
     /// Mesaj satırı avatarı. Aynı yazarın ardışık mesajlarında yerini korur, çizilmez.
     pub const AVATAR: f32 = 28.0;
     /// Kenar çubuğundaki kişi satırı ve thread yanıtı avatarı.
@@ -393,8 +421,6 @@ pub mod size {
     pub const RAIL_ITEM: f32 = 40.0;
     /// Sidebar satırı ve jump alanının yüksekliği.
     pub const ROW: f32 = 32.0;
-    /// Masaüstü kabuğunun pencere düğmeleri için boş sürükleme şeridi (D-14).
-    pub const DRAG: f32 = 28.0;
 }
 
 pub mod stroke {
@@ -571,6 +597,10 @@ pub const PAIRS: &[(&str, &str, f32)] = &[
     ("composer-edge", "surface-050", 3.0),
     ("composer-edge", "surface-100", 3.0),
     ("composer-edge", "surface-200", 3.0),
+    ("composer-focus", "surface-000", 1.6),
+    ("composer-focus", "surface-050", 1.6),
+    ("composer-focus", "surface-100", 1.6),
+    ("composer-focus", "surface-200", 1.6),
 ];
 
 /// Looks a color token up by its bundle name (`ink-muted`).
@@ -605,6 +635,10 @@ pub fn color_by_name(p: &Palette, name: &str) -> Option<Rgba> {
         "avatar-5" => p.avatar_5,
         "avatar-6" => p.avatar_6,
         "focus-ring" => p.focus_ring,
+        "border-default" => p.border_default,
+        "composer-rest" => p.composer_rest,
+        "composer-hover" => p.composer_hover,
+        "composer-focus" => p.composer_focus,
         "composer-edge" => p.composer_edge,
         "danger" => p.danger,
         "warning" => p.warning,

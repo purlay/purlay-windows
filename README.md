@@ -124,7 +124,7 @@ app takes them back the next time it starts. Debug builds accept plain `http` fo
 ## How it is built
 
 ```
-Contract/contract.lock      the server contract this build speaks (server 0.6.1, contract 1)
+Contract/contract.lock      the server contract this build speaks (server 0.9.0, contract 1)
 xtask/                      fetch / verify the bundle; generate code from it
 crates/purlay-contract      GENERATED serde types (379 schemas), the route table, constants
 crates/purlay-tokens        GENERATED design tokens: palette per theme, spacing, type, sizes

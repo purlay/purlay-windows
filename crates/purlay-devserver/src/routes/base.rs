@@ -14,6 +14,7 @@ use purlay_contract::CONTRACT_VERSION;
 pub fn auth_methods_value() -> AuthMethods {
     AuthMethods {
         github: false,
+        company: None,
         email: true,
         oidc: None,
         google: false,

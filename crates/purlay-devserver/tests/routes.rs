@@ -106,6 +106,11 @@ async fn read_routes_decode() {
     let find: FindResponse = t.get(&format!("/api/workspaces/{ws}/find?q=reaction")).await;
     assert_eq!(find.groups.len(), 2);
     assert!(find.groups.iter().all(|g| !g.hits.is_empty()));
+    assert!(!find.partial);
+    let limited: FindResponse = t.get(&format!("/api/workspaces/{ws}/find?q=reaction&limit=1")).await;
+    assert_eq!(limited.groups[0].hits.len(), 1);
+    assert!(limited.groups[0].more);
+    assert!(!limited.groups[1].more);
     let groups: ChannelGroupPage = t.get(&format!("/api/workspaces/{ws}/channel-groups")).await;
     assert!(groups.data.is_empty());
     let _: SavedSearchPage = t.get(&format!("/api/workspaces/{ws}/saved-searches")).await;

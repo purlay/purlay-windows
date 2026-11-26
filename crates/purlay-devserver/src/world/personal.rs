@@ -671,10 +671,11 @@ impl World {
             .collect();
         Ok(FindResponse {
             groups: vec![
-                FindGroup { source: "chat".into(), hits: chat_hits },
-                FindGroup { source: "issues".into(), hits: issue_hits },
+                FindGroup { source: "chat".into(), hits: chat_hits, more: chat.next_cursor.is_some() },
+                FindGroup { source: "issues".into(), hits: issue_hits, more: issues.len() > limit },
             ],
             skipped: Vec::new(),
+            partial: false,
         })
     }
 

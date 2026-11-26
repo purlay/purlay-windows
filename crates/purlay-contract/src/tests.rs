@@ -44,6 +44,60 @@ fn server_frames_are_tagged_by_event() {
 }
 
 #[test]
+fn message_created_reads_optional_delivery_priority() {
+    let mut wire = json!({
+        "event": "MESSAGE_CREATED",
+        "data": {
+            "id": "0190abcd-0000-7000-8000-000000000001",
+            "channelId": "0190abcd-0000-7000-8000-000000000002",
+            "content": "Ready",
+            "createdAt": "2026-11-10T09:30:05.123Z",
+            "reactions": [],
+            "mentions": [],
+            "attachments": []
+        },
+        "ts": 1.0
+    });
+    let ServerFrame::MessageCreated(previous) =
+        serde_json::from_value(wire.clone()).expect("decode message without a priority")
+    else {
+        panic!("the server sent MESSAGE_CREATED");
+    };
+    assert_eq!(previous.data.priority, None);
+
+    for (name, priority) in [
+        ("important", MessagePriority2::Important),
+        ("urgent", MessagePriority2::Urgent),
+    ] {
+        wire["data"]["priority"] = json!(name);
+        let ServerFrame::MessageCreated(current) =
+            serde_json::from_value(wire.clone()).expect("decode message with a priority")
+        else {
+            panic!("the server sent MESSAGE_CREATED");
+        };
+        assert_eq!(current.data.priority, Some(priority), "wire priority {name}");
+        assert_eq!(
+            serde_json::to_value(current).expect("encode message event")["data"]["priority"],
+            name
+        );
+    }
+}
+
+#[test]
+fn older_search_results_can_omit_the_pagination_flags() {
+    let mut wire = json!({ "groups": [{ "source": "chat", "hits": [] }], "skipped": [] });
+    let old: FindResponse = serde_json::from_value(wire.clone()).expect("decode older search");
+    assert!(!old.partial);
+    assert!(!old.groups.first().expect("chat group").more);
+
+    wire["partial"] = json!(true);
+    wire["groups"][0]["more"] = json!(true);
+    let current: FindResponse = serde_json::from_value(wire).expect("decode paged search");
+    assert!(current.partial);
+    assert!(current.groups.first().expect("chat group").more);
+}
+
+#[test]
 fn client_frames_carry_their_op() {
     let f = ClientFrame::Ping(PingFrame { id: Uuid::new("0190abcd-0000-7000-8000-000000000003"), payload: EmptyObject {} });
     let v = serde_json::to_value(&f).unwrap();
