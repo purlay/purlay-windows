@@ -439,6 +439,8 @@ impl World {
         Message {
             id: m.id.clone(),
             channel_id: m.channel_id.clone(),
+            history_hidden: None,
+            reply_allowed: None,
             sender: m.sender.as_ref().map(|s| self.user_view(s)),
             github_event: None,
             incoming_webhook: None,
@@ -456,6 +458,7 @@ impl World {
             },
             mentions: if gone { Vec::new() } else { m.mentions.clone() },
             attachments: if gone { Vec::new() } else { self.attachment_views(&m.attachments) },
+            priority: None,
         }
     }
 
@@ -502,6 +505,7 @@ impl World {
         };
         Channel {
             id: chan.id.clone(),
+            channel_capabilities: None,
             workspace_id: chan.workspace_id.clone(),
             name: chan.name.clone(),
             topic: chan.topic.clone(),
@@ -509,6 +513,7 @@ impl World {
             last_message_at: chan.last_message_ms.map(ts),
             state: self.channel_state(chan, viewer),
             notification_level: member.map(|m| m.level.clone()),
+            notification_level_until: None,
             starred: member.is_some_and(|m| m.starred),
             sidebar_group_id: member
                 .filter(|m| !m.starred && chan.kind != ChannelType::DirectMessage)
@@ -532,7 +537,12 @@ impl World {
     }
 
     pub fn profile_view(p: &Person) -> Profile {
-        Profile { title: p.title.clone(), time_zone: p.time_zone.clone(), status: p.status.clone() }
+        Profile {
+            title: p.title.clone(),
+            time_zone: p.time_zone.clone(),
+            status: p.status.clone(),
+            ..Profile::default()
+        }
     }
 
     pub fn membership_view(&self, user: &str) -> Option<Membership> {
@@ -540,7 +550,10 @@ impl World {
         Some(Membership {
             workspace: self.workspace_view(),
             role: p.role.clone(),
+            workspace_capabilities: None,
+            channel_capabilities: None,
             joined_at: ts(p.joined_ms),
+            access: None,
             deep_work_until: self.deep_work.get(user).copied().filter(|u| *u > now_ms()).map(ts),
             modules: Some(vec![ModuleId::Chat, ModuleId::Issues]),
         })
@@ -700,7 +713,7 @@ pub fn frame_text(frame: &ServerFrame) -> String {
 
 /// A frame answering a client frame.
 pub fn error_frame(err: &AppError, ref_id: Option<Uuid>) -> ServerFrame {
-    ServerFrame::Error(ErrorFrame { data: err.body(), ts: now_ts(), ref_id })
+    ServerFrame::Error(ErrorFrame { data: err.body(), workspace_id: None, ts: now_ts(), ref_id })
 }
 
 /// Keyset helpers: `limit` from a query, 1–100, default 50.

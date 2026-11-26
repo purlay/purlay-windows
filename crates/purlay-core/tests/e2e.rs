@@ -118,7 +118,13 @@ async fn someone_elses_message_arrives_live() {
     grace.set_session(Some(h.issue_session("grace")));
     let now = std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap().as_millis() as u64;
     let mid = purlay_core::ids::message_id(now, purlay_core::ids::random_u128());
-    let body = SendMessageRequest { id: mid.clone(), content: "@ada ping from Grace".into(), attachment_ids: None, parent_id: None };
+    let body = SendMessageRequest {
+        id: mid.clone(),
+        content: "@ada ping from Grace".into(),
+        attachment_ids: None,
+        parent_id: None,
+        priority: None,
+    };
     grace.send_message(&g, &body).await.unwrap();
     until(&s, "live message", |st| st.windows.get(&g).is_some_and(|w| w.get(&mid).is_some())).await;
     // It is offered for a desktop notification.

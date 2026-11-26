@@ -207,6 +207,8 @@ impl World {
                 avatar_url: None,
                 email: p.email.clone(),
             },
+            company_workspace_id: None,
+            company_sign_in_available: None,
             profile: Self::profile_view(p),
             memberships: self.membership_view(user).into_iter().collect(),
             may_create_workspace: false,
@@ -227,6 +229,7 @@ impl World {
                 role: p.role.clone(),
                 joined_at: ts(p.joined_ms),
                 profile: Self::profile_view(p),
+                access_kind: None,
             })
             .collect()
     }

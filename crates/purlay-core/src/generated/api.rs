@@ -66,6 +66,11 @@ impl ApiClient {
         self.call_json(&ep::SET_AWAY, &[], None, Some(crate::api::to_body(body)?)).await
     }
 
+    /// `PATCH /api/me/profile` (updateProfile)
+    pub async fn update_profile(&self, body: &UpdateProfileRequest) -> ApiResult<Profile> {
+        self.call_json(&ep::UPDATE_PROFILE, &[], None, Some(crate::api::to_body(body)?)).await
+    }
+
     /// `GET /api/workspaces` (listWorkspaces)
     pub async fn list_workspaces(&self, ) -> ApiResult<MembershipList> {
         self.call_json(&ep::LIST_WORKSPACES, &[], None, None).await
@@ -79,6 +84,31 @@ impl ApiClient {
     /// `GET /api/workspaces/:workspaceId/members` (listWorkspaceMembers)
     pub async fn list_workspace_members(&self, workspace_id: &str) -> ApiResult<WorkspaceMemberList> {
         self.call_json(&ep::LIST_WORKSPACE_MEMBERS, &[workspace_id], None, None).await
+    }
+
+    /// `GET /api/workspaces/:workspaceId/guest-invitations` (readGuestInvitationAvailability)
+    pub async fn read_guest_invitation_availability(&self, workspace_id: &str) -> ApiResult<GuestInvitationAvailability> {
+        self.call_json(&ep::READ_GUEST_INVITATION_AVAILABILITY, &[workspace_id], None, None).await
+    }
+
+    /// `POST /api/workspaces/:workspaceId/guest-invitations` (createWorkspaceGuestInvitation)
+    pub async fn create_workspace_guest_invitation(&self, workspace_id: &str, body: &CreateGuestInvitationRequest) -> ApiResult<CreatedGuestInvitation> {
+        self.call_json(&ep::CREATE_WORKSPACE_GUEST_INVITATION, &[workspace_id], None, Some(crate::api::to_body(body)?)).await
+    }
+
+    /// `GET /api/workspaces/:workspaceId/guests` (listWorkspaceGuests)
+    pub async fn list_workspace_guests(&self, workspace_id: &str, query: &WorkspaceGuestQuery) -> ApiResult<WorkspaceGuestPage> {
+        self.call_json(&ep::LIST_WORKSPACE_GUESTS, &[workspace_id], Some(crate::api::to_query(query)?), None).await
+    }
+
+    /// `PATCH /api/workspaces/:workspaceId/guests/:userId` (updateWorkspaceGuest)
+    pub async fn update_workspace_guest(&self, workspace_id: &str, user_id: &str, body: &UpdateGuestAccessRequest) -> ApiResult<UpdatedGuestAccess> {
+        self.call_json(&ep::UPDATE_WORKSPACE_GUEST, &[workspace_id, user_id], None, Some(crate::api::to_body(body)?)).await
+    }
+
+    /// `POST /api/workspaces/:workspaceId/guests/:userId/conversion` (convertWorkspaceGuest)
+    pub async fn convert_workspace_guest(&self, workspace_id: &str, user_id: &str, body: &ConvertGuestRequest) -> ApiResult<WorkspaceMember> {
+        self.call_json(&ep::CONVERT_WORKSPACE_GUEST, &[workspace_id, user_id], None, Some(crate::api::to_body(body)?)).await
     }
 
     /// `GET /api/workspaces/:workspaceId/presence` (getPresence)
@@ -379,6 +409,11 @@ impl ApiClient {
     /// `PUT /api/channels/:channelId/scheduled/:scheduledId` (scheduleMessage)
     pub async fn schedule_message(&self, channel_id: &str, scheduled_id: &str, body: &ScheduleMessageRequest) -> ApiResult<ScheduledMessage> {
         self.call_json(&ep::SCHEDULE_MESSAGE, &[channel_id, scheduled_id], None, Some(crate::api::to_body(body)?)).await
+    }
+
+    /// `POST /api/channels/:channelId/scheduled/:scheduledId/send` (sendScheduledMessage)
+    pub async fn send_scheduled_message(&self, channel_id: &str, scheduled_id: &str) -> ApiResult<Message> {
+        self.call_json(&ep::SEND_SCHEDULED_MESSAGE, &[channel_id, scheduled_id], None, None).await
     }
 
     /// `DELETE /api/channels/:channelId/scheduled/:scheduledId` (cancelScheduledMessage)

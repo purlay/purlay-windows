@@ -340,7 +340,14 @@ impl<'a> Gen<'a> {
                     }
                     // Required means required: structure is how same-tag members (the three
                     // `ACK` shapes) are told apart, so a missing array is not defaulted.
-                    let a = if rename.is_empty() {
+                    // Search servers before pagination shipped these results without either flag.
+                    let legacy_search_flag = matches!(
+                        (name, json.as_str()),
+                        ("FindGroup", "more") | ("FindResponse", "partial")
+                    );
+                    let a = if legacy_search_flag {
+                        format!("#[serde({rename}default)]")
+                    } else if rename.is_empty() {
                         String::new()
                     } else {
                         format!("#[serde({})]", rename.trim_end_matches(", "))

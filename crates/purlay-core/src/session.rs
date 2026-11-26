@@ -446,9 +446,12 @@ impl Session {
         let api = self.api.clone();
         let c = channel.clone();
         let l = level.clone();
-        self.channel_patch(async move { api.set_notification_level(&c, &SetNotificationLevelRequest { level: l }).await }, channel, move |ch| {
-            ch.notification_level = Some(level)
-        })
+        let request = SetNotificationLevelRequest { level: l, until: None };
+        self.channel_patch(
+            async move { api.set_notification_level(&c, &request).await },
+            channel,
+            move |ch| ch.notification_level = Some(level),
+        )
     }
 
     // --- timed mutes (kept on this device until the server holds the end, #1379) -------

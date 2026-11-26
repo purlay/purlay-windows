@@ -176,7 +176,13 @@ async fn http_send_is_idempotent() {
     let cookie = server.cookie_header("ada");
     let general = server.channel_id("general").unwrap();
     let id = purlay_devserver::ids::new_id();
-    let body = SendMessageRequest { id: id.clone(), content: "Hello from the test".into(), attachment_ids: None, parent_id: None };
+    let body = SendMessageRequest {
+        id: id.clone(),
+        content: "Hello from the test".into(),
+        attachment_ids: None,
+        parent_id: None,
+        priority: None,
+    };
     let path = format!("/api/channels/{general}/messages");
     let mut sent = Vec::new();
     for _ in 0..2 {
@@ -244,6 +250,7 @@ async fn socket_subscribe_send_and_ping() {
             content: "From the socket, **bold**".into(),
             parent_id: None,
             attachment_ids: None,
+            priority: None,
         },
     });
     send_frame(&mut ws, &send).await;
@@ -267,7 +274,13 @@ async fn socket_subscribe_send_and_ping() {
     // Somebody else's HTTP send reaches the room, and our unread state moves.
     let grace = server.cookie_header("grace");
     let other = purlay_devserver::ids::new_id();
-    let body = SendMessageRequest { id: other.clone(), content: "@ada ping from Grace".into(), attachment_ids: None, parent_id: None };
+    let body = SendMessageRequest {
+        id: other.clone(),
+        content: "@ada ping from Grace".into(),
+        attachment_ids: None,
+        parent_id: None,
+        priority: None,
+    };
     let res = http.post(url(&server, &format!("/api/channels/{general}/messages"))).header("Cookie", &grace).json(&body).send().await.unwrap();
     assert_eq!(res.status(), 200);
     wait_for(&mut ws, "Grace's message", |f| matches!(f, ServerFrame::MessageCreated(m) if m.data.id == other)).await;
@@ -455,6 +468,7 @@ async fn threads_reactions_and_reads() {
         content: "A reply".into(),
         attachment_ids: None,
         parent_id: Some(root.clone()),
+        priority: None,
     };
     let res = http.post(url(&server, &format!("/api/channels/{general}/messages"))).header("Cookie", &cookie).json(&reply).send().await.unwrap();
     assert_eq!(res.status(), 200);

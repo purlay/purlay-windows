@@ -39,9 +39,15 @@ pub const GET_AUTH_METHODS: Endpoint = Endpoint { id: "getAuthMethods", method: 
 pub const GET_LATEST_RELEASE: Endpoint = Endpoint { id: "getLatestRelease", method: Method::Get, path: "/api/releases/latest", module: "core", auth: Auth::Session, idempotent: true };
 pub const GET_ME: Endpoint = Endpoint { id: "getMe", method: Method::Get, path: "/api/me", module: "core", auth: Auth::Session, idempotent: true };
 pub const SET_AWAY: Endpoint = Endpoint { id: "setAway", method: Method::Put, path: "/api/me/away", module: "core", auth: Auth::Session, idempotent: false };
+pub const UPDATE_PROFILE: Endpoint = Endpoint { id: "updateProfile", method: Method::Patch, path: "/api/me/profile", module: "core", auth: Auth::Session, idempotent: false };
 pub const LIST_WORKSPACES: Endpoint = Endpoint { id: "listWorkspaces", method: Method::Get, path: "/api/workspaces", module: "core", auth: Auth::Session, idempotent: true };
 pub const GET_WORKSPACE: Endpoint = Endpoint { id: "getWorkspace", method: Method::Get, path: "/api/workspaces/:workspaceId", module: "core", auth: Auth::Session, idempotent: true };
 pub const LIST_WORKSPACE_MEMBERS: Endpoint = Endpoint { id: "listWorkspaceMembers", method: Method::Get, path: "/api/workspaces/:workspaceId/members", module: "core", auth: Auth::Session, idempotent: true };
+pub const READ_GUEST_INVITATION_AVAILABILITY: Endpoint = Endpoint { id: "readGuestInvitationAvailability", method: Method::Get, path: "/api/workspaces/:workspaceId/guest-invitations", module: "core", auth: Auth::Session, idempotent: true };
+pub const CREATE_WORKSPACE_GUEST_INVITATION: Endpoint = Endpoint { id: "createWorkspaceGuestInvitation", method: Method::Post, path: "/api/workspaces/:workspaceId/guest-invitations", module: "core", auth: Auth::Session, idempotent: false };
+pub const LIST_WORKSPACE_GUESTS: Endpoint = Endpoint { id: "listWorkspaceGuests", method: Method::Get, path: "/api/workspaces/:workspaceId/guests", module: "core", auth: Auth::Session, idempotent: true };
+pub const UPDATE_WORKSPACE_GUEST: Endpoint = Endpoint { id: "updateWorkspaceGuest", method: Method::Patch, path: "/api/workspaces/:workspaceId/guests/:userId", module: "core", auth: Auth::Session, idempotent: false };
+pub const CONVERT_WORKSPACE_GUEST: Endpoint = Endpoint { id: "convertWorkspaceGuest", method: Method::Post, path: "/api/workspaces/:workspaceId/guests/:userId/conversion", module: "core", auth: Auth::Session, idempotent: false };
 pub const GET_PRESENCE: Endpoint = Endpoint { id: "getPresence", method: Method::Get, path: "/api/workspaces/:workspaceId/presence", module: "chat", auth: Auth::Session, idempotent: true };
 pub const SET_DEEP_WORK: Endpoint = Endpoint { id: "setDeepWork", method: Method::Put, path: "/api/workspaces/:workspaceId/deep-work", module: "core", auth: Auth::Session, idempotent: false };
 pub const LIST_INBOX: Endpoint = Endpoint { id: "listInbox", method: Method::Get, path: "/api/workspaces/:workspaceId/inbox", module: "core", auth: Auth::Session, idempotent: true };
@@ -102,6 +108,7 @@ pub const SET_MESSAGE_REMINDER: Endpoint = Endpoint { id: "setMessageReminder", 
 pub const CANCEL_MESSAGE_REMINDER: Endpoint = Endpoint { id: "cancelMessageReminder", method: Method::Delete, path: "/api/messages/:messageId/reminder", module: "chat", auth: Auth::Session, idempotent: false };
 pub const LIST_MESSAGE_REMINDERS: Endpoint = Endpoint { id: "listMessageReminders", method: Method::Get, path: "/api/workspaces/:workspaceId/reminders", module: "chat", auth: Auth::Session, idempotent: true };
 pub const SCHEDULE_MESSAGE: Endpoint = Endpoint { id: "scheduleMessage", method: Method::Put, path: "/api/channels/:channelId/scheduled/:scheduledId", module: "chat", auth: Auth::Session, idempotent: false };
+pub const SEND_SCHEDULED_MESSAGE: Endpoint = Endpoint { id: "sendScheduledMessage", method: Method::Post, path: "/api/channels/:channelId/scheduled/:scheduledId/send", module: "chat", auth: Auth::Session, idempotent: false };
 pub const CANCEL_SCHEDULED_MESSAGE: Endpoint = Endpoint { id: "cancelScheduledMessage", method: Method::Delete, path: "/api/channels/:channelId/scheduled/:scheduledId", module: "chat", auth: Auth::Session, idempotent: false };
 pub const LIST_SCHEDULED_MESSAGES: Endpoint = Endpoint { id: "listScheduledMessages", method: Method::Get, path: "/api/workspaces/:workspaceId/scheduled", module: "chat", auth: Auth::Session, idempotent: true };
 pub const LIST_UNRESOLVED: Endpoint = Endpoint { id: "listUnresolved", method: Method::Get, path: "/api/workspaces/:workspaceId/unresolved", module: "chat", auth: Auth::Session, idempotent: true };
@@ -134,9 +141,15 @@ pub const ALL: &[Endpoint] = &[
     GET_LATEST_RELEASE,
     GET_ME,
     SET_AWAY,
+    UPDATE_PROFILE,
     LIST_WORKSPACES,
     GET_WORKSPACE,
     LIST_WORKSPACE_MEMBERS,
+    READ_GUEST_INVITATION_AVAILABILITY,
+    CREATE_WORKSPACE_GUEST_INVITATION,
+    LIST_WORKSPACE_GUESTS,
+    UPDATE_WORKSPACE_GUEST,
+    CONVERT_WORKSPACE_GUEST,
     GET_PRESENCE,
     SET_DEEP_WORK,
     LIST_INBOX,
@@ -197,6 +210,7 @@ pub const ALL: &[Endpoint] = &[
     CANCEL_MESSAGE_REMINDER,
     LIST_MESSAGE_REMINDERS,
     SCHEDULE_MESSAGE,
+    SEND_SCHEDULED_MESSAGE,
     CANCEL_SCHEDULED_MESSAGE,
     LIST_SCHEDULED_MESSAGES,
     LIST_UNRESOLVED,

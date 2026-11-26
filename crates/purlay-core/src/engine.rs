@@ -481,12 +481,19 @@ impl Engine {
                 content: p.content.clone(),
                 parent_id: p.parent_id.clone(),
                 attachment_ids: attachment_ids.clone(),
+                priority: None,
             },
         });
         if !self.conn.send(&frame) {
             // HTTP is the door when the socket is not: the same service, the same id.
             let api = self.api.clone();
-            let body = SendMessageRequest { id: p.id.clone(), content: p.content.clone(), attachment_ids, parent_id: p.parent_id.clone() };
+            let body = SendMessageRequest {
+                id: p.id.clone(),
+                content: p.content.clone(),
+                attachment_ids,
+                parent_id: p.parent_id.clone(),
+                priority: None,
+            };
             let id = p.id.clone();
             let channel = p.channel_id.clone();
             self.spawn(async move { Internal::SentOverHttp(id, api.send_message(&channel, &body).await) });

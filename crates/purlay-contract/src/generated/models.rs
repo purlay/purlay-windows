@@ -299,8 +299,36 @@ impl<'de> Deserialize<'de> for AttachmentKind {
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum AuditActionName {
+    /// `identity.domain_created`
+    IdentityDomainCreated,
+    /// `identity.domain_renewed`
+    IdentityDomainRenewed,
+    /// `identity.domain_verified`
+    IdentityDomainVerified,
+    /// `identity.domain_revoked`
+    IdentityDomainRevoked,
+    /// `identity.connection_created`
+    IdentityConnectionCreated,
+    /// `identity.connection_updated`
+    IdentityConnectionUpdated,
+    /// `identity.connection_enabled`
+    IdentityConnectionEnabled,
+    /// `identity.connection_disabled`
+    IdentityConnectionDisabled,
+    /// `identity.connection_deleted`
+    IdentityConnectionDeleted,
+    /// `identity.connection_tested`
+    IdentityConnectionTested,
+    /// `identity.linked`
+    IdentityLinked,
+    /// `identity.unlinked`
+    IdentityUnlinked,
     /// `member.role_changed`
     MemberRoleChanged,
+    /// `member.guest_access_changed`
+    MemberGuestAccessChanged,
+    /// `member.guest_converted`
+    MemberGuestConverted,
     /// `member.removed`
     MemberRemoved,
     /// `member.left`
@@ -331,6 +359,10 @@ pub enum AuditActionName {
     IntegrationWebhookCreated,
     /// `integration.webhook_revoked`
     IntegrationWebhookRevoked,
+    /// `integration.webhook_rotated`
+    IntegrationWebhookRotated,
+    /// `integration.outgoing_webhook_changed`
+    IntegrationOutgoingWebhookChanged,
     /// `integration.app_connected`
     IntegrationAppConnected,
     /// `integration.app_disconnected`
@@ -349,6 +381,62 @@ pub enum AuditActionName {
     MessageRemovedByModerator,
     /// `workspace.renamed`
     WorkspaceRenamed,
+    /// `workspace.mfa.enrolled`
+    WorkspaceMfaEnrolled,
+    /// `workspace.mfa.rotated`
+    WorkspaceMfaRotated,
+    /// `workspace.mfa.revoked`
+    WorkspaceMfaRevoked,
+    /// `workspace.mfa.recovery_codes_rotated`
+    WorkspaceMfaRecoveryCodesRotated,
+    /// `workspace.mfa.recovery_used`
+    WorkspaceMfaRecoveryUsed,
+    /// `workspace.security.policy_tested`
+    WorkspaceSecurityPolicyTested,
+    /// `workspace.security.policy_updated`
+    WorkspaceSecurityPolicyUpdated,
+    /// `workspace.security.recovery_created`
+    WorkspaceSecurityRecoveryCreated,
+    /// `workspace.security.policy_recovered`
+    WorkspaceSecurityPolicyRecovered,
+    /// `workspace.access.manual_added`
+    WorkspaceAccessManualAdded,
+    /// `workspace.access.source_revoked`
+    WorkspaceAccessSourceRevoked,
+    /// `workspace.access.role_created`
+    WorkspaceAccessRoleCreated,
+    /// `workspace.access.role_updated`
+    WorkspaceAccessRoleUpdated,
+    /// `workspace.access.role_retired`
+    WorkspaceAccessRoleRetired,
+    /// `workspace.access.group_created`
+    WorkspaceAccessGroupCreated,
+    /// `workspace.access.group_updated`
+    WorkspaceAccessGroupUpdated,
+    /// `workspace.access.group_retired`
+    WorkspaceAccessGroupRetired,
+    /// `workspace.access.group_members_changed`
+    WorkspaceAccessGroupMembersChanged,
+    /// `workspace.access.grant_assigned`
+    WorkspaceAccessGrantAssigned,
+    /// `workspace.access.grant_revoked`
+    WorkspaceAccessGrantRevoked,
+    /// `workspace.access.member_offboarded`
+    WorkspaceAccessMemberOffboarded,
+    /// `workspace.access.member_readmitted`
+    WorkspaceAccessMemberReadmitted,
+    /// `directory.created`
+    DirectoryCreated,
+    /// `directory.updated`
+    DirectoryUpdated,
+    /// `directory.disabled`
+    DirectoryDisabled,
+    /// `directory.deleted`
+    DirectoryDeleted,
+    /// `directory.credential_rotated`
+    DirectoryCredentialRotated,
+    /// `directory.credential_revoked`
+    DirectoryCredentialRevoked,
     /// `retention.changed`
     RetentionChanged,
     /// `channel.retention_changed`
@@ -367,6 +455,8 @@ pub enum AuditActionName {
     RetentionPurged,
     /// `storage.quota_changed`
     StorageQuotaChanged,
+    /// `quota.changed`
+    QuotaChanged,
     /// `audit.exported`
     AuditExported,
     /// `workspace.deletion_requested`
@@ -386,10 +476,24 @@ pub enum AuditActionName {
 }
 
 impl AuditActionName {
-    pub const ALL: &'static [AuditActionName] = &[AuditActionName::MemberRoleChanged, AuditActionName::MemberRemoved, AuditActionName::MemberLeft, AuditActionName::MemberJoined, AuditActionName::ChannelCreated, AuditActionName::ChannelRenamed, AuditActionName::ChannelArchived, AuditActionName::ChannelRestored, AuditActionName::ChannelMemberAdded, AuditActionName::ChannelMemberRemoved, AuditActionName::IntegrationTokenSet, AuditActionName::IntegrationTokenRemoved, AuditActionName::IntegrationFeedCreated, AuditActionName::IntegrationFeedRemoved, AuditActionName::IntegrationWebhookCreated, AuditActionName::IntegrationWebhookRevoked, AuditActionName::IntegrationAppConnected, AuditActionName::IntegrationAppDisconnected, AuditActionName::IntegrationIssueCreated, AuditActionName::IntegrationWorkLinked, AuditActionName::IntegrationFeedSecretRegenerated, AuditActionName::InvitationCreated, AuditActionName::InvitationRevoked, AuditActionName::MessageRemovedByModerator, AuditActionName::WorkspaceRenamed, AuditActionName::RetentionChanged, AuditActionName::ChannelRetentionChanged, AuditActionName::ChannelPostingChanged, AuditActionName::AccountErased, AuditActionName::ContentErased, AuditActionName::WorkspaceExportRequested, AuditActionName::WorkspaceExported, AuditActionName::RetentionPurged, AuditActionName::StorageQuotaChanged, AuditActionName::AuditExported, AuditActionName::WorkspaceDeletionRequested, AuditActionName::WorkspaceDeletionCancelled, AuditActionName::IssueCreated, AuditActionName::IssueStatusChanged, AuditActionName::IssueAssigned, AuditActionName::IssueDeleted];
+    pub const ALL: &'static [AuditActionName] = &[AuditActionName::IdentityDomainCreated, AuditActionName::IdentityDomainRenewed, AuditActionName::IdentityDomainVerified, AuditActionName::IdentityDomainRevoked, AuditActionName::IdentityConnectionCreated, AuditActionName::IdentityConnectionUpdated, AuditActionName::IdentityConnectionEnabled, AuditActionName::IdentityConnectionDisabled, AuditActionName::IdentityConnectionDeleted, AuditActionName::IdentityConnectionTested, AuditActionName::IdentityLinked, AuditActionName::IdentityUnlinked, AuditActionName::MemberRoleChanged, AuditActionName::MemberGuestAccessChanged, AuditActionName::MemberGuestConverted, AuditActionName::MemberRemoved, AuditActionName::MemberLeft, AuditActionName::MemberJoined, AuditActionName::ChannelCreated, AuditActionName::ChannelRenamed, AuditActionName::ChannelArchived, AuditActionName::ChannelRestored, AuditActionName::ChannelMemberAdded, AuditActionName::ChannelMemberRemoved, AuditActionName::IntegrationTokenSet, AuditActionName::IntegrationTokenRemoved, AuditActionName::IntegrationFeedCreated, AuditActionName::IntegrationFeedRemoved, AuditActionName::IntegrationWebhookCreated, AuditActionName::IntegrationWebhookRevoked, AuditActionName::IntegrationWebhookRotated, AuditActionName::IntegrationOutgoingWebhookChanged, AuditActionName::IntegrationAppConnected, AuditActionName::IntegrationAppDisconnected, AuditActionName::IntegrationIssueCreated, AuditActionName::IntegrationWorkLinked, AuditActionName::IntegrationFeedSecretRegenerated, AuditActionName::InvitationCreated, AuditActionName::InvitationRevoked, AuditActionName::MessageRemovedByModerator, AuditActionName::WorkspaceRenamed, AuditActionName::WorkspaceMfaEnrolled, AuditActionName::WorkspaceMfaRotated, AuditActionName::WorkspaceMfaRevoked, AuditActionName::WorkspaceMfaRecoveryCodesRotated, AuditActionName::WorkspaceMfaRecoveryUsed, AuditActionName::WorkspaceSecurityPolicyTested, AuditActionName::WorkspaceSecurityPolicyUpdated, AuditActionName::WorkspaceSecurityRecoveryCreated, AuditActionName::WorkspaceSecurityPolicyRecovered, AuditActionName::WorkspaceAccessManualAdded, AuditActionName::WorkspaceAccessSourceRevoked, AuditActionName::WorkspaceAccessRoleCreated, AuditActionName::WorkspaceAccessRoleUpdated, AuditActionName::WorkspaceAccessRoleRetired, AuditActionName::WorkspaceAccessGroupCreated, AuditActionName::WorkspaceAccessGroupUpdated, AuditActionName::WorkspaceAccessGroupRetired, AuditActionName::WorkspaceAccessGroupMembersChanged, AuditActionName::WorkspaceAccessGrantAssigned, AuditActionName::WorkspaceAccessGrantRevoked, AuditActionName::WorkspaceAccessMemberOffboarded, AuditActionName::WorkspaceAccessMemberReadmitted, AuditActionName::DirectoryCreated, AuditActionName::DirectoryUpdated, AuditActionName::DirectoryDisabled, AuditActionName::DirectoryDeleted, AuditActionName::DirectoryCredentialRotated, AuditActionName::DirectoryCredentialRevoked, AuditActionName::RetentionChanged, AuditActionName::ChannelRetentionChanged, AuditActionName::ChannelPostingChanged, AuditActionName::AccountErased, AuditActionName::ContentErased, AuditActionName::WorkspaceExportRequested, AuditActionName::WorkspaceExported, AuditActionName::RetentionPurged, AuditActionName::StorageQuotaChanged, AuditActionName::QuotaChanged, AuditActionName::AuditExported, AuditActionName::WorkspaceDeletionRequested, AuditActionName::WorkspaceDeletionCancelled, AuditActionName::IssueCreated, AuditActionName::IssueStatusChanged, AuditActionName::IssueAssigned, AuditActionName::IssueDeleted];
     pub fn as_str(&self) -> &str {
         match self {
+            AuditActionName::IdentityDomainCreated => "identity.domain_created",
+            AuditActionName::IdentityDomainRenewed => "identity.domain_renewed",
+            AuditActionName::IdentityDomainVerified => "identity.domain_verified",
+            AuditActionName::IdentityDomainRevoked => "identity.domain_revoked",
+            AuditActionName::IdentityConnectionCreated => "identity.connection_created",
+            AuditActionName::IdentityConnectionUpdated => "identity.connection_updated",
+            AuditActionName::IdentityConnectionEnabled => "identity.connection_enabled",
+            AuditActionName::IdentityConnectionDisabled => "identity.connection_disabled",
+            AuditActionName::IdentityConnectionDeleted => "identity.connection_deleted",
+            AuditActionName::IdentityConnectionTested => "identity.connection_tested",
+            AuditActionName::IdentityLinked => "identity.linked",
+            AuditActionName::IdentityUnlinked => "identity.unlinked",
             AuditActionName::MemberRoleChanged => "member.role_changed",
+            AuditActionName::MemberGuestAccessChanged => "member.guest_access_changed",
+            AuditActionName::MemberGuestConverted => "member.guest_converted",
             AuditActionName::MemberRemoved => "member.removed",
             AuditActionName::MemberLeft => "member.left",
             AuditActionName::MemberJoined => "member.joined",
@@ -405,6 +509,8 @@ impl AuditActionName {
             AuditActionName::IntegrationFeedRemoved => "integration.feed_removed",
             AuditActionName::IntegrationWebhookCreated => "integration.webhook_created",
             AuditActionName::IntegrationWebhookRevoked => "integration.webhook_revoked",
+            AuditActionName::IntegrationWebhookRotated => "integration.webhook_rotated",
+            AuditActionName::IntegrationOutgoingWebhookChanged => "integration.outgoing_webhook_changed",
             AuditActionName::IntegrationAppConnected => "integration.app_connected",
             AuditActionName::IntegrationAppDisconnected => "integration.app_disconnected",
             AuditActionName::IntegrationIssueCreated => "integration.issue_created",
@@ -414,6 +520,34 @@ impl AuditActionName {
             AuditActionName::InvitationRevoked => "invitation.revoked",
             AuditActionName::MessageRemovedByModerator => "message.removed_by_moderator",
             AuditActionName::WorkspaceRenamed => "workspace.renamed",
+            AuditActionName::WorkspaceMfaEnrolled => "workspace.mfa.enrolled",
+            AuditActionName::WorkspaceMfaRotated => "workspace.mfa.rotated",
+            AuditActionName::WorkspaceMfaRevoked => "workspace.mfa.revoked",
+            AuditActionName::WorkspaceMfaRecoveryCodesRotated => "workspace.mfa.recovery_codes_rotated",
+            AuditActionName::WorkspaceMfaRecoveryUsed => "workspace.mfa.recovery_used",
+            AuditActionName::WorkspaceSecurityPolicyTested => "workspace.security.policy_tested",
+            AuditActionName::WorkspaceSecurityPolicyUpdated => "workspace.security.policy_updated",
+            AuditActionName::WorkspaceSecurityRecoveryCreated => "workspace.security.recovery_created",
+            AuditActionName::WorkspaceSecurityPolicyRecovered => "workspace.security.policy_recovered",
+            AuditActionName::WorkspaceAccessManualAdded => "workspace.access.manual_added",
+            AuditActionName::WorkspaceAccessSourceRevoked => "workspace.access.source_revoked",
+            AuditActionName::WorkspaceAccessRoleCreated => "workspace.access.role_created",
+            AuditActionName::WorkspaceAccessRoleUpdated => "workspace.access.role_updated",
+            AuditActionName::WorkspaceAccessRoleRetired => "workspace.access.role_retired",
+            AuditActionName::WorkspaceAccessGroupCreated => "workspace.access.group_created",
+            AuditActionName::WorkspaceAccessGroupUpdated => "workspace.access.group_updated",
+            AuditActionName::WorkspaceAccessGroupRetired => "workspace.access.group_retired",
+            AuditActionName::WorkspaceAccessGroupMembersChanged => "workspace.access.group_members_changed",
+            AuditActionName::WorkspaceAccessGrantAssigned => "workspace.access.grant_assigned",
+            AuditActionName::WorkspaceAccessGrantRevoked => "workspace.access.grant_revoked",
+            AuditActionName::WorkspaceAccessMemberOffboarded => "workspace.access.member_offboarded",
+            AuditActionName::WorkspaceAccessMemberReadmitted => "workspace.access.member_readmitted",
+            AuditActionName::DirectoryCreated => "directory.created",
+            AuditActionName::DirectoryUpdated => "directory.updated",
+            AuditActionName::DirectoryDisabled => "directory.disabled",
+            AuditActionName::DirectoryDeleted => "directory.deleted",
+            AuditActionName::DirectoryCredentialRotated => "directory.credential_rotated",
+            AuditActionName::DirectoryCredentialRevoked => "directory.credential_revoked",
             AuditActionName::RetentionChanged => "retention.changed",
             AuditActionName::ChannelRetentionChanged => "channel.retention_changed",
             AuditActionName::ChannelPostingChanged => "channel.posting_changed",
@@ -423,6 +557,7 @@ impl AuditActionName {
             AuditActionName::WorkspaceExported => "workspace.exported",
             AuditActionName::RetentionPurged => "retention.purged",
             AuditActionName::StorageQuotaChanged => "storage.quota_changed",
+            AuditActionName::QuotaChanged => "quota.changed",
             AuditActionName::AuditExported => "audit.exported",
             AuditActionName::WorkspaceDeletionRequested => "workspace.deletion_requested",
             AuditActionName::WorkspaceDeletionCancelled => "workspace.deletion_cancelled",
@@ -435,7 +570,21 @@ impl AuditActionName {
     }
     pub fn parse(s: &str) -> Self {
         match s {
+            "identity.domain_created" => AuditActionName::IdentityDomainCreated,
+            "identity.domain_renewed" => AuditActionName::IdentityDomainRenewed,
+            "identity.domain_verified" => AuditActionName::IdentityDomainVerified,
+            "identity.domain_revoked" => AuditActionName::IdentityDomainRevoked,
+            "identity.connection_created" => AuditActionName::IdentityConnectionCreated,
+            "identity.connection_updated" => AuditActionName::IdentityConnectionUpdated,
+            "identity.connection_enabled" => AuditActionName::IdentityConnectionEnabled,
+            "identity.connection_disabled" => AuditActionName::IdentityConnectionDisabled,
+            "identity.connection_deleted" => AuditActionName::IdentityConnectionDeleted,
+            "identity.connection_tested" => AuditActionName::IdentityConnectionTested,
+            "identity.linked" => AuditActionName::IdentityLinked,
+            "identity.unlinked" => AuditActionName::IdentityUnlinked,
             "member.role_changed" => AuditActionName::MemberRoleChanged,
+            "member.guest_access_changed" => AuditActionName::MemberGuestAccessChanged,
+            "member.guest_converted" => AuditActionName::MemberGuestConverted,
             "member.removed" => AuditActionName::MemberRemoved,
             "member.left" => AuditActionName::MemberLeft,
             "member.joined" => AuditActionName::MemberJoined,
@@ -451,6 +600,8 @@ impl AuditActionName {
             "integration.feed_removed" => AuditActionName::IntegrationFeedRemoved,
             "integration.webhook_created" => AuditActionName::IntegrationWebhookCreated,
             "integration.webhook_revoked" => AuditActionName::IntegrationWebhookRevoked,
+            "integration.webhook_rotated" => AuditActionName::IntegrationWebhookRotated,
+            "integration.outgoing_webhook_changed" => AuditActionName::IntegrationOutgoingWebhookChanged,
             "integration.app_connected" => AuditActionName::IntegrationAppConnected,
             "integration.app_disconnected" => AuditActionName::IntegrationAppDisconnected,
             "integration.issue_created" => AuditActionName::IntegrationIssueCreated,
@@ -460,6 +611,34 @@ impl AuditActionName {
             "invitation.revoked" => AuditActionName::InvitationRevoked,
             "message.removed_by_moderator" => AuditActionName::MessageRemovedByModerator,
             "workspace.renamed" => AuditActionName::WorkspaceRenamed,
+            "workspace.mfa.enrolled" => AuditActionName::WorkspaceMfaEnrolled,
+            "workspace.mfa.rotated" => AuditActionName::WorkspaceMfaRotated,
+            "workspace.mfa.revoked" => AuditActionName::WorkspaceMfaRevoked,
+            "workspace.mfa.recovery_codes_rotated" => AuditActionName::WorkspaceMfaRecoveryCodesRotated,
+            "workspace.mfa.recovery_used" => AuditActionName::WorkspaceMfaRecoveryUsed,
+            "workspace.security.policy_tested" => AuditActionName::WorkspaceSecurityPolicyTested,
+            "workspace.security.policy_updated" => AuditActionName::WorkspaceSecurityPolicyUpdated,
+            "workspace.security.recovery_created" => AuditActionName::WorkspaceSecurityRecoveryCreated,
+            "workspace.security.policy_recovered" => AuditActionName::WorkspaceSecurityPolicyRecovered,
+            "workspace.access.manual_added" => AuditActionName::WorkspaceAccessManualAdded,
+            "workspace.access.source_revoked" => AuditActionName::WorkspaceAccessSourceRevoked,
+            "workspace.access.role_created" => AuditActionName::WorkspaceAccessRoleCreated,
+            "workspace.access.role_updated" => AuditActionName::WorkspaceAccessRoleUpdated,
+            "workspace.access.role_retired" => AuditActionName::WorkspaceAccessRoleRetired,
+            "workspace.access.group_created" => AuditActionName::WorkspaceAccessGroupCreated,
+            "workspace.access.group_updated" => AuditActionName::WorkspaceAccessGroupUpdated,
+            "workspace.access.group_retired" => AuditActionName::WorkspaceAccessGroupRetired,
+            "workspace.access.group_members_changed" => AuditActionName::WorkspaceAccessGroupMembersChanged,
+            "workspace.access.grant_assigned" => AuditActionName::WorkspaceAccessGrantAssigned,
+            "workspace.access.grant_revoked" => AuditActionName::WorkspaceAccessGrantRevoked,
+            "workspace.access.member_offboarded" => AuditActionName::WorkspaceAccessMemberOffboarded,
+            "workspace.access.member_readmitted" => AuditActionName::WorkspaceAccessMemberReadmitted,
+            "directory.created" => AuditActionName::DirectoryCreated,
+            "directory.updated" => AuditActionName::DirectoryUpdated,
+            "directory.disabled" => AuditActionName::DirectoryDisabled,
+            "directory.deleted" => AuditActionName::DirectoryDeleted,
+            "directory.credential_rotated" => AuditActionName::DirectoryCredentialRotated,
+            "directory.credential_revoked" => AuditActionName::DirectoryCredentialRevoked,
             "retention.changed" => AuditActionName::RetentionChanged,
             "channel.retention_changed" => AuditActionName::ChannelRetentionChanged,
             "channel.posting_changed" => AuditActionName::ChannelPostingChanged,
@@ -469,6 +648,7 @@ impl AuditActionName {
             "workspace.exported" => AuditActionName::WorkspaceExported,
             "retention.purged" => AuditActionName::RetentionPurged,
             "storage.quota_changed" => AuditActionName::StorageQuotaChanged,
+            "quota.changed" => AuditActionName::QuotaChanged,
             "audit.exported" => AuditActionName::AuditExported,
             "workspace.deletion_requested" => AuditActionName::WorkspaceDeletionRequested,
             "workspace.deletion_cancelled" => AuditActionName::WorkspaceDeletionCancelled,
@@ -532,8 +712,36 @@ pub struct AuditExportLine {
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum AuditExportQueryAction {
+    /// `identity.domain_created`
+    IdentityDomainCreated,
+    /// `identity.domain_renewed`
+    IdentityDomainRenewed,
+    /// `identity.domain_verified`
+    IdentityDomainVerified,
+    /// `identity.domain_revoked`
+    IdentityDomainRevoked,
+    /// `identity.connection_created`
+    IdentityConnectionCreated,
+    /// `identity.connection_updated`
+    IdentityConnectionUpdated,
+    /// `identity.connection_enabled`
+    IdentityConnectionEnabled,
+    /// `identity.connection_disabled`
+    IdentityConnectionDisabled,
+    /// `identity.connection_deleted`
+    IdentityConnectionDeleted,
+    /// `identity.connection_tested`
+    IdentityConnectionTested,
+    /// `identity.linked`
+    IdentityLinked,
+    /// `identity.unlinked`
+    IdentityUnlinked,
     /// `member.role_changed`
     MemberRoleChanged,
+    /// `member.guest_access_changed`
+    MemberGuestAccessChanged,
+    /// `member.guest_converted`
+    MemberGuestConverted,
     /// `member.removed`
     MemberRemoved,
     /// `member.left`
@@ -564,6 +772,10 @@ pub enum AuditExportQueryAction {
     IntegrationWebhookCreated,
     /// `integration.webhook_revoked`
     IntegrationWebhookRevoked,
+    /// `integration.webhook_rotated`
+    IntegrationWebhookRotated,
+    /// `integration.outgoing_webhook_changed`
+    IntegrationOutgoingWebhookChanged,
     /// `integration.app_connected`
     IntegrationAppConnected,
     /// `integration.app_disconnected`
@@ -582,6 +794,62 @@ pub enum AuditExportQueryAction {
     MessageRemovedByModerator,
     /// `workspace.renamed`
     WorkspaceRenamed,
+    /// `workspace.mfa.enrolled`
+    WorkspaceMfaEnrolled,
+    /// `workspace.mfa.rotated`
+    WorkspaceMfaRotated,
+    /// `workspace.mfa.revoked`
+    WorkspaceMfaRevoked,
+    /// `workspace.mfa.recovery_codes_rotated`
+    WorkspaceMfaRecoveryCodesRotated,
+    /// `workspace.mfa.recovery_used`
+    WorkspaceMfaRecoveryUsed,
+    /// `workspace.security.policy_tested`
+    WorkspaceSecurityPolicyTested,
+    /// `workspace.security.policy_updated`
+    WorkspaceSecurityPolicyUpdated,
+    /// `workspace.security.recovery_created`
+    WorkspaceSecurityRecoveryCreated,
+    /// `workspace.security.policy_recovered`
+    WorkspaceSecurityPolicyRecovered,
+    /// `workspace.access.manual_added`
+    WorkspaceAccessManualAdded,
+    /// `workspace.access.source_revoked`
+    WorkspaceAccessSourceRevoked,
+    /// `workspace.access.role_created`
+    WorkspaceAccessRoleCreated,
+    /// `workspace.access.role_updated`
+    WorkspaceAccessRoleUpdated,
+    /// `workspace.access.role_retired`
+    WorkspaceAccessRoleRetired,
+    /// `workspace.access.group_created`
+    WorkspaceAccessGroupCreated,
+    /// `workspace.access.group_updated`
+    WorkspaceAccessGroupUpdated,
+    /// `workspace.access.group_retired`
+    WorkspaceAccessGroupRetired,
+    /// `workspace.access.group_members_changed`
+    WorkspaceAccessGroupMembersChanged,
+    /// `workspace.access.grant_assigned`
+    WorkspaceAccessGrantAssigned,
+    /// `workspace.access.grant_revoked`
+    WorkspaceAccessGrantRevoked,
+    /// `workspace.access.member_offboarded`
+    WorkspaceAccessMemberOffboarded,
+    /// `workspace.access.member_readmitted`
+    WorkspaceAccessMemberReadmitted,
+    /// `directory.created`
+    DirectoryCreated,
+    /// `directory.updated`
+    DirectoryUpdated,
+    /// `directory.disabled`
+    DirectoryDisabled,
+    /// `directory.deleted`
+    DirectoryDeleted,
+    /// `directory.credential_rotated`
+    DirectoryCredentialRotated,
+    /// `directory.credential_revoked`
+    DirectoryCredentialRevoked,
     /// `retention.changed`
     RetentionChanged,
     /// `channel.retention_changed`
@@ -600,6 +868,8 @@ pub enum AuditExportQueryAction {
     RetentionPurged,
     /// `storage.quota_changed`
     StorageQuotaChanged,
+    /// `quota.changed`
+    QuotaChanged,
     /// `audit.exported`
     AuditExported,
     /// `workspace.deletion_requested`
@@ -619,10 +889,24 @@ pub enum AuditExportQueryAction {
 }
 
 impl AuditExportQueryAction {
-    pub const ALL: &'static [AuditExportQueryAction] = &[AuditExportQueryAction::MemberRoleChanged, AuditExportQueryAction::MemberRemoved, AuditExportQueryAction::MemberLeft, AuditExportQueryAction::MemberJoined, AuditExportQueryAction::ChannelCreated, AuditExportQueryAction::ChannelRenamed, AuditExportQueryAction::ChannelArchived, AuditExportQueryAction::ChannelRestored, AuditExportQueryAction::ChannelMemberAdded, AuditExportQueryAction::ChannelMemberRemoved, AuditExportQueryAction::IntegrationTokenSet, AuditExportQueryAction::IntegrationTokenRemoved, AuditExportQueryAction::IntegrationFeedCreated, AuditExportQueryAction::IntegrationFeedRemoved, AuditExportQueryAction::IntegrationWebhookCreated, AuditExportQueryAction::IntegrationWebhookRevoked, AuditExportQueryAction::IntegrationAppConnected, AuditExportQueryAction::IntegrationAppDisconnected, AuditExportQueryAction::IntegrationIssueCreated, AuditExportQueryAction::IntegrationWorkLinked, AuditExportQueryAction::IntegrationFeedSecretRegenerated, AuditExportQueryAction::InvitationCreated, AuditExportQueryAction::InvitationRevoked, AuditExportQueryAction::MessageRemovedByModerator, AuditExportQueryAction::WorkspaceRenamed, AuditExportQueryAction::RetentionChanged, AuditExportQueryAction::ChannelRetentionChanged, AuditExportQueryAction::ChannelPostingChanged, AuditExportQueryAction::AccountErased, AuditExportQueryAction::ContentErased, AuditExportQueryAction::WorkspaceExportRequested, AuditExportQueryAction::WorkspaceExported, AuditExportQueryAction::RetentionPurged, AuditExportQueryAction::StorageQuotaChanged, AuditExportQueryAction::AuditExported, AuditExportQueryAction::WorkspaceDeletionRequested, AuditExportQueryAction::WorkspaceDeletionCancelled, AuditExportQueryAction::IssueCreated, AuditExportQueryAction::IssueStatusChanged, AuditExportQueryAction::IssueAssigned, AuditExportQueryAction::IssueDeleted];
+    pub const ALL: &'static [AuditExportQueryAction] = &[AuditExportQueryAction::IdentityDomainCreated, AuditExportQueryAction::IdentityDomainRenewed, AuditExportQueryAction::IdentityDomainVerified, AuditExportQueryAction::IdentityDomainRevoked, AuditExportQueryAction::IdentityConnectionCreated, AuditExportQueryAction::IdentityConnectionUpdated, AuditExportQueryAction::IdentityConnectionEnabled, AuditExportQueryAction::IdentityConnectionDisabled, AuditExportQueryAction::IdentityConnectionDeleted, AuditExportQueryAction::IdentityConnectionTested, AuditExportQueryAction::IdentityLinked, AuditExportQueryAction::IdentityUnlinked, AuditExportQueryAction::MemberRoleChanged, AuditExportQueryAction::MemberGuestAccessChanged, AuditExportQueryAction::MemberGuestConverted, AuditExportQueryAction::MemberRemoved, AuditExportQueryAction::MemberLeft, AuditExportQueryAction::MemberJoined, AuditExportQueryAction::ChannelCreated, AuditExportQueryAction::ChannelRenamed, AuditExportQueryAction::ChannelArchived, AuditExportQueryAction::ChannelRestored, AuditExportQueryAction::ChannelMemberAdded, AuditExportQueryAction::ChannelMemberRemoved, AuditExportQueryAction::IntegrationTokenSet, AuditExportQueryAction::IntegrationTokenRemoved, AuditExportQueryAction::IntegrationFeedCreated, AuditExportQueryAction::IntegrationFeedRemoved, AuditExportQueryAction::IntegrationWebhookCreated, AuditExportQueryAction::IntegrationWebhookRevoked, AuditExportQueryAction::IntegrationWebhookRotated, AuditExportQueryAction::IntegrationOutgoingWebhookChanged, AuditExportQueryAction::IntegrationAppConnected, AuditExportQueryAction::IntegrationAppDisconnected, AuditExportQueryAction::IntegrationIssueCreated, AuditExportQueryAction::IntegrationWorkLinked, AuditExportQueryAction::IntegrationFeedSecretRegenerated, AuditExportQueryAction::InvitationCreated, AuditExportQueryAction::InvitationRevoked, AuditExportQueryAction::MessageRemovedByModerator, AuditExportQueryAction::WorkspaceRenamed, AuditExportQueryAction::WorkspaceMfaEnrolled, AuditExportQueryAction::WorkspaceMfaRotated, AuditExportQueryAction::WorkspaceMfaRevoked, AuditExportQueryAction::WorkspaceMfaRecoveryCodesRotated, AuditExportQueryAction::WorkspaceMfaRecoveryUsed, AuditExportQueryAction::WorkspaceSecurityPolicyTested, AuditExportQueryAction::WorkspaceSecurityPolicyUpdated, AuditExportQueryAction::WorkspaceSecurityRecoveryCreated, AuditExportQueryAction::WorkspaceSecurityPolicyRecovered, AuditExportQueryAction::WorkspaceAccessManualAdded, AuditExportQueryAction::WorkspaceAccessSourceRevoked, AuditExportQueryAction::WorkspaceAccessRoleCreated, AuditExportQueryAction::WorkspaceAccessRoleUpdated, AuditExportQueryAction::WorkspaceAccessRoleRetired, AuditExportQueryAction::WorkspaceAccessGroupCreated, AuditExportQueryAction::WorkspaceAccessGroupUpdated, AuditExportQueryAction::WorkspaceAccessGroupRetired, AuditExportQueryAction::WorkspaceAccessGroupMembersChanged, AuditExportQueryAction::WorkspaceAccessGrantAssigned, AuditExportQueryAction::WorkspaceAccessGrantRevoked, AuditExportQueryAction::WorkspaceAccessMemberOffboarded, AuditExportQueryAction::WorkspaceAccessMemberReadmitted, AuditExportQueryAction::DirectoryCreated, AuditExportQueryAction::DirectoryUpdated, AuditExportQueryAction::DirectoryDisabled, AuditExportQueryAction::DirectoryDeleted, AuditExportQueryAction::DirectoryCredentialRotated, AuditExportQueryAction::DirectoryCredentialRevoked, AuditExportQueryAction::RetentionChanged, AuditExportQueryAction::ChannelRetentionChanged, AuditExportQueryAction::ChannelPostingChanged, AuditExportQueryAction::AccountErased, AuditExportQueryAction::ContentErased, AuditExportQueryAction::WorkspaceExportRequested, AuditExportQueryAction::WorkspaceExported, AuditExportQueryAction::RetentionPurged, AuditExportQueryAction::StorageQuotaChanged, AuditExportQueryAction::QuotaChanged, AuditExportQueryAction::AuditExported, AuditExportQueryAction::WorkspaceDeletionRequested, AuditExportQueryAction::WorkspaceDeletionCancelled, AuditExportQueryAction::IssueCreated, AuditExportQueryAction::IssueStatusChanged, AuditExportQueryAction::IssueAssigned, AuditExportQueryAction::IssueDeleted];
     pub fn as_str(&self) -> &str {
         match self {
+            AuditExportQueryAction::IdentityDomainCreated => "identity.domain_created",
+            AuditExportQueryAction::IdentityDomainRenewed => "identity.domain_renewed",
+            AuditExportQueryAction::IdentityDomainVerified => "identity.domain_verified",
+            AuditExportQueryAction::IdentityDomainRevoked => "identity.domain_revoked",
+            AuditExportQueryAction::IdentityConnectionCreated => "identity.connection_created",
+            AuditExportQueryAction::IdentityConnectionUpdated => "identity.connection_updated",
+            AuditExportQueryAction::IdentityConnectionEnabled => "identity.connection_enabled",
+            AuditExportQueryAction::IdentityConnectionDisabled => "identity.connection_disabled",
+            AuditExportQueryAction::IdentityConnectionDeleted => "identity.connection_deleted",
+            AuditExportQueryAction::IdentityConnectionTested => "identity.connection_tested",
+            AuditExportQueryAction::IdentityLinked => "identity.linked",
+            AuditExportQueryAction::IdentityUnlinked => "identity.unlinked",
             AuditExportQueryAction::MemberRoleChanged => "member.role_changed",
+            AuditExportQueryAction::MemberGuestAccessChanged => "member.guest_access_changed",
+            AuditExportQueryAction::MemberGuestConverted => "member.guest_converted",
             AuditExportQueryAction::MemberRemoved => "member.removed",
             AuditExportQueryAction::MemberLeft => "member.left",
             AuditExportQueryAction::MemberJoined => "member.joined",
@@ -638,6 +922,8 @@ impl AuditExportQueryAction {
             AuditExportQueryAction::IntegrationFeedRemoved => "integration.feed_removed",
             AuditExportQueryAction::IntegrationWebhookCreated => "integration.webhook_created",
             AuditExportQueryAction::IntegrationWebhookRevoked => "integration.webhook_revoked",
+            AuditExportQueryAction::IntegrationWebhookRotated => "integration.webhook_rotated",
+            AuditExportQueryAction::IntegrationOutgoingWebhookChanged => "integration.outgoing_webhook_changed",
             AuditExportQueryAction::IntegrationAppConnected => "integration.app_connected",
             AuditExportQueryAction::IntegrationAppDisconnected => "integration.app_disconnected",
             AuditExportQueryAction::IntegrationIssueCreated => "integration.issue_created",
@@ -647,6 +933,34 @@ impl AuditExportQueryAction {
             AuditExportQueryAction::InvitationRevoked => "invitation.revoked",
             AuditExportQueryAction::MessageRemovedByModerator => "message.removed_by_moderator",
             AuditExportQueryAction::WorkspaceRenamed => "workspace.renamed",
+            AuditExportQueryAction::WorkspaceMfaEnrolled => "workspace.mfa.enrolled",
+            AuditExportQueryAction::WorkspaceMfaRotated => "workspace.mfa.rotated",
+            AuditExportQueryAction::WorkspaceMfaRevoked => "workspace.mfa.revoked",
+            AuditExportQueryAction::WorkspaceMfaRecoveryCodesRotated => "workspace.mfa.recovery_codes_rotated",
+            AuditExportQueryAction::WorkspaceMfaRecoveryUsed => "workspace.mfa.recovery_used",
+            AuditExportQueryAction::WorkspaceSecurityPolicyTested => "workspace.security.policy_tested",
+            AuditExportQueryAction::WorkspaceSecurityPolicyUpdated => "workspace.security.policy_updated",
+            AuditExportQueryAction::WorkspaceSecurityRecoveryCreated => "workspace.security.recovery_created",
+            AuditExportQueryAction::WorkspaceSecurityPolicyRecovered => "workspace.security.policy_recovered",
+            AuditExportQueryAction::WorkspaceAccessManualAdded => "workspace.access.manual_added",
+            AuditExportQueryAction::WorkspaceAccessSourceRevoked => "workspace.access.source_revoked",
+            AuditExportQueryAction::WorkspaceAccessRoleCreated => "workspace.access.role_created",
+            AuditExportQueryAction::WorkspaceAccessRoleUpdated => "workspace.access.role_updated",
+            AuditExportQueryAction::WorkspaceAccessRoleRetired => "workspace.access.role_retired",
+            AuditExportQueryAction::WorkspaceAccessGroupCreated => "workspace.access.group_created",
+            AuditExportQueryAction::WorkspaceAccessGroupUpdated => "workspace.access.group_updated",
+            AuditExportQueryAction::WorkspaceAccessGroupRetired => "workspace.access.group_retired",
+            AuditExportQueryAction::WorkspaceAccessGroupMembersChanged => "workspace.access.group_members_changed",
+            AuditExportQueryAction::WorkspaceAccessGrantAssigned => "workspace.access.grant_assigned",
+            AuditExportQueryAction::WorkspaceAccessGrantRevoked => "workspace.access.grant_revoked",
+            AuditExportQueryAction::WorkspaceAccessMemberOffboarded => "workspace.access.member_offboarded",
+            AuditExportQueryAction::WorkspaceAccessMemberReadmitted => "workspace.access.member_readmitted",
+            AuditExportQueryAction::DirectoryCreated => "directory.created",
+            AuditExportQueryAction::DirectoryUpdated => "directory.updated",
+            AuditExportQueryAction::DirectoryDisabled => "directory.disabled",
+            AuditExportQueryAction::DirectoryDeleted => "directory.deleted",
+            AuditExportQueryAction::DirectoryCredentialRotated => "directory.credential_rotated",
+            AuditExportQueryAction::DirectoryCredentialRevoked => "directory.credential_revoked",
             AuditExportQueryAction::RetentionChanged => "retention.changed",
             AuditExportQueryAction::ChannelRetentionChanged => "channel.retention_changed",
             AuditExportQueryAction::ChannelPostingChanged => "channel.posting_changed",
@@ -656,6 +970,7 @@ impl AuditExportQueryAction {
             AuditExportQueryAction::WorkspaceExported => "workspace.exported",
             AuditExportQueryAction::RetentionPurged => "retention.purged",
             AuditExportQueryAction::StorageQuotaChanged => "storage.quota_changed",
+            AuditExportQueryAction::QuotaChanged => "quota.changed",
             AuditExportQueryAction::AuditExported => "audit.exported",
             AuditExportQueryAction::WorkspaceDeletionRequested => "workspace.deletion_requested",
             AuditExportQueryAction::WorkspaceDeletionCancelled => "workspace.deletion_cancelled",
@@ -668,7 +983,21 @@ impl AuditExportQueryAction {
     }
     pub fn parse(s: &str) -> Self {
         match s {
+            "identity.domain_created" => AuditExportQueryAction::IdentityDomainCreated,
+            "identity.domain_renewed" => AuditExportQueryAction::IdentityDomainRenewed,
+            "identity.domain_verified" => AuditExportQueryAction::IdentityDomainVerified,
+            "identity.domain_revoked" => AuditExportQueryAction::IdentityDomainRevoked,
+            "identity.connection_created" => AuditExportQueryAction::IdentityConnectionCreated,
+            "identity.connection_updated" => AuditExportQueryAction::IdentityConnectionUpdated,
+            "identity.connection_enabled" => AuditExportQueryAction::IdentityConnectionEnabled,
+            "identity.connection_disabled" => AuditExportQueryAction::IdentityConnectionDisabled,
+            "identity.connection_deleted" => AuditExportQueryAction::IdentityConnectionDeleted,
+            "identity.connection_tested" => AuditExportQueryAction::IdentityConnectionTested,
+            "identity.linked" => AuditExportQueryAction::IdentityLinked,
+            "identity.unlinked" => AuditExportQueryAction::IdentityUnlinked,
             "member.role_changed" => AuditExportQueryAction::MemberRoleChanged,
+            "member.guest_access_changed" => AuditExportQueryAction::MemberGuestAccessChanged,
+            "member.guest_converted" => AuditExportQueryAction::MemberGuestConverted,
             "member.removed" => AuditExportQueryAction::MemberRemoved,
             "member.left" => AuditExportQueryAction::MemberLeft,
             "member.joined" => AuditExportQueryAction::MemberJoined,
@@ -684,6 +1013,8 @@ impl AuditExportQueryAction {
             "integration.feed_removed" => AuditExportQueryAction::IntegrationFeedRemoved,
             "integration.webhook_created" => AuditExportQueryAction::IntegrationWebhookCreated,
             "integration.webhook_revoked" => AuditExportQueryAction::IntegrationWebhookRevoked,
+            "integration.webhook_rotated" => AuditExportQueryAction::IntegrationWebhookRotated,
+            "integration.outgoing_webhook_changed" => AuditExportQueryAction::IntegrationOutgoingWebhookChanged,
             "integration.app_connected" => AuditExportQueryAction::IntegrationAppConnected,
             "integration.app_disconnected" => AuditExportQueryAction::IntegrationAppDisconnected,
             "integration.issue_created" => AuditExportQueryAction::IntegrationIssueCreated,
@@ -693,6 +1024,34 @@ impl AuditExportQueryAction {
             "invitation.revoked" => AuditExportQueryAction::InvitationRevoked,
             "message.removed_by_moderator" => AuditExportQueryAction::MessageRemovedByModerator,
             "workspace.renamed" => AuditExportQueryAction::WorkspaceRenamed,
+            "workspace.mfa.enrolled" => AuditExportQueryAction::WorkspaceMfaEnrolled,
+            "workspace.mfa.rotated" => AuditExportQueryAction::WorkspaceMfaRotated,
+            "workspace.mfa.revoked" => AuditExportQueryAction::WorkspaceMfaRevoked,
+            "workspace.mfa.recovery_codes_rotated" => AuditExportQueryAction::WorkspaceMfaRecoveryCodesRotated,
+            "workspace.mfa.recovery_used" => AuditExportQueryAction::WorkspaceMfaRecoveryUsed,
+            "workspace.security.policy_tested" => AuditExportQueryAction::WorkspaceSecurityPolicyTested,
+            "workspace.security.policy_updated" => AuditExportQueryAction::WorkspaceSecurityPolicyUpdated,
+            "workspace.security.recovery_created" => AuditExportQueryAction::WorkspaceSecurityRecoveryCreated,
+            "workspace.security.policy_recovered" => AuditExportQueryAction::WorkspaceSecurityPolicyRecovered,
+            "workspace.access.manual_added" => AuditExportQueryAction::WorkspaceAccessManualAdded,
+            "workspace.access.source_revoked" => AuditExportQueryAction::WorkspaceAccessSourceRevoked,
+            "workspace.access.role_created" => AuditExportQueryAction::WorkspaceAccessRoleCreated,
+            "workspace.access.role_updated" => AuditExportQueryAction::WorkspaceAccessRoleUpdated,
+            "workspace.access.role_retired" => AuditExportQueryAction::WorkspaceAccessRoleRetired,
+            "workspace.access.group_created" => AuditExportQueryAction::WorkspaceAccessGroupCreated,
+            "workspace.access.group_updated" => AuditExportQueryAction::WorkspaceAccessGroupUpdated,
+            "workspace.access.group_retired" => AuditExportQueryAction::WorkspaceAccessGroupRetired,
+            "workspace.access.group_members_changed" => AuditExportQueryAction::WorkspaceAccessGroupMembersChanged,
+            "workspace.access.grant_assigned" => AuditExportQueryAction::WorkspaceAccessGrantAssigned,
+            "workspace.access.grant_revoked" => AuditExportQueryAction::WorkspaceAccessGrantRevoked,
+            "workspace.access.member_offboarded" => AuditExportQueryAction::WorkspaceAccessMemberOffboarded,
+            "workspace.access.member_readmitted" => AuditExportQueryAction::WorkspaceAccessMemberReadmitted,
+            "directory.created" => AuditExportQueryAction::DirectoryCreated,
+            "directory.updated" => AuditExportQueryAction::DirectoryUpdated,
+            "directory.disabled" => AuditExportQueryAction::DirectoryDisabled,
+            "directory.deleted" => AuditExportQueryAction::DirectoryDeleted,
+            "directory.credential_rotated" => AuditExportQueryAction::DirectoryCredentialRotated,
+            "directory.credential_revoked" => AuditExportQueryAction::DirectoryCredentialRevoked,
             "retention.changed" => AuditExportQueryAction::RetentionChanged,
             "channel.retention_changed" => AuditExportQueryAction::ChannelRetentionChanged,
             "channel.posting_changed" => AuditExportQueryAction::ChannelPostingChanged,
@@ -702,6 +1061,7 @@ impl AuditExportQueryAction {
             "workspace.exported" => AuditExportQueryAction::WorkspaceExported,
             "retention.purged" => AuditExportQueryAction::RetentionPurged,
             "storage.quota_changed" => AuditExportQueryAction::StorageQuotaChanged,
+            "quota.changed" => AuditExportQueryAction::QuotaChanged,
             "audit.exported" => AuditExportQueryAction::AuditExported,
             "workspace.deletion_requested" => AuditExportQueryAction::WorkspaceDeletionRequested,
             "workspace.deletion_cancelled" => AuditExportQueryAction::WorkspaceDeletionCancelled,
@@ -787,8 +1147,36 @@ pub struct AuditExportQuery {
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum AuditFilterAction {
+    /// `identity.domain_created`
+    IdentityDomainCreated,
+    /// `identity.domain_renewed`
+    IdentityDomainRenewed,
+    /// `identity.domain_verified`
+    IdentityDomainVerified,
+    /// `identity.domain_revoked`
+    IdentityDomainRevoked,
+    /// `identity.connection_created`
+    IdentityConnectionCreated,
+    /// `identity.connection_updated`
+    IdentityConnectionUpdated,
+    /// `identity.connection_enabled`
+    IdentityConnectionEnabled,
+    /// `identity.connection_disabled`
+    IdentityConnectionDisabled,
+    /// `identity.connection_deleted`
+    IdentityConnectionDeleted,
+    /// `identity.connection_tested`
+    IdentityConnectionTested,
+    /// `identity.linked`
+    IdentityLinked,
+    /// `identity.unlinked`
+    IdentityUnlinked,
     /// `member.role_changed`
     MemberRoleChanged,
+    /// `member.guest_access_changed`
+    MemberGuestAccessChanged,
+    /// `member.guest_converted`
+    MemberGuestConverted,
     /// `member.removed`
     MemberRemoved,
     /// `member.left`
@@ -819,6 +1207,10 @@ pub enum AuditFilterAction {
     IntegrationWebhookCreated,
     /// `integration.webhook_revoked`
     IntegrationWebhookRevoked,
+    /// `integration.webhook_rotated`
+    IntegrationWebhookRotated,
+    /// `integration.outgoing_webhook_changed`
+    IntegrationOutgoingWebhookChanged,
     /// `integration.app_connected`
     IntegrationAppConnected,
     /// `integration.app_disconnected`
@@ -837,6 +1229,62 @@ pub enum AuditFilterAction {
     MessageRemovedByModerator,
     /// `workspace.renamed`
     WorkspaceRenamed,
+    /// `workspace.mfa.enrolled`
+    WorkspaceMfaEnrolled,
+    /// `workspace.mfa.rotated`
+    WorkspaceMfaRotated,
+    /// `workspace.mfa.revoked`
+    WorkspaceMfaRevoked,
+    /// `workspace.mfa.recovery_codes_rotated`
+    WorkspaceMfaRecoveryCodesRotated,
+    /// `workspace.mfa.recovery_used`
+    WorkspaceMfaRecoveryUsed,
+    /// `workspace.security.policy_tested`
+    WorkspaceSecurityPolicyTested,
+    /// `workspace.security.policy_updated`
+    WorkspaceSecurityPolicyUpdated,
+    /// `workspace.security.recovery_created`
+    WorkspaceSecurityRecoveryCreated,
+    /// `workspace.security.policy_recovered`
+    WorkspaceSecurityPolicyRecovered,
+    /// `workspace.access.manual_added`
+    WorkspaceAccessManualAdded,
+    /// `workspace.access.source_revoked`
+    WorkspaceAccessSourceRevoked,
+    /// `workspace.access.role_created`
+    WorkspaceAccessRoleCreated,
+    /// `workspace.access.role_updated`
+    WorkspaceAccessRoleUpdated,
+    /// `workspace.access.role_retired`
+    WorkspaceAccessRoleRetired,
+    /// `workspace.access.group_created`
+    WorkspaceAccessGroupCreated,
+    /// `workspace.access.group_updated`
+    WorkspaceAccessGroupUpdated,
+    /// `workspace.access.group_retired`
+    WorkspaceAccessGroupRetired,
+    /// `workspace.access.group_members_changed`
+    WorkspaceAccessGroupMembersChanged,
+    /// `workspace.access.grant_assigned`
+    WorkspaceAccessGrantAssigned,
+    /// `workspace.access.grant_revoked`
+    WorkspaceAccessGrantRevoked,
+    /// `workspace.access.member_offboarded`
+    WorkspaceAccessMemberOffboarded,
+    /// `workspace.access.member_readmitted`
+    WorkspaceAccessMemberReadmitted,
+    /// `directory.created`
+    DirectoryCreated,
+    /// `directory.updated`
+    DirectoryUpdated,
+    /// `directory.disabled`
+    DirectoryDisabled,
+    /// `directory.deleted`
+    DirectoryDeleted,
+    /// `directory.credential_rotated`
+    DirectoryCredentialRotated,
+    /// `directory.credential_revoked`
+    DirectoryCredentialRevoked,
     /// `retention.changed`
     RetentionChanged,
     /// `channel.retention_changed`
@@ -855,6 +1303,8 @@ pub enum AuditFilterAction {
     RetentionPurged,
     /// `storage.quota_changed`
     StorageQuotaChanged,
+    /// `quota.changed`
+    QuotaChanged,
     /// `audit.exported`
     AuditExported,
     /// `workspace.deletion_requested`
@@ -874,10 +1324,24 @@ pub enum AuditFilterAction {
 }
 
 impl AuditFilterAction {
-    pub const ALL: &'static [AuditFilterAction] = &[AuditFilterAction::MemberRoleChanged, AuditFilterAction::MemberRemoved, AuditFilterAction::MemberLeft, AuditFilterAction::MemberJoined, AuditFilterAction::ChannelCreated, AuditFilterAction::ChannelRenamed, AuditFilterAction::ChannelArchived, AuditFilterAction::ChannelRestored, AuditFilterAction::ChannelMemberAdded, AuditFilterAction::ChannelMemberRemoved, AuditFilterAction::IntegrationTokenSet, AuditFilterAction::IntegrationTokenRemoved, AuditFilterAction::IntegrationFeedCreated, AuditFilterAction::IntegrationFeedRemoved, AuditFilterAction::IntegrationWebhookCreated, AuditFilterAction::IntegrationWebhookRevoked, AuditFilterAction::IntegrationAppConnected, AuditFilterAction::IntegrationAppDisconnected, AuditFilterAction::IntegrationIssueCreated, AuditFilterAction::IntegrationWorkLinked, AuditFilterAction::IntegrationFeedSecretRegenerated, AuditFilterAction::InvitationCreated, AuditFilterAction::InvitationRevoked, AuditFilterAction::MessageRemovedByModerator, AuditFilterAction::WorkspaceRenamed, AuditFilterAction::RetentionChanged, AuditFilterAction::ChannelRetentionChanged, AuditFilterAction::ChannelPostingChanged, AuditFilterAction::AccountErased, AuditFilterAction::ContentErased, AuditFilterAction::WorkspaceExportRequested, AuditFilterAction::WorkspaceExported, AuditFilterAction::RetentionPurged, AuditFilterAction::StorageQuotaChanged, AuditFilterAction::AuditExported, AuditFilterAction::WorkspaceDeletionRequested, AuditFilterAction::WorkspaceDeletionCancelled, AuditFilterAction::IssueCreated, AuditFilterAction::IssueStatusChanged, AuditFilterAction::IssueAssigned, AuditFilterAction::IssueDeleted];
+    pub const ALL: &'static [AuditFilterAction] = &[AuditFilterAction::IdentityDomainCreated, AuditFilterAction::IdentityDomainRenewed, AuditFilterAction::IdentityDomainVerified, AuditFilterAction::IdentityDomainRevoked, AuditFilterAction::IdentityConnectionCreated, AuditFilterAction::IdentityConnectionUpdated, AuditFilterAction::IdentityConnectionEnabled, AuditFilterAction::IdentityConnectionDisabled, AuditFilterAction::IdentityConnectionDeleted, AuditFilterAction::IdentityConnectionTested, AuditFilterAction::IdentityLinked, AuditFilterAction::IdentityUnlinked, AuditFilterAction::MemberRoleChanged, AuditFilterAction::MemberGuestAccessChanged, AuditFilterAction::MemberGuestConverted, AuditFilterAction::MemberRemoved, AuditFilterAction::MemberLeft, AuditFilterAction::MemberJoined, AuditFilterAction::ChannelCreated, AuditFilterAction::ChannelRenamed, AuditFilterAction::ChannelArchived, AuditFilterAction::ChannelRestored, AuditFilterAction::ChannelMemberAdded, AuditFilterAction::ChannelMemberRemoved, AuditFilterAction::IntegrationTokenSet, AuditFilterAction::IntegrationTokenRemoved, AuditFilterAction::IntegrationFeedCreated, AuditFilterAction::IntegrationFeedRemoved, AuditFilterAction::IntegrationWebhookCreated, AuditFilterAction::IntegrationWebhookRevoked, AuditFilterAction::IntegrationWebhookRotated, AuditFilterAction::IntegrationOutgoingWebhookChanged, AuditFilterAction::IntegrationAppConnected, AuditFilterAction::IntegrationAppDisconnected, AuditFilterAction::IntegrationIssueCreated, AuditFilterAction::IntegrationWorkLinked, AuditFilterAction::IntegrationFeedSecretRegenerated, AuditFilterAction::InvitationCreated, AuditFilterAction::InvitationRevoked, AuditFilterAction::MessageRemovedByModerator, AuditFilterAction::WorkspaceRenamed, AuditFilterAction::WorkspaceMfaEnrolled, AuditFilterAction::WorkspaceMfaRotated, AuditFilterAction::WorkspaceMfaRevoked, AuditFilterAction::WorkspaceMfaRecoveryCodesRotated, AuditFilterAction::WorkspaceMfaRecoveryUsed, AuditFilterAction::WorkspaceSecurityPolicyTested, AuditFilterAction::WorkspaceSecurityPolicyUpdated, AuditFilterAction::WorkspaceSecurityRecoveryCreated, AuditFilterAction::WorkspaceSecurityPolicyRecovered, AuditFilterAction::WorkspaceAccessManualAdded, AuditFilterAction::WorkspaceAccessSourceRevoked, AuditFilterAction::WorkspaceAccessRoleCreated, AuditFilterAction::WorkspaceAccessRoleUpdated, AuditFilterAction::WorkspaceAccessRoleRetired, AuditFilterAction::WorkspaceAccessGroupCreated, AuditFilterAction::WorkspaceAccessGroupUpdated, AuditFilterAction::WorkspaceAccessGroupRetired, AuditFilterAction::WorkspaceAccessGroupMembersChanged, AuditFilterAction::WorkspaceAccessGrantAssigned, AuditFilterAction::WorkspaceAccessGrantRevoked, AuditFilterAction::WorkspaceAccessMemberOffboarded, AuditFilterAction::WorkspaceAccessMemberReadmitted, AuditFilterAction::DirectoryCreated, AuditFilterAction::DirectoryUpdated, AuditFilterAction::DirectoryDisabled, AuditFilterAction::DirectoryDeleted, AuditFilterAction::DirectoryCredentialRotated, AuditFilterAction::DirectoryCredentialRevoked, AuditFilterAction::RetentionChanged, AuditFilterAction::ChannelRetentionChanged, AuditFilterAction::ChannelPostingChanged, AuditFilterAction::AccountErased, AuditFilterAction::ContentErased, AuditFilterAction::WorkspaceExportRequested, AuditFilterAction::WorkspaceExported, AuditFilterAction::RetentionPurged, AuditFilterAction::StorageQuotaChanged, AuditFilterAction::QuotaChanged, AuditFilterAction::AuditExported, AuditFilterAction::WorkspaceDeletionRequested, AuditFilterAction::WorkspaceDeletionCancelled, AuditFilterAction::IssueCreated, AuditFilterAction::IssueStatusChanged, AuditFilterAction::IssueAssigned, AuditFilterAction::IssueDeleted];
     pub fn as_str(&self) -> &str {
         match self {
+            AuditFilterAction::IdentityDomainCreated => "identity.domain_created",
+            AuditFilterAction::IdentityDomainRenewed => "identity.domain_renewed",
+            AuditFilterAction::IdentityDomainVerified => "identity.domain_verified",
+            AuditFilterAction::IdentityDomainRevoked => "identity.domain_revoked",
+            AuditFilterAction::IdentityConnectionCreated => "identity.connection_created",
+            AuditFilterAction::IdentityConnectionUpdated => "identity.connection_updated",
+            AuditFilterAction::IdentityConnectionEnabled => "identity.connection_enabled",
+            AuditFilterAction::IdentityConnectionDisabled => "identity.connection_disabled",
+            AuditFilterAction::IdentityConnectionDeleted => "identity.connection_deleted",
+            AuditFilterAction::IdentityConnectionTested => "identity.connection_tested",
+            AuditFilterAction::IdentityLinked => "identity.linked",
+            AuditFilterAction::IdentityUnlinked => "identity.unlinked",
             AuditFilterAction::MemberRoleChanged => "member.role_changed",
+            AuditFilterAction::MemberGuestAccessChanged => "member.guest_access_changed",
+            AuditFilterAction::MemberGuestConverted => "member.guest_converted",
             AuditFilterAction::MemberRemoved => "member.removed",
             AuditFilterAction::MemberLeft => "member.left",
             AuditFilterAction::MemberJoined => "member.joined",
@@ -893,6 +1357,8 @@ impl AuditFilterAction {
             AuditFilterAction::IntegrationFeedRemoved => "integration.feed_removed",
             AuditFilterAction::IntegrationWebhookCreated => "integration.webhook_created",
             AuditFilterAction::IntegrationWebhookRevoked => "integration.webhook_revoked",
+            AuditFilterAction::IntegrationWebhookRotated => "integration.webhook_rotated",
+            AuditFilterAction::IntegrationOutgoingWebhookChanged => "integration.outgoing_webhook_changed",
             AuditFilterAction::IntegrationAppConnected => "integration.app_connected",
             AuditFilterAction::IntegrationAppDisconnected => "integration.app_disconnected",
             AuditFilterAction::IntegrationIssueCreated => "integration.issue_created",
@@ -902,6 +1368,34 @@ impl AuditFilterAction {
             AuditFilterAction::InvitationRevoked => "invitation.revoked",
             AuditFilterAction::MessageRemovedByModerator => "message.removed_by_moderator",
             AuditFilterAction::WorkspaceRenamed => "workspace.renamed",
+            AuditFilterAction::WorkspaceMfaEnrolled => "workspace.mfa.enrolled",
+            AuditFilterAction::WorkspaceMfaRotated => "workspace.mfa.rotated",
+            AuditFilterAction::WorkspaceMfaRevoked => "workspace.mfa.revoked",
+            AuditFilterAction::WorkspaceMfaRecoveryCodesRotated => "workspace.mfa.recovery_codes_rotated",
+            AuditFilterAction::WorkspaceMfaRecoveryUsed => "workspace.mfa.recovery_used",
+            AuditFilterAction::WorkspaceSecurityPolicyTested => "workspace.security.policy_tested",
+            AuditFilterAction::WorkspaceSecurityPolicyUpdated => "workspace.security.policy_updated",
+            AuditFilterAction::WorkspaceSecurityRecoveryCreated => "workspace.security.recovery_created",
+            AuditFilterAction::WorkspaceSecurityPolicyRecovered => "workspace.security.policy_recovered",
+            AuditFilterAction::WorkspaceAccessManualAdded => "workspace.access.manual_added",
+            AuditFilterAction::WorkspaceAccessSourceRevoked => "workspace.access.source_revoked",
+            AuditFilterAction::WorkspaceAccessRoleCreated => "workspace.access.role_created",
+            AuditFilterAction::WorkspaceAccessRoleUpdated => "workspace.access.role_updated",
+            AuditFilterAction::WorkspaceAccessRoleRetired => "workspace.access.role_retired",
+            AuditFilterAction::WorkspaceAccessGroupCreated => "workspace.access.group_created",
+            AuditFilterAction::WorkspaceAccessGroupUpdated => "workspace.access.group_updated",
+            AuditFilterAction::WorkspaceAccessGroupRetired => "workspace.access.group_retired",
+            AuditFilterAction::WorkspaceAccessGroupMembersChanged => "workspace.access.group_members_changed",
+            AuditFilterAction::WorkspaceAccessGrantAssigned => "workspace.access.grant_assigned",
+            AuditFilterAction::WorkspaceAccessGrantRevoked => "workspace.access.grant_revoked",
+            AuditFilterAction::WorkspaceAccessMemberOffboarded => "workspace.access.member_offboarded",
+            AuditFilterAction::WorkspaceAccessMemberReadmitted => "workspace.access.member_readmitted",
+            AuditFilterAction::DirectoryCreated => "directory.created",
+            AuditFilterAction::DirectoryUpdated => "directory.updated",
+            AuditFilterAction::DirectoryDisabled => "directory.disabled",
+            AuditFilterAction::DirectoryDeleted => "directory.deleted",
+            AuditFilterAction::DirectoryCredentialRotated => "directory.credential_rotated",
+            AuditFilterAction::DirectoryCredentialRevoked => "directory.credential_revoked",
             AuditFilterAction::RetentionChanged => "retention.changed",
             AuditFilterAction::ChannelRetentionChanged => "channel.retention_changed",
             AuditFilterAction::ChannelPostingChanged => "channel.posting_changed",
@@ -911,6 +1405,7 @@ impl AuditFilterAction {
             AuditFilterAction::WorkspaceExported => "workspace.exported",
             AuditFilterAction::RetentionPurged => "retention.purged",
             AuditFilterAction::StorageQuotaChanged => "storage.quota_changed",
+            AuditFilterAction::QuotaChanged => "quota.changed",
             AuditFilterAction::AuditExported => "audit.exported",
             AuditFilterAction::WorkspaceDeletionRequested => "workspace.deletion_requested",
             AuditFilterAction::WorkspaceDeletionCancelled => "workspace.deletion_cancelled",
@@ -923,7 +1418,21 @@ impl AuditFilterAction {
     }
     pub fn parse(s: &str) -> Self {
         match s {
+            "identity.domain_created" => AuditFilterAction::IdentityDomainCreated,
+            "identity.domain_renewed" => AuditFilterAction::IdentityDomainRenewed,
+            "identity.domain_verified" => AuditFilterAction::IdentityDomainVerified,
+            "identity.domain_revoked" => AuditFilterAction::IdentityDomainRevoked,
+            "identity.connection_created" => AuditFilterAction::IdentityConnectionCreated,
+            "identity.connection_updated" => AuditFilterAction::IdentityConnectionUpdated,
+            "identity.connection_enabled" => AuditFilterAction::IdentityConnectionEnabled,
+            "identity.connection_disabled" => AuditFilterAction::IdentityConnectionDisabled,
+            "identity.connection_deleted" => AuditFilterAction::IdentityConnectionDeleted,
+            "identity.connection_tested" => AuditFilterAction::IdentityConnectionTested,
+            "identity.linked" => AuditFilterAction::IdentityLinked,
+            "identity.unlinked" => AuditFilterAction::IdentityUnlinked,
             "member.role_changed" => AuditFilterAction::MemberRoleChanged,
+            "member.guest_access_changed" => AuditFilterAction::MemberGuestAccessChanged,
+            "member.guest_converted" => AuditFilterAction::MemberGuestConverted,
             "member.removed" => AuditFilterAction::MemberRemoved,
             "member.left" => AuditFilterAction::MemberLeft,
             "member.joined" => AuditFilterAction::MemberJoined,
@@ -939,6 +1448,8 @@ impl AuditFilterAction {
             "integration.feed_removed" => AuditFilterAction::IntegrationFeedRemoved,
             "integration.webhook_created" => AuditFilterAction::IntegrationWebhookCreated,
             "integration.webhook_revoked" => AuditFilterAction::IntegrationWebhookRevoked,
+            "integration.webhook_rotated" => AuditFilterAction::IntegrationWebhookRotated,
+            "integration.outgoing_webhook_changed" => AuditFilterAction::IntegrationOutgoingWebhookChanged,
             "integration.app_connected" => AuditFilterAction::IntegrationAppConnected,
             "integration.app_disconnected" => AuditFilterAction::IntegrationAppDisconnected,
             "integration.issue_created" => AuditFilterAction::IntegrationIssueCreated,
@@ -948,6 +1459,34 @@ impl AuditFilterAction {
             "invitation.revoked" => AuditFilterAction::InvitationRevoked,
             "message.removed_by_moderator" => AuditFilterAction::MessageRemovedByModerator,
             "workspace.renamed" => AuditFilterAction::WorkspaceRenamed,
+            "workspace.mfa.enrolled" => AuditFilterAction::WorkspaceMfaEnrolled,
+            "workspace.mfa.rotated" => AuditFilterAction::WorkspaceMfaRotated,
+            "workspace.mfa.revoked" => AuditFilterAction::WorkspaceMfaRevoked,
+            "workspace.mfa.recovery_codes_rotated" => AuditFilterAction::WorkspaceMfaRecoveryCodesRotated,
+            "workspace.mfa.recovery_used" => AuditFilterAction::WorkspaceMfaRecoveryUsed,
+            "workspace.security.policy_tested" => AuditFilterAction::WorkspaceSecurityPolicyTested,
+            "workspace.security.policy_updated" => AuditFilterAction::WorkspaceSecurityPolicyUpdated,
+            "workspace.security.recovery_created" => AuditFilterAction::WorkspaceSecurityRecoveryCreated,
+            "workspace.security.policy_recovered" => AuditFilterAction::WorkspaceSecurityPolicyRecovered,
+            "workspace.access.manual_added" => AuditFilterAction::WorkspaceAccessManualAdded,
+            "workspace.access.source_revoked" => AuditFilterAction::WorkspaceAccessSourceRevoked,
+            "workspace.access.role_created" => AuditFilterAction::WorkspaceAccessRoleCreated,
+            "workspace.access.role_updated" => AuditFilterAction::WorkspaceAccessRoleUpdated,
+            "workspace.access.role_retired" => AuditFilterAction::WorkspaceAccessRoleRetired,
+            "workspace.access.group_created" => AuditFilterAction::WorkspaceAccessGroupCreated,
+            "workspace.access.group_updated" => AuditFilterAction::WorkspaceAccessGroupUpdated,
+            "workspace.access.group_retired" => AuditFilterAction::WorkspaceAccessGroupRetired,
+            "workspace.access.group_members_changed" => AuditFilterAction::WorkspaceAccessGroupMembersChanged,
+            "workspace.access.grant_assigned" => AuditFilterAction::WorkspaceAccessGrantAssigned,
+            "workspace.access.grant_revoked" => AuditFilterAction::WorkspaceAccessGrantRevoked,
+            "workspace.access.member_offboarded" => AuditFilterAction::WorkspaceAccessMemberOffboarded,
+            "workspace.access.member_readmitted" => AuditFilterAction::WorkspaceAccessMemberReadmitted,
+            "directory.created" => AuditFilterAction::DirectoryCreated,
+            "directory.updated" => AuditFilterAction::DirectoryUpdated,
+            "directory.disabled" => AuditFilterAction::DirectoryDisabled,
+            "directory.deleted" => AuditFilterAction::DirectoryDeleted,
+            "directory.credential_rotated" => AuditFilterAction::DirectoryCredentialRotated,
+            "directory.credential_revoked" => AuditFilterAction::DirectoryCredentialRevoked,
             "retention.changed" => AuditFilterAction::RetentionChanged,
             "channel.retention_changed" => AuditFilterAction::ChannelRetentionChanged,
             "channel.posting_changed" => AuditFilterAction::ChannelPostingChanged,
@@ -957,6 +1496,7 @@ impl AuditFilterAction {
             "workspace.exported" => AuditFilterAction::WorkspaceExported,
             "retention.purged" => AuditFilterAction::RetentionPurged,
             "storage.quota_changed" => AuditFilterAction::StorageQuotaChanged,
+            "quota.changed" => AuditFilterAction::QuotaChanged,
             "audit.exported" => AuditFilterAction::AuditExported,
             "workspace.deletion_requested" => AuditFilterAction::WorkspaceDeletionRequested,
             "workspace.deletion_cancelled" => AuditFilterAction::WorkspaceDeletionCancelled,
@@ -1005,8 +1545,36 @@ pub struct AuditPage {
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum AuditQueryAction {
+    /// `identity.domain_created`
+    IdentityDomainCreated,
+    /// `identity.domain_renewed`
+    IdentityDomainRenewed,
+    /// `identity.domain_verified`
+    IdentityDomainVerified,
+    /// `identity.domain_revoked`
+    IdentityDomainRevoked,
+    /// `identity.connection_created`
+    IdentityConnectionCreated,
+    /// `identity.connection_updated`
+    IdentityConnectionUpdated,
+    /// `identity.connection_enabled`
+    IdentityConnectionEnabled,
+    /// `identity.connection_disabled`
+    IdentityConnectionDisabled,
+    /// `identity.connection_deleted`
+    IdentityConnectionDeleted,
+    /// `identity.connection_tested`
+    IdentityConnectionTested,
+    /// `identity.linked`
+    IdentityLinked,
+    /// `identity.unlinked`
+    IdentityUnlinked,
     /// `member.role_changed`
     MemberRoleChanged,
+    /// `member.guest_access_changed`
+    MemberGuestAccessChanged,
+    /// `member.guest_converted`
+    MemberGuestConverted,
     /// `member.removed`
     MemberRemoved,
     /// `member.left`
@@ -1037,6 +1605,10 @@ pub enum AuditQueryAction {
     IntegrationWebhookCreated,
     /// `integration.webhook_revoked`
     IntegrationWebhookRevoked,
+    /// `integration.webhook_rotated`
+    IntegrationWebhookRotated,
+    /// `integration.outgoing_webhook_changed`
+    IntegrationOutgoingWebhookChanged,
     /// `integration.app_connected`
     IntegrationAppConnected,
     /// `integration.app_disconnected`
@@ -1055,6 +1627,62 @@ pub enum AuditQueryAction {
     MessageRemovedByModerator,
     /// `workspace.renamed`
     WorkspaceRenamed,
+    /// `workspace.mfa.enrolled`
+    WorkspaceMfaEnrolled,
+    /// `workspace.mfa.rotated`
+    WorkspaceMfaRotated,
+    /// `workspace.mfa.revoked`
+    WorkspaceMfaRevoked,
+    /// `workspace.mfa.recovery_codes_rotated`
+    WorkspaceMfaRecoveryCodesRotated,
+    /// `workspace.mfa.recovery_used`
+    WorkspaceMfaRecoveryUsed,
+    /// `workspace.security.policy_tested`
+    WorkspaceSecurityPolicyTested,
+    /// `workspace.security.policy_updated`
+    WorkspaceSecurityPolicyUpdated,
+    /// `workspace.security.recovery_created`
+    WorkspaceSecurityRecoveryCreated,
+    /// `workspace.security.policy_recovered`
+    WorkspaceSecurityPolicyRecovered,
+    /// `workspace.access.manual_added`
+    WorkspaceAccessManualAdded,
+    /// `workspace.access.source_revoked`
+    WorkspaceAccessSourceRevoked,
+    /// `workspace.access.role_created`
+    WorkspaceAccessRoleCreated,
+    /// `workspace.access.role_updated`
+    WorkspaceAccessRoleUpdated,
+    /// `workspace.access.role_retired`
+    WorkspaceAccessRoleRetired,
+    /// `workspace.access.group_created`
+    WorkspaceAccessGroupCreated,
+    /// `workspace.access.group_updated`
+    WorkspaceAccessGroupUpdated,
+    /// `workspace.access.group_retired`
+    WorkspaceAccessGroupRetired,
+    /// `workspace.access.group_members_changed`
+    WorkspaceAccessGroupMembersChanged,
+    /// `workspace.access.grant_assigned`
+    WorkspaceAccessGrantAssigned,
+    /// `workspace.access.grant_revoked`
+    WorkspaceAccessGrantRevoked,
+    /// `workspace.access.member_offboarded`
+    WorkspaceAccessMemberOffboarded,
+    /// `workspace.access.member_readmitted`
+    WorkspaceAccessMemberReadmitted,
+    /// `directory.created`
+    DirectoryCreated,
+    /// `directory.updated`
+    DirectoryUpdated,
+    /// `directory.disabled`
+    DirectoryDisabled,
+    /// `directory.deleted`
+    DirectoryDeleted,
+    /// `directory.credential_rotated`
+    DirectoryCredentialRotated,
+    /// `directory.credential_revoked`
+    DirectoryCredentialRevoked,
     /// `retention.changed`
     RetentionChanged,
     /// `channel.retention_changed`
@@ -1073,6 +1701,8 @@ pub enum AuditQueryAction {
     RetentionPurged,
     /// `storage.quota_changed`
     StorageQuotaChanged,
+    /// `quota.changed`
+    QuotaChanged,
     /// `audit.exported`
     AuditExported,
     /// `workspace.deletion_requested`
@@ -1092,10 +1722,24 @@ pub enum AuditQueryAction {
 }
 
 impl AuditQueryAction {
-    pub const ALL: &'static [AuditQueryAction] = &[AuditQueryAction::MemberRoleChanged, AuditQueryAction::MemberRemoved, AuditQueryAction::MemberLeft, AuditQueryAction::MemberJoined, AuditQueryAction::ChannelCreated, AuditQueryAction::ChannelRenamed, AuditQueryAction::ChannelArchived, AuditQueryAction::ChannelRestored, AuditQueryAction::ChannelMemberAdded, AuditQueryAction::ChannelMemberRemoved, AuditQueryAction::IntegrationTokenSet, AuditQueryAction::IntegrationTokenRemoved, AuditQueryAction::IntegrationFeedCreated, AuditQueryAction::IntegrationFeedRemoved, AuditQueryAction::IntegrationWebhookCreated, AuditQueryAction::IntegrationWebhookRevoked, AuditQueryAction::IntegrationAppConnected, AuditQueryAction::IntegrationAppDisconnected, AuditQueryAction::IntegrationIssueCreated, AuditQueryAction::IntegrationWorkLinked, AuditQueryAction::IntegrationFeedSecretRegenerated, AuditQueryAction::InvitationCreated, AuditQueryAction::InvitationRevoked, AuditQueryAction::MessageRemovedByModerator, AuditQueryAction::WorkspaceRenamed, AuditQueryAction::RetentionChanged, AuditQueryAction::ChannelRetentionChanged, AuditQueryAction::ChannelPostingChanged, AuditQueryAction::AccountErased, AuditQueryAction::ContentErased, AuditQueryAction::WorkspaceExportRequested, AuditQueryAction::WorkspaceExported, AuditQueryAction::RetentionPurged, AuditQueryAction::StorageQuotaChanged, AuditQueryAction::AuditExported, AuditQueryAction::WorkspaceDeletionRequested, AuditQueryAction::WorkspaceDeletionCancelled, AuditQueryAction::IssueCreated, AuditQueryAction::IssueStatusChanged, AuditQueryAction::IssueAssigned, AuditQueryAction::IssueDeleted];
+    pub const ALL: &'static [AuditQueryAction] = &[AuditQueryAction::IdentityDomainCreated, AuditQueryAction::IdentityDomainRenewed, AuditQueryAction::IdentityDomainVerified, AuditQueryAction::IdentityDomainRevoked, AuditQueryAction::IdentityConnectionCreated, AuditQueryAction::IdentityConnectionUpdated, AuditQueryAction::IdentityConnectionEnabled, AuditQueryAction::IdentityConnectionDisabled, AuditQueryAction::IdentityConnectionDeleted, AuditQueryAction::IdentityConnectionTested, AuditQueryAction::IdentityLinked, AuditQueryAction::IdentityUnlinked, AuditQueryAction::MemberRoleChanged, AuditQueryAction::MemberGuestAccessChanged, AuditQueryAction::MemberGuestConverted, AuditQueryAction::MemberRemoved, AuditQueryAction::MemberLeft, AuditQueryAction::MemberJoined, AuditQueryAction::ChannelCreated, AuditQueryAction::ChannelRenamed, AuditQueryAction::ChannelArchived, AuditQueryAction::ChannelRestored, AuditQueryAction::ChannelMemberAdded, AuditQueryAction::ChannelMemberRemoved, AuditQueryAction::IntegrationTokenSet, AuditQueryAction::IntegrationTokenRemoved, AuditQueryAction::IntegrationFeedCreated, AuditQueryAction::IntegrationFeedRemoved, AuditQueryAction::IntegrationWebhookCreated, AuditQueryAction::IntegrationWebhookRevoked, AuditQueryAction::IntegrationWebhookRotated, AuditQueryAction::IntegrationOutgoingWebhookChanged, AuditQueryAction::IntegrationAppConnected, AuditQueryAction::IntegrationAppDisconnected, AuditQueryAction::IntegrationIssueCreated, AuditQueryAction::IntegrationWorkLinked, AuditQueryAction::IntegrationFeedSecretRegenerated, AuditQueryAction::InvitationCreated, AuditQueryAction::InvitationRevoked, AuditQueryAction::MessageRemovedByModerator, AuditQueryAction::WorkspaceRenamed, AuditQueryAction::WorkspaceMfaEnrolled, AuditQueryAction::WorkspaceMfaRotated, AuditQueryAction::WorkspaceMfaRevoked, AuditQueryAction::WorkspaceMfaRecoveryCodesRotated, AuditQueryAction::WorkspaceMfaRecoveryUsed, AuditQueryAction::WorkspaceSecurityPolicyTested, AuditQueryAction::WorkspaceSecurityPolicyUpdated, AuditQueryAction::WorkspaceSecurityRecoveryCreated, AuditQueryAction::WorkspaceSecurityPolicyRecovered, AuditQueryAction::WorkspaceAccessManualAdded, AuditQueryAction::WorkspaceAccessSourceRevoked, AuditQueryAction::WorkspaceAccessRoleCreated, AuditQueryAction::WorkspaceAccessRoleUpdated, AuditQueryAction::WorkspaceAccessRoleRetired, AuditQueryAction::WorkspaceAccessGroupCreated, AuditQueryAction::WorkspaceAccessGroupUpdated, AuditQueryAction::WorkspaceAccessGroupRetired, AuditQueryAction::WorkspaceAccessGroupMembersChanged, AuditQueryAction::WorkspaceAccessGrantAssigned, AuditQueryAction::WorkspaceAccessGrantRevoked, AuditQueryAction::WorkspaceAccessMemberOffboarded, AuditQueryAction::WorkspaceAccessMemberReadmitted, AuditQueryAction::DirectoryCreated, AuditQueryAction::DirectoryUpdated, AuditQueryAction::DirectoryDisabled, AuditQueryAction::DirectoryDeleted, AuditQueryAction::DirectoryCredentialRotated, AuditQueryAction::DirectoryCredentialRevoked, AuditQueryAction::RetentionChanged, AuditQueryAction::ChannelRetentionChanged, AuditQueryAction::ChannelPostingChanged, AuditQueryAction::AccountErased, AuditQueryAction::ContentErased, AuditQueryAction::WorkspaceExportRequested, AuditQueryAction::WorkspaceExported, AuditQueryAction::RetentionPurged, AuditQueryAction::StorageQuotaChanged, AuditQueryAction::QuotaChanged, AuditQueryAction::AuditExported, AuditQueryAction::WorkspaceDeletionRequested, AuditQueryAction::WorkspaceDeletionCancelled, AuditQueryAction::IssueCreated, AuditQueryAction::IssueStatusChanged, AuditQueryAction::IssueAssigned, AuditQueryAction::IssueDeleted];
     pub fn as_str(&self) -> &str {
         match self {
+            AuditQueryAction::IdentityDomainCreated => "identity.domain_created",
+            AuditQueryAction::IdentityDomainRenewed => "identity.domain_renewed",
+            AuditQueryAction::IdentityDomainVerified => "identity.domain_verified",
+            AuditQueryAction::IdentityDomainRevoked => "identity.domain_revoked",
+            AuditQueryAction::IdentityConnectionCreated => "identity.connection_created",
+            AuditQueryAction::IdentityConnectionUpdated => "identity.connection_updated",
+            AuditQueryAction::IdentityConnectionEnabled => "identity.connection_enabled",
+            AuditQueryAction::IdentityConnectionDisabled => "identity.connection_disabled",
+            AuditQueryAction::IdentityConnectionDeleted => "identity.connection_deleted",
+            AuditQueryAction::IdentityConnectionTested => "identity.connection_tested",
+            AuditQueryAction::IdentityLinked => "identity.linked",
+            AuditQueryAction::IdentityUnlinked => "identity.unlinked",
             AuditQueryAction::MemberRoleChanged => "member.role_changed",
+            AuditQueryAction::MemberGuestAccessChanged => "member.guest_access_changed",
+            AuditQueryAction::MemberGuestConverted => "member.guest_converted",
             AuditQueryAction::MemberRemoved => "member.removed",
             AuditQueryAction::MemberLeft => "member.left",
             AuditQueryAction::MemberJoined => "member.joined",
@@ -1111,6 +1755,8 @@ impl AuditQueryAction {
             AuditQueryAction::IntegrationFeedRemoved => "integration.feed_removed",
             AuditQueryAction::IntegrationWebhookCreated => "integration.webhook_created",
             AuditQueryAction::IntegrationWebhookRevoked => "integration.webhook_revoked",
+            AuditQueryAction::IntegrationWebhookRotated => "integration.webhook_rotated",
+            AuditQueryAction::IntegrationOutgoingWebhookChanged => "integration.outgoing_webhook_changed",
             AuditQueryAction::IntegrationAppConnected => "integration.app_connected",
             AuditQueryAction::IntegrationAppDisconnected => "integration.app_disconnected",
             AuditQueryAction::IntegrationIssueCreated => "integration.issue_created",
@@ -1120,6 +1766,34 @@ impl AuditQueryAction {
             AuditQueryAction::InvitationRevoked => "invitation.revoked",
             AuditQueryAction::MessageRemovedByModerator => "message.removed_by_moderator",
             AuditQueryAction::WorkspaceRenamed => "workspace.renamed",
+            AuditQueryAction::WorkspaceMfaEnrolled => "workspace.mfa.enrolled",
+            AuditQueryAction::WorkspaceMfaRotated => "workspace.mfa.rotated",
+            AuditQueryAction::WorkspaceMfaRevoked => "workspace.mfa.revoked",
+            AuditQueryAction::WorkspaceMfaRecoveryCodesRotated => "workspace.mfa.recovery_codes_rotated",
+            AuditQueryAction::WorkspaceMfaRecoveryUsed => "workspace.mfa.recovery_used",
+            AuditQueryAction::WorkspaceSecurityPolicyTested => "workspace.security.policy_tested",
+            AuditQueryAction::WorkspaceSecurityPolicyUpdated => "workspace.security.policy_updated",
+            AuditQueryAction::WorkspaceSecurityRecoveryCreated => "workspace.security.recovery_created",
+            AuditQueryAction::WorkspaceSecurityPolicyRecovered => "workspace.security.policy_recovered",
+            AuditQueryAction::WorkspaceAccessManualAdded => "workspace.access.manual_added",
+            AuditQueryAction::WorkspaceAccessSourceRevoked => "workspace.access.source_revoked",
+            AuditQueryAction::WorkspaceAccessRoleCreated => "workspace.access.role_created",
+            AuditQueryAction::WorkspaceAccessRoleUpdated => "workspace.access.role_updated",
+            AuditQueryAction::WorkspaceAccessRoleRetired => "workspace.access.role_retired",
+            AuditQueryAction::WorkspaceAccessGroupCreated => "workspace.access.group_created",
+            AuditQueryAction::WorkspaceAccessGroupUpdated => "workspace.access.group_updated",
+            AuditQueryAction::WorkspaceAccessGroupRetired => "workspace.access.group_retired",
+            AuditQueryAction::WorkspaceAccessGroupMembersChanged => "workspace.access.group_members_changed",
+            AuditQueryAction::WorkspaceAccessGrantAssigned => "workspace.access.grant_assigned",
+            AuditQueryAction::WorkspaceAccessGrantRevoked => "workspace.access.grant_revoked",
+            AuditQueryAction::WorkspaceAccessMemberOffboarded => "workspace.access.member_offboarded",
+            AuditQueryAction::WorkspaceAccessMemberReadmitted => "workspace.access.member_readmitted",
+            AuditQueryAction::DirectoryCreated => "directory.created",
+            AuditQueryAction::DirectoryUpdated => "directory.updated",
+            AuditQueryAction::DirectoryDisabled => "directory.disabled",
+            AuditQueryAction::DirectoryDeleted => "directory.deleted",
+            AuditQueryAction::DirectoryCredentialRotated => "directory.credential_rotated",
+            AuditQueryAction::DirectoryCredentialRevoked => "directory.credential_revoked",
             AuditQueryAction::RetentionChanged => "retention.changed",
             AuditQueryAction::ChannelRetentionChanged => "channel.retention_changed",
             AuditQueryAction::ChannelPostingChanged => "channel.posting_changed",
@@ -1129,6 +1803,7 @@ impl AuditQueryAction {
             AuditQueryAction::WorkspaceExported => "workspace.exported",
             AuditQueryAction::RetentionPurged => "retention.purged",
             AuditQueryAction::StorageQuotaChanged => "storage.quota_changed",
+            AuditQueryAction::QuotaChanged => "quota.changed",
             AuditQueryAction::AuditExported => "audit.exported",
             AuditQueryAction::WorkspaceDeletionRequested => "workspace.deletion_requested",
             AuditQueryAction::WorkspaceDeletionCancelled => "workspace.deletion_cancelled",
@@ -1141,7 +1816,21 @@ impl AuditQueryAction {
     }
     pub fn parse(s: &str) -> Self {
         match s {
+            "identity.domain_created" => AuditQueryAction::IdentityDomainCreated,
+            "identity.domain_renewed" => AuditQueryAction::IdentityDomainRenewed,
+            "identity.domain_verified" => AuditQueryAction::IdentityDomainVerified,
+            "identity.domain_revoked" => AuditQueryAction::IdentityDomainRevoked,
+            "identity.connection_created" => AuditQueryAction::IdentityConnectionCreated,
+            "identity.connection_updated" => AuditQueryAction::IdentityConnectionUpdated,
+            "identity.connection_enabled" => AuditQueryAction::IdentityConnectionEnabled,
+            "identity.connection_disabled" => AuditQueryAction::IdentityConnectionDisabled,
+            "identity.connection_deleted" => AuditQueryAction::IdentityConnectionDeleted,
+            "identity.connection_tested" => AuditQueryAction::IdentityConnectionTested,
+            "identity.linked" => AuditQueryAction::IdentityLinked,
+            "identity.unlinked" => AuditQueryAction::IdentityUnlinked,
             "member.role_changed" => AuditQueryAction::MemberRoleChanged,
+            "member.guest_access_changed" => AuditQueryAction::MemberGuestAccessChanged,
+            "member.guest_converted" => AuditQueryAction::MemberGuestConverted,
             "member.removed" => AuditQueryAction::MemberRemoved,
             "member.left" => AuditQueryAction::MemberLeft,
             "member.joined" => AuditQueryAction::MemberJoined,
@@ -1157,6 +1846,8 @@ impl AuditQueryAction {
             "integration.feed_removed" => AuditQueryAction::IntegrationFeedRemoved,
             "integration.webhook_created" => AuditQueryAction::IntegrationWebhookCreated,
             "integration.webhook_revoked" => AuditQueryAction::IntegrationWebhookRevoked,
+            "integration.webhook_rotated" => AuditQueryAction::IntegrationWebhookRotated,
+            "integration.outgoing_webhook_changed" => AuditQueryAction::IntegrationOutgoingWebhookChanged,
             "integration.app_connected" => AuditQueryAction::IntegrationAppConnected,
             "integration.app_disconnected" => AuditQueryAction::IntegrationAppDisconnected,
             "integration.issue_created" => AuditQueryAction::IntegrationIssueCreated,
@@ -1166,6 +1857,34 @@ impl AuditQueryAction {
             "invitation.revoked" => AuditQueryAction::InvitationRevoked,
             "message.removed_by_moderator" => AuditQueryAction::MessageRemovedByModerator,
             "workspace.renamed" => AuditQueryAction::WorkspaceRenamed,
+            "workspace.mfa.enrolled" => AuditQueryAction::WorkspaceMfaEnrolled,
+            "workspace.mfa.rotated" => AuditQueryAction::WorkspaceMfaRotated,
+            "workspace.mfa.revoked" => AuditQueryAction::WorkspaceMfaRevoked,
+            "workspace.mfa.recovery_codes_rotated" => AuditQueryAction::WorkspaceMfaRecoveryCodesRotated,
+            "workspace.mfa.recovery_used" => AuditQueryAction::WorkspaceMfaRecoveryUsed,
+            "workspace.security.policy_tested" => AuditQueryAction::WorkspaceSecurityPolicyTested,
+            "workspace.security.policy_updated" => AuditQueryAction::WorkspaceSecurityPolicyUpdated,
+            "workspace.security.recovery_created" => AuditQueryAction::WorkspaceSecurityRecoveryCreated,
+            "workspace.security.policy_recovered" => AuditQueryAction::WorkspaceSecurityPolicyRecovered,
+            "workspace.access.manual_added" => AuditQueryAction::WorkspaceAccessManualAdded,
+            "workspace.access.source_revoked" => AuditQueryAction::WorkspaceAccessSourceRevoked,
+            "workspace.access.role_created" => AuditQueryAction::WorkspaceAccessRoleCreated,
+            "workspace.access.role_updated" => AuditQueryAction::WorkspaceAccessRoleUpdated,
+            "workspace.access.role_retired" => AuditQueryAction::WorkspaceAccessRoleRetired,
+            "workspace.access.group_created" => AuditQueryAction::WorkspaceAccessGroupCreated,
+            "workspace.access.group_updated" => AuditQueryAction::WorkspaceAccessGroupUpdated,
+            "workspace.access.group_retired" => AuditQueryAction::WorkspaceAccessGroupRetired,
+            "workspace.access.group_members_changed" => AuditQueryAction::WorkspaceAccessGroupMembersChanged,
+            "workspace.access.grant_assigned" => AuditQueryAction::WorkspaceAccessGrantAssigned,
+            "workspace.access.grant_revoked" => AuditQueryAction::WorkspaceAccessGrantRevoked,
+            "workspace.access.member_offboarded" => AuditQueryAction::WorkspaceAccessMemberOffboarded,
+            "workspace.access.member_readmitted" => AuditQueryAction::WorkspaceAccessMemberReadmitted,
+            "directory.created" => AuditQueryAction::DirectoryCreated,
+            "directory.updated" => AuditQueryAction::DirectoryUpdated,
+            "directory.disabled" => AuditQueryAction::DirectoryDisabled,
+            "directory.deleted" => AuditQueryAction::DirectoryDeleted,
+            "directory.credential_rotated" => AuditQueryAction::DirectoryCredentialRotated,
+            "directory.credential_revoked" => AuditQueryAction::DirectoryCredentialRevoked,
             "retention.changed" => AuditQueryAction::RetentionChanged,
             "channel.retention_changed" => AuditQueryAction::ChannelRetentionChanged,
             "channel.posting_changed" => AuditQueryAction::ChannelPostingChanged,
@@ -1175,6 +1894,7 @@ impl AuditQueryAction {
             "workspace.exported" => AuditQueryAction::WorkspaceExported,
             "retention.purged" => AuditQueryAction::RetentionPurged,
             "storage.quota_changed" => AuditQueryAction::StorageQuotaChanged,
+            "quota.changed" => AuditQueryAction::QuotaChanged,
             "audit.exported" => AuditQueryAction::AuditExported,
             "workspace.deletion_requested" => AuditQueryAction::WorkspaceDeletionRequested,
             "workspace.deletion_cancelled" => AuditQueryAction::WorkspaceDeletionCancelled,
@@ -1264,6 +1984,8 @@ impl<'de> Deserialize<'de> for AuthMethodsSignUp {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AuthMethods {
     pub github: bool,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub company: Option<AuthMethodsCompany>,
     pub email: bool,
     #[serde(default)]
     pub oidc: Option<AuthMethodsOidc>,
@@ -1271,6 +1993,12 @@ pub struct AuthMethods {
     #[serde(rename = "signUp")]
     pub sign_up: AuthMethodsSignUp,
     pub password: bool,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Default)]
+pub struct AuthMethodsCompany {
+    #[serde(rename = "callbackUrl")]
+    pub callback_url: String,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Default)]
@@ -1491,6 +2219,8 @@ pub struct ChangesQuery {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Channel {
     pub id: Uuid,
+    #[serde(rename = "channelCapabilities", default, skip_serializing_if = "Option::is_none")]
+    pub channel_capabilities: Option<Vec<ChannelAccessAction>>,
     #[serde(rename = "workspaceId")]
     pub workspace_id: Uuid,
     #[serde(default)]
@@ -1505,6 +2235,8 @@ pub struct Channel {
     pub state: Option<ChannelState>,
     #[serde(rename = "notificationLevel", default)]
     pub notification_level: Option<NotificationLevel>,
+    #[serde(rename = "notificationLevelUntil", default, skip_serializing_if = "Option::is_none", with = "crate::double_option")]
+    pub notification_level_until: Option<Option<Timestamp>>,
     pub starred: bool,
     #[serde(rename = "sidebarGroupId", default)]
     pub sidebar_group_id: Option<Uuid>,
@@ -1519,6 +2251,49 @@ pub struct Channel {
     pub code_repository: Option<String>,
     #[serde(rename = "onlyAdminsPost")]
     pub only_admins_post: bool,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
+pub enum ChannelAccessAction {
+    /// `channel.settings.manage`
+    ChannelSettingsManage,
+    /// `channel.members.manage`
+    ChannelMembersManage,
+    /// A value this build does not know (the server may add values).
+    Unknown(String),
+}
+
+impl ChannelAccessAction {
+    pub const ALL: &'static [ChannelAccessAction] = &[ChannelAccessAction::ChannelSettingsManage, ChannelAccessAction::ChannelMembersManage];
+    pub fn as_str(&self) -> &str {
+        match self {
+            ChannelAccessAction::ChannelSettingsManage => "channel.settings.manage",
+            ChannelAccessAction::ChannelMembersManage => "channel.members.manage",
+            ChannelAccessAction::Unknown(s) => s,
+        }
+    }
+    pub fn parse(s: &str) -> Self {
+        match s {
+            "channel.settings.manage" => ChannelAccessAction::ChannelSettingsManage,
+            "channel.members.manage" => ChannelAccessAction::ChannelMembersManage,
+            other => ChannelAccessAction::Unknown(other.to_string()),
+        }
+    }
+}
+
+impl std::fmt::Display for ChannelAccessAction {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result { f.write_str(self.as_str()) }
+}
+
+impl Serialize for ChannelAccessAction {
+    fn serialize<S: serde::Serializer>(&self, s: S) -> Result<S::Ok, S::Error> { s.serialize_str(self.as_str()) }
+}
+
+impl<'de> Deserialize<'de> for ChannelAccessAction {
+    fn deserialize<D: serde::Deserializer<'de>>(d: D) -> Result<Self, D::Error> {
+        let s = std::borrow::Cow::<'de, str>::deserialize(d)?;
+        Ok(ChannelAccessAction::parse(&s))
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -1871,6 +2646,12 @@ pub struct ClientTooOldDetails {
     pub download_url: Option<String>,
 }
 
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Default)]
+pub struct ConvertGuestRequest {
+    #[serde(rename = "confirmFullAccess")]
+    pub confirm_full_access: bool,
+}
+
 #[derive(Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum CreateChannelRequestType {
     /// `public`
@@ -1945,6 +2726,60 @@ pub struct CreateGitHubIssueRequest {
     pub body: String,
     #[serde(rename = "copyPrivateText")]
     pub copy_private_text: bool,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
+pub enum CreateGuestInvitationRequestLocale {
+    /// `en`
+    En,
+    /// `tr`
+    Tr,
+    /// A value this build does not know (the server may add values).
+    Unknown(String),
+}
+
+impl CreateGuestInvitationRequestLocale {
+    pub const ALL: &'static [CreateGuestInvitationRequestLocale] = &[CreateGuestInvitationRequestLocale::En, CreateGuestInvitationRequestLocale::Tr];
+    pub fn as_str(&self) -> &str {
+        match self {
+            CreateGuestInvitationRequestLocale::En => "en",
+            CreateGuestInvitationRequestLocale::Tr => "tr",
+            CreateGuestInvitationRequestLocale::Unknown(s) => s,
+        }
+    }
+    pub fn parse(s: &str) -> Self {
+        match s {
+            "en" => CreateGuestInvitationRequestLocale::En,
+            "tr" => CreateGuestInvitationRequestLocale::Tr,
+            other => CreateGuestInvitationRequestLocale::Unknown(other.to_string()),
+        }
+    }
+}
+
+impl std::fmt::Display for CreateGuestInvitationRequestLocale {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result { f.write_str(self.as_str()) }
+}
+
+impl Serialize for CreateGuestInvitationRequestLocale {
+    fn serialize<S: serde::Serializer>(&self, s: S) -> Result<S::Ok, S::Error> { s.serialize_str(self.as_str()) }
+}
+
+impl<'de> Deserialize<'de> for CreateGuestInvitationRequestLocale {
+    fn deserialize<D: serde::Deserializer<'de>>(d: D) -> Result<Self, D::Error> {
+        let s = std::borrow::Cow::<'de, str>::deserialize(d)?;
+        Ok(CreateGuestInvitationRequestLocale::parse(&s))
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct CreateGuestInvitationRequest {
+    pub email: String,
+    #[serde(rename = "channelIds")]
+    pub channel_ids: GuestChannelIds,
+    #[serde(rename = "accessExpiresAt", default)]
+    pub access_expires_at: Option<Timestamp>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub locale: Option<CreateGuestInvitationRequestLocale>,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -2027,6 +2862,45 @@ pub struct CreatedGitHubFeed {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct CreatedGuestInvitation {
+    pub invitation: CreatedGuestInvitationInvitation,
+    pub token: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub mail: Option<Vec<InvitationMailResult>>,
+    pub guest: CreatedGuestInvitationGuest,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Default)]
+pub struct CreatedGuestInvitationInvitation {
+    pub id: Uuid,
+    #[serde(rename = "createdBy", default)]
+    pub created_by: Option<User>,
+    #[serde(rename = "createdAt")]
+    pub created_at: Timestamp,
+    #[serde(rename = "expiresAt")]
+    pub expires_at: Timestamp,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub guest: Option<CreatedGuestInvitationInvitationGuest>,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct CreatedGuestInvitationGuest {
+    pub email: String,
+    #[serde(rename = "channelIds")]
+    pub channel_ids: GuestChannelIds,
+    #[serde(rename = "accessExpiresAt", default)]
+    pub access_expires_at: Option<Timestamp>,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Default)]
+pub struct CreatedGuestInvitationInvitationGuest {
+    #[serde(rename = "channelCount")]
+    pub channel_count: i64,
+    #[serde(rename = "accessExpiresAt", default)]
+    pub access_expires_at: Option<Timestamp>,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CreatedIncomingWebhook {
     pub webhook: IncomingWebhook,
     pub path: String,
@@ -2038,6 +2912,12 @@ pub struct CreatedInvitation {
     pub token: InvitationToken,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub mail: Option<Vec<InvitationMailResult>>,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct CreatedOutgoingWebhook {
+    pub webhook: OutgoingWebhook,
+    pub secret: String,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Default)]
@@ -2212,6 +3092,38 @@ pub enum ErrorCode {
     ReauthenticationRequired,
     /// `TWO_FACTOR_REQUIRED`
     TwoFactorRequired,
+    /// `WORKSPACE_ACCESS_REQUIRED`
+    WorkspaceAccessRequired,
+    /// `WORKSPACE_SECURITY_CHANGED`
+    WorkspaceSecurityChanged,
+    /// `WORKSPACE_SECURITY_NOT_READY`
+    WorkspaceSecurityNotReady,
+    /// `WORKSPACE_PROVISIONING_CHANGED`
+    WorkspaceProvisioningChanged,
+    /// `WORKSPACE_PROVISIONING_NOT_READY`
+    WorkspaceProvisioningNotReady,
+    /// `WORKSPACE_MEMBERSHIP_MANAGED`
+    WorkspaceMembershipManaged,
+    /// `WORKSPACE_ACCESS_SOURCE_NOT_FOUND`
+    WorkspaceAccessSourceNotFound,
+    /// `WORKSPACE_ACCESS_ROLE_NOT_FOUND`
+    WorkspaceAccessRoleNotFound,
+    /// `WORKSPACE_ACCESS_GROUP_NOT_FOUND`
+    WorkspaceAccessGroupNotFound,
+    /// `WORKSPACE_ACCESS_GRANT_NOT_FOUND`
+    WorkspaceAccessGrantNotFound,
+    /// `WORKSPACE_DIRECTORY_NOT_FOUND`
+    WorkspaceDirectoryNotFound,
+    /// `WORKSPACE_DIRECTORY_CHANGED`
+    WorkspaceDirectoryChanged,
+    /// `WORKSPACE_DIRECTORY_NOT_READY`
+    WorkspaceDirectoryNotReady,
+    /// `WORKSPACE_MFA_NOT_FOUND`
+    WorkspaceMfaNotFound,
+    /// `WORKSPACE_MFA_INVALID`
+    WorkspaceMfaInvalid,
+    /// `WORKSPACE_MFA_LOCKED`
+    WorkspaceMfaLocked,
     /// `NOT_A_CHANNEL_MEMBER`
     NotAChannelMember,
     /// `ONLY_ADMINS_POST`
@@ -2220,6 +3132,14 @@ pub enum ErrorCode {
     RouteNotFound,
     /// `WORKSPACE_NOT_FOUND`
     WorkspaceNotFound,
+    /// `COMPANY_IDENTITY_NOT_FOUND`
+    CompanyIdentityNotFound,
+    /// `COMPANY_IDENTITY_CHANGED`
+    CompanyIdentityChanged,
+    /// `COMPANY_IDENTITY_NOT_READY`
+    CompanyIdentityNotReady,
+    /// `COMPANY_IDENTITY_LIMIT`
+    CompanyIdentityLimit,
     /// `CHANNEL_NOT_FOUND`
     ChannelNotFound,
     /// `MESSAGE_NOT_FOUND`
@@ -2314,6 +3234,10 @@ pub enum ErrorCode {
     GithubFeedsLimit,
     /// `INCOMING_WEBHOOKS_LIMIT`
     IncomingWebhooksLimit,
+    /// `OUTGOING_WEBHOOKS_LIMIT`
+    OutgoingWebhooksLimit,
+    /// `OUTGOING_WEBHOOK_NOT_FOUND`
+    OutgoingWebhookNotFound,
     /// `ATTACHMENT_ID_CONFLICT`
     AttachmentIdConflict,
     /// `ATTACHMENT_NOT_FOUND`
@@ -2379,7 +3303,7 @@ pub enum ErrorCode {
 }
 
 impl ErrorCode {
-    pub const ALL: &'static [ErrorCode] = &[ErrorCode::ValidationFailed, ErrorCode::InvalidMessageId, ErrorCode::UnsupportedMediaType, ErrorCode::ClientTooOld, ErrorCode::Unauthenticated, ErrorCode::WebhookSignatureInvalid, ErrorCode::Forbidden, ErrorCode::ReauthenticationRequired, ErrorCode::TwoFactorRequired, ErrorCode::NotAChannelMember, ErrorCode::OnlyAdminsPost, ErrorCode::RouteNotFound, ErrorCode::WorkspaceNotFound, ErrorCode::ChannelNotFound, ErrorCode::MessageNotFound, ErrorCode::ScheduledMessageNotFound, ErrorCode::ScheduledMessageSent, ErrorCode::ScheduledMessageLimit, ErrorCode::BookmarkNotFound, ErrorCode::MessageVersionNotFound, ErrorCode::IncidentNotFound, ErrorCode::IssueNotFound, ErrorCode::ModuleRequires, ErrorCode::PeersBehind, ErrorCode::UserNotFound, ErrorCode::WorkspaceSlugTaken, ErrorCode::ChannelNameTaken, ErrorCode::ChannelGroupNotFound, ErrorCode::ChannelGroupNameTaken, ErrorCode::ChannelGroupLimit, ErrorCode::MessageIdConflict, ErrorCode::KnowledgeConflict, ErrorCode::SavedSearchNotFound, ErrorCode::SavedSearchLimit, ErrorCode::IssuesLimit, ErrorCode::ThreadNotResolvable, ErrorCode::AccountEmailConflict, ErrorCode::GithubAccountTaken, ErrorCode::GithubFeedExists, ErrorCode::GithubNotConnected, ErrorCode::GithubAuthorizationRequired, ErrorCode::GithubUnavailable, ErrorCode::GithubRequestConflict, ErrorCode::IncidentOpen, ErrorCode::IncidentIdConflict, ErrorCode::IncidentPostmortemChanged, ErrorCode::IncidentRespondersLimit, ErrorCode::IncidentResolved, ErrorCode::GithubRepositoryMismatch, ErrorCode::PayloadTooLarge, ErrorCode::LengthRequired, ErrorCode::ImageUnreadable, ErrorCode::ImageTooLarge, ErrorCode::StorageQuotaExceeded, ErrorCode::TooManyPendingUploads, ErrorCode::SavedLimit, ErrorCode::PinsLimit, ErrorCode::BookmarksLimit, ErrorCode::GithubFeedsLimit, ErrorCode::IncomingWebhooksLimit, ErrorCode::AttachmentIdConflict, ErrorCode::AttachmentNotFound, ErrorCode::SessionNotFound, ErrorCode::InvitationNotFound, ErrorCode::ExportNotFound, ErrorCode::ExportInProgress, ErrorCode::SignInLinkNotFound, ErrorCode::NativeCodeNotFound, ErrorCode::GithubFeedNotFound, ErrorCode::IncomingWebhookNotFound, ErrorCode::ImageNotAvailable, ErrorCode::LastOwner, ErrorCode::LastChannelMember, ErrorCode::RetentionTooShort, ErrorCode::WorkspaceDeletionStarted, ErrorCode::RateLimited, ErrorCode::DatabaseUnavailable, ErrorCode::FactBacklogFull, ErrorCode::StorageUnavailable, ErrorCode::RequestTimeout, ErrorCode::PushUnavailable, ErrorCode::EmailSignInUnavailable, ErrorCode::SetupUnavailable, ErrorCode::SetupLocked, ErrorCode::SetupStepRefused, ErrorCode::SettingsChangeFailed, ErrorCode::ServerChangeRefused, ErrorCode::AdminLinkNotFound, ErrorCode::MailLinkNotFound, ErrorCode::Internal];
+    pub const ALL: &'static [ErrorCode] = &[ErrorCode::ValidationFailed, ErrorCode::InvalidMessageId, ErrorCode::UnsupportedMediaType, ErrorCode::ClientTooOld, ErrorCode::Unauthenticated, ErrorCode::WebhookSignatureInvalid, ErrorCode::Forbidden, ErrorCode::ReauthenticationRequired, ErrorCode::TwoFactorRequired, ErrorCode::WorkspaceAccessRequired, ErrorCode::WorkspaceSecurityChanged, ErrorCode::WorkspaceSecurityNotReady, ErrorCode::WorkspaceProvisioningChanged, ErrorCode::WorkspaceProvisioningNotReady, ErrorCode::WorkspaceMembershipManaged, ErrorCode::WorkspaceAccessSourceNotFound, ErrorCode::WorkspaceAccessRoleNotFound, ErrorCode::WorkspaceAccessGroupNotFound, ErrorCode::WorkspaceAccessGrantNotFound, ErrorCode::WorkspaceDirectoryNotFound, ErrorCode::WorkspaceDirectoryChanged, ErrorCode::WorkspaceDirectoryNotReady, ErrorCode::WorkspaceMfaNotFound, ErrorCode::WorkspaceMfaInvalid, ErrorCode::WorkspaceMfaLocked, ErrorCode::NotAChannelMember, ErrorCode::OnlyAdminsPost, ErrorCode::RouteNotFound, ErrorCode::WorkspaceNotFound, ErrorCode::CompanyIdentityNotFound, ErrorCode::CompanyIdentityChanged, ErrorCode::CompanyIdentityNotReady, ErrorCode::CompanyIdentityLimit, ErrorCode::ChannelNotFound, ErrorCode::MessageNotFound, ErrorCode::ScheduledMessageNotFound, ErrorCode::ScheduledMessageSent, ErrorCode::ScheduledMessageLimit, ErrorCode::BookmarkNotFound, ErrorCode::MessageVersionNotFound, ErrorCode::IncidentNotFound, ErrorCode::IssueNotFound, ErrorCode::ModuleRequires, ErrorCode::PeersBehind, ErrorCode::UserNotFound, ErrorCode::WorkspaceSlugTaken, ErrorCode::ChannelNameTaken, ErrorCode::ChannelGroupNotFound, ErrorCode::ChannelGroupNameTaken, ErrorCode::ChannelGroupLimit, ErrorCode::MessageIdConflict, ErrorCode::KnowledgeConflict, ErrorCode::SavedSearchNotFound, ErrorCode::SavedSearchLimit, ErrorCode::IssuesLimit, ErrorCode::ThreadNotResolvable, ErrorCode::AccountEmailConflict, ErrorCode::GithubAccountTaken, ErrorCode::GithubFeedExists, ErrorCode::GithubNotConnected, ErrorCode::GithubAuthorizationRequired, ErrorCode::GithubUnavailable, ErrorCode::GithubRequestConflict, ErrorCode::IncidentOpen, ErrorCode::IncidentIdConflict, ErrorCode::IncidentPostmortemChanged, ErrorCode::IncidentRespondersLimit, ErrorCode::IncidentResolved, ErrorCode::GithubRepositoryMismatch, ErrorCode::PayloadTooLarge, ErrorCode::LengthRequired, ErrorCode::ImageUnreadable, ErrorCode::ImageTooLarge, ErrorCode::StorageQuotaExceeded, ErrorCode::TooManyPendingUploads, ErrorCode::SavedLimit, ErrorCode::PinsLimit, ErrorCode::BookmarksLimit, ErrorCode::GithubFeedsLimit, ErrorCode::IncomingWebhooksLimit, ErrorCode::OutgoingWebhooksLimit, ErrorCode::OutgoingWebhookNotFound, ErrorCode::AttachmentIdConflict, ErrorCode::AttachmentNotFound, ErrorCode::SessionNotFound, ErrorCode::InvitationNotFound, ErrorCode::ExportNotFound, ErrorCode::ExportInProgress, ErrorCode::SignInLinkNotFound, ErrorCode::NativeCodeNotFound, ErrorCode::GithubFeedNotFound, ErrorCode::IncomingWebhookNotFound, ErrorCode::ImageNotAvailable, ErrorCode::LastOwner, ErrorCode::LastChannelMember, ErrorCode::RetentionTooShort, ErrorCode::WorkspaceDeletionStarted, ErrorCode::RateLimited, ErrorCode::DatabaseUnavailable, ErrorCode::FactBacklogFull, ErrorCode::StorageUnavailable, ErrorCode::RequestTimeout, ErrorCode::PushUnavailable, ErrorCode::EmailSignInUnavailable, ErrorCode::SetupUnavailable, ErrorCode::SetupLocked, ErrorCode::SetupStepRefused, ErrorCode::SettingsChangeFailed, ErrorCode::ServerChangeRefused, ErrorCode::AdminLinkNotFound, ErrorCode::MailLinkNotFound, ErrorCode::Internal];
     pub fn as_str(&self) -> &str {
         match self {
             ErrorCode::ValidationFailed => "VALIDATION_FAILED",
@@ -2391,10 +3315,30 @@ impl ErrorCode {
             ErrorCode::Forbidden => "FORBIDDEN",
             ErrorCode::ReauthenticationRequired => "REAUTHENTICATION_REQUIRED",
             ErrorCode::TwoFactorRequired => "TWO_FACTOR_REQUIRED",
+            ErrorCode::WorkspaceAccessRequired => "WORKSPACE_ACCESS_REQUIRED",
+            ErrorCode::WorkspaceSecurityChanged => "WORKSPACE_SECURITY_CHANGED",
+            ErrorCode::WorkspaceSecurityNotReady => "WORKSPACE_SECURITY_NOT_READY",
+            ErrorCode::WorkspaceProvisioningChanged => "WORKSPACE_PROVISIONING_CHANGED",
+            ErrorCode::WorkspaceProvisioningNotReady => "WORKSPACE_PROVISIONING_NOT_READY",
+            ErrorCode::WorkspaceMembershipManaged => "WORKSPACE_MEMBERSHIP_MANAGED",
+            ErrorCode::WorkspaceAccessSourceNotFound => "WORKSPACE_ACCESS_SOURCE_NOT_FOUND",
+            ErrorCode::WorkspaceAccessRoleNotFound => "WORKSPACE_ACCESS_ROLE_NOT_FOUND",
+            ErrorCode::WorkspaceAccessGroupNotFound => "WORKSPACE_ACCESS_GROUP_NOT_FOUND",
+            ErrorCode::WorkspaceAccessGrantNotFound => "WORKSPACE_ACCESS_GRANT_NOT_FOUND",
+            ErrorCode::WorkspaceDirectoryNotFound => "WORKSPACE_DIRECTORY_NOT_FOUND",
+            ErrorCode::WorkspaceDirectoryChanged => "WORKSPACE_DIRECTORY_CHANGED",
+            ErrorCode::WorkspaceDirectoryNotReady => "WORKSPACE_DIRECTORY_NOT_READY",
+            ErrorCode::WorkspaceMfaNotFound => "WORKSPACE_MFA_NOT_FOUND",
+            ErrorCode::WorkspaceMfaInvalid => "WORKSPACE_MFA_INVALID",
+            ErrorCode::WorkspaceMfaLocked => "WORKSPACE_MFA_LOCKED",
             ErrorCode::NotAChannelMember => "NOT_A_CHANNEL_MEMBER",
             ErrorCode::OnlyAdminsPost => "ONLY_ADMINS_POST",
             ErrorCode::RouteNotFound => "ROUTE_NOT_FOUND",
             ErrorCode::WorkspaceNotFound => "WORKSPACE_NOT_FOUND",
+            ErrorCode::CompanyIdentityNotFound => "COMPANY_IDENTITY_NOT_FOUND",
+            ErrorCode::CompanyIdentityChanged => "COMPANY_IDENTITY_CHANGED",
+            ErrorCode::CompanyIdentityNotReady => "COMPANY_IDENTITY_NOT_READY",
+            ErrorCode::CompanyIdentityLimit => "COMPANY_IDENTITY_LIMIT",
             ErrorCode::ChannelNotFound => "CHANNEL_NOT_FOUND",
             ErrorCode::MessageNotFound => "MESSAGE_NOT_FOUND",
             ErrorCode::ScheduledMessageNotFound => "SCHEDULED_MESSAGE_NOT_FOUND",
@@ -2442,6 +3386,8 @@ impl ErrorCode {
             ErrorCode::BookmarksLimit => "BOOKMARKS_LIMIT",
             ErrorCode::GithubFeedsLimit => "GITHUB_FEEDS_LIMIT",
             ErrorCode::IncomingWebhooksLimit => "INCOMING_WEBHOOKS_LIMIT",
+            ErrorCode::OutgoingWebhooksLimit => "OUTGOING_WEBHOOKS_LIMIT",
+            ErrorCode::OutgoingWebhookNotFound => "OUTGOING_WEBHOOK_NOT_FOUND",
             ErrorCode::AttachmentIdConflict => "ATTACHMENT_ID_CONFLICT",
             ErrorCode::AttachmentNotFound => "ATTACHMENT_NOT_FOUND",
             ErrorCode::SessionNotFound => "SESSION_NOT_FOUND",
@@ -2486,10 +3432,30 @@ impl ErrorCode {
             "FORBIDDEN" => ErrorCode::Forbidden,
             "REAUTHENTICATION_REQUIRED" => ErrorCode::ReauthenticationRequired,
             "TWO_FACTOR_REQUIRED" => ErrorCode::TwoFactorRequired,
+            "WORKSPACE_ACCESS_REQUIRED" => ErrorCode::WorkspaceAccessRequired,
+            "WORKSPACE_SECURITY_CHANGED" => ErrorCode::WorkspaceSecurityChanged,
+            "WORKSPACE_SECURITY_NOT_READY" => ErrorCode::WorkspaceSecurityNotReady,
+            "WORKSPACE_PROVISIONING_CHANGED" => ErrorCode::WorkspaceProvisioningChanged,
+            "WORKSPACE_PROVISIONING_NOT_READY" => ErrorCode::WorkspaceProvisioningNotReady,
+            "WORKSPACE_MEMBERSHIP_MANAGED" => ErrorCode::WorkspaceMembershipManaged,
+            "WORKSPACE_ACCESS_SOURCE_NOT_FOUND" => ErrorCode::WorkspaceAccessSourceNotFound,
+            "WORKSPACE_ACCESS_ROLE_NOT_FOUND" => ErrorCode::WorkspaceAccessRoleNotFound,
+            "WORKSPACE_ACCESS_GROUP_NOT_FOUND" => ErrorCode::WorkspaceAccessGroupNotFound,
+            "WORKSPACE_ACCESS_GRANT_NOT_FOUND" => ErrorCode::WorkspaceAccessGrantNotFound,
+            "WORKSPACE_DIRECTORY_NOT_FOUND" => ErrorCode::WorkspaceDirectoryNotFound,
+            "WORKSPACE_DIRECTORY_CHANGED" => ErrorCode::WorkspaceDirectoryChanged,
+            "WORKSPACE_DIRECTORY_NOT_READY" => ErrorCode::WorkspaceDirectoryNotReady,
+            "WORKSPACE_MFA_NOT_FOUND" => ErrorCode::WorkspaceMfaNotFound,
+            "WORKSPACE_MFA_INVALID" => ErrorCode::WorkspaceMfaInvalid,
+            "WORKSPACE_MFA_LOCKED" => ErrorCode::WorkspaceMfaLocked,
             "NOT_A_CHANNEL_MEMBER" => ErrorCode::NotAChannelMember,
             "ONLY_ADMINS_POST" => ErrorCode::OnlyAdminsPost,
             "ROUTE_NOT_FOUND" => ErrorCode::RouteNotFound,
             "WORKSPACE_NOT_FOUND" => ErrorCode::WorkspaceNotFound,
+            "COMPANY_IDENTITY_NOT_FOUND" => ErrorCode::CompanyIdentityNotFound,
+            "COMPANY_IDENTITY_CHANGED" => ErrorCode::CompanyIdentityChanged,
+            "COMPANY_IDENTITY_NOT_READY" => ErrorCode::CompanyIdentityNotReady,
+            "COMPANY_IDENTITY_LIMIT" => ErrorCode::CompanyIdentityLimit,
             "CHANNEL_NOT_FOUND" => ErrorCode::ChannelNotFound,
             "MESSAGE_NOT_FOUND" => ErrorCode::MessageNotFound,
             "SCHEDULED_MESSAGE_NOT_FOUND" => ErrorCode::ScheduledMessageNotFound,
@@ -2537,6 +3503,8 @@ impl ErrorCode {
             "BOOKMARKS_LIMIT" => ErrorCode::BookmarksLimit,
             "GITHUB_FEEDS_LIMIT" => ErrorCode::GithubFeedsLimit,
             "INCOMING_WEBHOOKS_LIMIT" => ErrorCode::IncomingWebhooksLimit,
+            "OUTGOING_WEBHOOKS_LIMIT" => ErrorCode::OutgoingWebhooksLimit,
+            "OUTGOING_WEBHOOK_NOT_FOUND" => ErrorCode::OutgoingWebhookNotFound,
             "ATTACHMENT_ID_CONFLICT" => ErrorCode::AttachmentIdConflict,
             "ATTACHMENT_NOT_FOUND" => ErrorCode::AttachmentNotFound,
             "SESSION_NOT_FOUND" => ErrorCode::SessionNotFound,
@@ -2590,6 +3558,8 @@ impl<'de> Deserialize<'de> for ErrorCode {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ErrorFrame {
     pub data: AppErrorBody,
+    #[serde(rename = "workspaceId", default, skip_serializing_if = "Option::is_none")]
+    pub workspace_id: Option<Uuid>,
     pub ts: f64,
     #[serde(rename = "refId", default, skip_serializing_if = "Option::is_none")]
     pub ref_id: Option<Uuid>,
@@ -2620,6 +3590,38 @@ pub enum ExportFailure {
     ReauthenticationRequired,
     /// `TWO_FACTOR_REQUIRED`
     TwoFactorRequired,
+    /// `WORKSPACE_ACCESS_REQUIRED`
+    WorkspaceAccessRequired,
+    /// `WORKSPACE_SECURITY_CHANGED`
+    WorkspaceSecurityChanged,
+    /// `WORKSPACE_SECURITY_NOT_READY`
+    WorkspaceSecurityNotReady,
+    /// `WORKSPACE_PROVISIONING_CHANGED`
+    WorkspaceProvisioningChanged,
+    /// `WORKSPACE_PROVISIONING_NOT_READY`
+    WorkspaceProvisioningNotReady,
+    /// `WORKSPACE_MEMBERSHIP_MANAGED`
+    WorkspaceMembershipManaged,
+    /// `WORKSPACE_ACCESS_SOURCE_NOT_FOUND`
+    WorkspaceAccessSourceNotFound,
+    /// `WORKSPACE_ACCESS_ROLE_NOT_FOUND`
+    WorkspaceAccessRoleNotFound,
+    /// `WORKSPACE_ACCESS_GROUP_NOT_FOUND`
+    WorkspaceAccessGroupNotFound,
+    /// `WORKSPACE_ACCESS_GRANT_NOT_FOUND`
+    WorkspaceAccessGrantNotFound,
+    /// `WORKSPACE_DIRECTORY_NOT_FOUND`
+    WorkspaceDirectoryNotFound,
+    /// `WORKSPACE_DIRECTORY_CHANGED`
+    WorkspaceDirectoryChanged,
+    /// `WORKSPACE_DIRECTORY_NOT_READY`
+    WorkspaceDirectoryNotReady,
+    /// `WORKSPACE_MFA_NOT_FOUND`
+    WorkspaceMfaNotFound,
+    /// `WORKSPACE_MFA_INVALID`
+    WorkspaceMfaInvalid,
+    /// `WORKSPACE_MFA_LOCKED`
+    WorkspaceMfaLocked,
     /// `NOT_A_CHANNEL_MEMBER`
     NotAChannelMember,
     /// `ONLY_ADMINS_POST`
@@ -2628,6 +3630,14 @@ pub enum ExportFailure {
     RouteNotFound,
     /// `WORKSPACE_NOT_FOUND`
     WorkspaceNotFound,
+    /// `COMPANY_IDENTITY_NOT_FOUND`
+    CompanyIdentityNotFound,
+    /// `COMPANY_IDENTITY_CHANGED`
+    CompanyIdentityChanged,
+    /// `COMPANY_IDENTITY_NOT_READY`
+    CompanyIdentityNotReady,
+    /// `COMPANY_IDENTITY_LIMIT`
+    CompanyIdentityLimit,
     /// `CHANNEL_NOT_FOUND`
     ChannelNotFound,
     /// `MESSAGE_NOT_FOUND`
@@ -2722,6 +3732,10 @@ pub enum ExportFailure {
     GithubFeedsLimit,
     /// `INCOMING_WEBHOOKS_LIMIT`
     IncomingWebhooksLimit,
+    /// `OUTGOING_WEBHOOKS_LIMIT`
+    OutgoingWebhooksLimit,
+    /// `OUTGOING_WEBHOOK_NOT_FOUND`
+    OutgoingWebhookNotFound,
     /// `ATTACHMENT_ID_CONFLICT`
     AttachmentIdConflict,
     /// `ATTACHMENT_NOT_FOUND`
@@ -2793,7 +3807,7 @@ pub enum ExportFailure {
 }
 
 impl ExportFailure {
-    pub const ALL: &'static [ExportFailure] = &[ExportFailure::ValidationFailed, ExportFailure::InvalidMessageId, ExportFailure::UnsupportedMediaType, ExportFailure::ClientTooOld, ExportFailure::Unauthenticated, ExportFailure::WebhookSignatureInvalid, ExportFailure::Forbidden, ExportFailure::ReauthenticationRequired, ExportFailure::TwoFactorRequired, ExportFailure::NotAChannelMember, ExportFailure::OnlyAdminsPost, ExportFailure::RouteNotFound, ExportFailure::WorkspaceNotFound, ExportFailure::ChannelNotFound, ExportFailure::MessageNotFound, ExportFailure::ScheduledMessageNotFound, ExportFailure::ScheduledMessageSent, ExportFailure::ScheduledMessageLimit, ExportFailure::BookmarkNotFound, ExportFailure::MessageVersionNotFound, ExportFailure::IncidentNotFound, ExportFailure::IssueNotFound, ExportFailure::ModuleRequires, ExportFailure::PeersBehind, ExportFailure::UserNotFound, ExportFailure::WorkspaceSlugTaken, ExportFailure::ChannelNameTaken, ExportFailure::ChannelGroupNotFound, ExportFailure::ChannelGroupNameTaken, ExportFailure::ChannelGroupLimit, ExportFailure::MessageIdConflict, ExportFailure::KnowledgeConflict, ExportFailure::SavedSearchNotFound, ExportFailure::SavedSearchLimit, ExportFailure::IssuesLimit, ExportFailure::ThreadNotResolvable, ExportFailure::AccountEmailConflict, ExportFailure::GithubAccountTaken, ExportFailure::GithubFeedExists, ExportFailure::GithubNotConnected, ExportFailure::GithubAuthorizationRequired, ExportFailure::GithubUnavailable, ExportFailure::GithubRequestConflict, ExportFailure::IncidentOpen, ExportFailure::IncidentIdConflict, ExportFailure::IncidentPostmortemChanged, ExportFailure::IncidentRespondersLimit, ExportFailure::IncidentResolved, ExportFailure::GithubRepositoryMismatch, ExportFailure::PayloadTooLarge, ExportFailure::LengthRequired, ExportFailure::ImageUnreadable, ExportFailure::ImageTooLarge, ExportFailure::StorageQuotaExceeded, ExportFailure::TooManyPendingUploads, ExportFailure::SavedLimit, ExportFailure::PinsLimit, ExportFailure::BookmarksLimit, ExportFailure::GithubFeedsLimit, ExportFailure::IncomingWebhooksLimit, ExportFailure::AttachmentIdConflict, ExportFailure::AttachmentNotFound, ExportFailure::SessionNotFound, ExportFailure::InvitationNotFound, ExportFailure::ExportNotFound, ExportFailure::ExportInProgress, ExportFailure::SignInLinkNotFound, ExportFailure::NativeCodeNotFound, ExportFailure::GithubFeedNotFound, ExportFailure::IncomingWebhookNotFound, ExportFailure::ImageNotAvailable, ExportFailure::LastOwner, ExportFailure::LastChannelMember, ExportFailure::RetentionTooShort, ExportFailure::WorkspaceDeletionStarted, ExportFailure::RateLimited, ExportFailure::DatabaseUnavailable, ExportFailure::FactBacklogFull, ExportFailure::StorageUnavailable, ExportFailure::RequestTimeout, ExportFailure::PushUnavailable, ExportFailure::EmailSignInUnavailable, ExportFailure::SetupUnavailable, ExportFailure::SetupLocked, ExportFailure::SetupStepRefused, ExportFailure::SettingsChangeFailed, ExportFailure::ServerChangeRefused, ExportFailure::AdminLinkNotFound, ExportFailure::MailLinkNotFound, ExportFailure::Internal, ExportFailure::ExportFailed, ExportFailure::ExportAbandoned, ExportFailure::ExportRequesterGone];
+    pub const ALL: &'static [ExportFailure] = &[ExportFailure::ValidationFailed, ExportFailure::InvalidMessageId, ExportFailure::UnsupportedMediaType, ExportFailure::ClientTooOld, ExportFailure::Unauthenticated, ExportFailure::WebhookSignatureInvalid, ExportFailure::Forbidden, ExportFailure::ReauthenticationRequired, ExportFailure::TwoFactorRequired, ExportFailure::WorkspaceAccessRequired, ExportFailure::WorkspaceSecurityChanged, ExportFailure::WorkspaceSecurityNotReady, ExportFailure::WorkspaceProvisioningChanged, ExportFailure::WorkspaceProvisioningNotReady, ExportFailure::WorkspaceMembershipManaged, ExportFailure::WorkspaceAccessSourceNotFound, ExportFailure::WorkspaceAccessRoleNotFound, ExportFailure::WorkspaceAccessGroupNotFound, ExportFailure::WorkspaceAccessGrantNotFound, ExportFailure::WorkspaceDirectoryNotFound, ExportFailure::WorkspaceDirectoryChanged, ExportFailure::WorkspaceDirectoryNotReady, ExportFailure::WorkspaceMfaNotFound, ExportFailure::WorkspaceMfaInvalid, ExportFailure::WorkspaceMfaLocked, ExportFailure::NotAChannelMember, ExportFailure::OnlyAdminsPost, ExportFailure::RouteNotFound, ExportFailure::WorkspaceNotFound, ExportFailure::CompanyIdentityNotFound, ExportFailure::CompanyIdentityChanged, ExportFailure::CompanyIdentityNotReady, ExportFailure::CompanyIdentityLimit, ExportFailure::ChannelNotFound, ExportFailure::MessageNotFound, ExportFailure::ScheduledMessageNotFound, ExportFailure::ScheduledMessageSent, ExportFailure::ScheduledMessageLimit, ExportFailure::BookmarkNotFound, ExportFailure::MessageVersionNotFound, ExportFailure::IncidentNotFound, ExportFailure::IssueNotFound, ExportFailure::ModuleRequires, ExportFailure::PeersBehind, ExportFailure::UserNotFound, ExportFailure::WorkspaceSlugTaken, ExportFailure::ChannelNameTaken, ExportFailure::ChannelGroupNotFound, ExportFailure::ChannelGroupNameTaken, ExportFailure::ChannelGroupLimit, ExportFailure::MessageIdConflict, ExportFailure::KnowledgeConflict, ExportFailure::SavedSearchNotFound, ExportFailure::SavedSearchLimit, ExportFailure::IssuesLimit, ExportFailure::ThreadNotResolvable, ExportFailure::AccountEmailConflict, ExportFailure::GithubAccountTaken, ExportFailure::GithubFeedExists, ExportFailure::GithubNotConnected, ExportFailure::GithubAuthorizationRequired, ExportFailure::GithubUnavailable, ExportFailure::GithubRequestConflict, ExportFailure::IncidentOpen, ExportFailure::IncidentIdConflict, ExportFailure::IncidentPostmortemChanged, ExportFailure::IncidentRespondersLimit, ExportFailure::IncidentResolved, ExportFailure::GithubRepositoryMismatch, ExportFailure::PayloadTooLarge, ExportFailure::LengthRequired, ExportFailure::ImageUnreadable, ExportFailure::ImageTooLarge, ExportFailure::StorageQuotaExceeded, ExportFailure::TooManyPendingUploads, ExportFailure::SavedLimit, ExportFailure::PinsLimit, ExportFailure::BookmarksLimit, ExportFailure::GithubFeedsLimit, ExportFailure::IncomingWebhooksLimit, ExportFailure::OutgoingWebhooksLimit, ExportFailure::OutgoingWebhookNotFound, ExportFailure::AttachmentIdConflict, ExportFailure::AttachmentNotFound, ExportFailure::SessionNotFound, ExportFailure::InvitationNotFound, ExportFailure::ExportNotFound, ExportFailure::ExportInProgress, ExportFailure::SignInLinkNotFound, ExportFailure::NativeCodeNotFound, ExportFailure::GithubFeedNotFound, ExportFailure::IncomingWebhookNotFound, ExportFailure::ImageNotAvailable, ExportFailure::LastOwner, ExportFailure::LastChannelMember, ExportFailure::RetentionTooShort, ExportFailure::WorkspaceDeletionStarted, ExportFailure::RateLimited, ExportFailure::DatabaseUnavailable, ExportFailure::FactBacklogFull, ExportFailure::StorageUnavailable, ExportFailure::RequestTimeout, ExportFailure::PushUnavailable, ExportFailure::EmailSignInUnavailable, ExportFailure::SetupUnavailable, ExportFailure::SetupLocked, ExportFailure::SetupStepRefused, ExportFailure::SettingsChangeFailed, ExportFailure::ServerChangeRefused, ExportFailure::AdminLinkNotFound, ExportFailure::MailLinkNotFound, ExportFailure::Internal, ExportFailure::ExportFailed, ExportFailure::ExportAbandoned, ExportFailure::ExportRequesterGone];
     pub fn as_str(&self) -> &str {
         match self {
             ExportFailure::ValidationFailed => "VALIDATION_FAILED",
@@ -2805,10 +3819,30 @@ impl ExportFailure {
             ExportFailure::Forbidden => "FORBIDDEN",
             ExportFailure::ReauthenticationRequired => "REAUTHENTICATION_REQUIRED",
             ExportFailure::TwoFactorRequired => "TWO_FACTOR_REQUIRED",
+            ExportFailure::WorkspaceAccessRequired => "WORKSPACE_ACCESS_REQUIRED",
+            ExportFailure::WorkspaceSecurityChanged => "WORKSPACE_SECURITY_CHANGED",
+            ExportFailure::WorkspaceSecurityNotReady => "WORKSPACE_SECURITY_NOT_READY",
+            ExportFailure::WorkspaceProvisioningChanged => "WORKSPACE_PROVISIONING_CHANGED",
+            ExportFailure::WorkspaceProvisioningNotReady => "WORKSPACE_PROVISIONING_NOT_READY",
+            ExportFailure::WorkspaceMembershipManaged => "WORKSPACE_MEMBERSHIP_MANAGED",
+            ExportFailure::WorkspaceAccessSourceNotFound => "WORKSPACE_ACCESS_SOURCE_NOT_FOUND",
+            ExportFailure::WorkspaceAccessRoleNotFound => "WORKSPACE_ACCESS_ROLE_NOT_FOUND",
+            ExportFailure::WorkspaceAccessGroupNotFound => "WORKSPACE_ACCESS_GROUP_NOT_FOUND",
+            ExportFailure::WorkspaceAccessGrantNotFound => "WORKSPACE_ACCESS_GRANT_NOT_FOUND",
+            ExportFailure::WorkspaceDirectoryNotFound => "WORKSPACE_DIRECTORY_NOT_FOUND",
+            ExportFailure::WorkspaceDirectoryChanged => "WORKSPACE_DIRECTORY_CHANGED",
+            ExportFailure::WorkspaceDirectoryNotReady => "WORKSPACE_DIRECTORY_NOT_READY",
+            ExportFailure::WorkspaceMfaNotFound => "WORKSPACE_MFA_NOT_FOUND",
+            ExportFailure::WorkspaceMfaInvalid => "WORKSPACE_MFA_INVALID",
+            ExportFailure::WorkspaceMfaLocked => "WORKSPACE_MFA_LOCKED",
             ExportFailure::NotAChannelMember => "NOT_A_CHANNEL_MEMBER",
             ExportFailure::OnlyAdminsPost => "ONLY_ADMINS_POST",
             ExportFailure::RouteNotFound => "ROUTE_NOT_FOUND",
             ExportFailure::WorkspaceNotFound => "WORKSPACE_NOT_FOUND",
+            ExportFailure::CompanyIdentityNotFound => "COMPANY_IDENTITY_NOT_FOUND",
+            ExportFailure::CompanyIdentityChanged => "COMPANY_IDENTITY_CHANGED",
+            ExportFailure::CompanyIdentityNotReady => "COMPANY_IDENTITY_NOT_READY",
+            ExportFailure::CompanyIdentityLimit => "COMPANY_IDENTITY_LIMIT",
             ExportFailure::ChannelNotFound => "CHANNEL_NOT_FOUND",
             ExportFailure::MessageNotFound => "MESSAGE_NOT_FOUND",
             ExportFailure::ScheduledMessageNotFound => "SCHEDULED_MESSAGE_NOT_FOUND",
@@ -2856,6 +3890,8 @@ impl ExportFailure {
             ExportFailure::BookmarksLimit => "BOOKMARKS_LIMIT",
             ExportFailure::GithubFeedsLimit => "GITHUB_FEEDS_LIMIT",
             ExportFailure::IncomingWebhooksLimit => "INCOMING_WEBHOOKS_LIMIT",
+            ExportFailure::OutgoingWebhooksLimit => "OUTGOING_WEBHOOKS_LIMIT",
+            ExportFailure::OutgoingWebhookNotFound => "OUTGOING_WEBHOOK_NOT_FOUND",
             ExportFailure::AttachmentIdConflict => "ATTACHMENT_ID_CONFLICT",
             ExportFailure::AttachmentNotFound => "ATTACHMENT_NOT_FOUND",
             ExportFailure::SessionNotFound => "SESSION_NOT_FOUND",
@@ -2903,10 +3939,30 @@ impl ExportFailure {
             "FORBIDDEN" => ExportFailure::Forbidden,
             "REAUTHENTICATION_REQUIRED" => ExportFailure::ReauthenticationRequired,
             "TWO_FACTOR_REQUIRED" => ExportFailure::TwoFactorRequired,
+            "WORKSPACE_ACCESS_REQUIRED" => ExportFailure::WorkspaceAccessRequired,
+            "WORKSPACE_SECURITY_CHANGED" => ExportFailure::WorkspaceSecurityChanged,
+            "WORKSPACE_SECURITY_NOT_READY" => ExportFailure::WorkspaceSecurityNotReady,
+            "WORKSPACE_PROVISIONING_CHANGED" => ExportFailure::WorkspaceProvisioningChanged,
+            "WORKSPACE_PROVISIONING_NOT_READY" => ExportFailure::WorkspaceProvisioningNotReady,
+            "WORKSPACE_MEMBERSHIP_MANAGED" => ExportFailure::WorkspaceMembershipManaged,
+            "WORKSPACE_ACCESS_SOURCE_NOT_FOUND" => ExportFailure::WorkspaceAccessSourceNotFound,
+            "WORKSPACE_ACCESS_ROLE_NOT_FOUND" => ExportFailure::WorkspaceAccessRoleNotFound,
+            "WORKSPACE_ACCESS_GROUP_NOT_FOUND" => ExportFailure::WorkspaceAccessGroupNotFound,
+            "WORKSPACE_ACCESS_GRANT_NOT_FOUND" => ExportFailure::WorkspaceAccessGrantNotFound,
+            "WORKSPACE_DIRECTORY_NOT_FOUND" => ExportFailure::WorkspaceDirectoryNotFound,
+            "WORKSPACE_DIRECTORY_CHANGED" => ExportFailure::WorkspaceDirectoryChanged,
+            "WORKSPACE_DIRECTORY_NOT_READY" => ExportFailure::WorkspaceDirectoryNotReady,
+            "WORKSPACE_MFA_NOT_FOUND" => ExportFailure::WorkspaceMfaNotFound,
+            "WORKSPACE_MFA_INVALID" => ExportFailure::WorkspaceMfaInvalid,
+            "WORKSPACE_MFA_LOCKED" => ExportFailure::WorkspaceMfaLocked,
             "NOT_A_CHANNEL_MEMBER" => ExportFailure::NotAChannelMember,
             "ONLY_ADMINS_POST" => ExportFailure::OnlyAdminsPost,
             "ROUTE_NOT_FOUND" => ExportFailure::RouteNotFound,
             "WORKSPACE_NOT_FOUND" => ExportFailure::WorkspaceNotFound,
+            "COMPANY_IDENTITY_NOT_FOUND" => ExportFailure::CompanyIdentityNotFound,
+            "COMPANY_IDENTITY_CHANGED" => ExportFailure::CompanyIdentityChanged,
+            "COMPANY_IDENTITY_NOT_READY" => ExportFailure::CompanyIdentityNotReady,
+            "COMPANY_IDENTITY_LIMIT" => ExportFailure::CompanyIdentityLimit,
             "CHANNEL_NOT_FOUND" => ExportFailure::ChannelNotFound,
             "MESSAGE_NOT_FOUND" => ExportFailure::MessageNotFound,
             "SCHEDULED_MESSAGE_NOT_FOUND" => ExportFailure::ScheduledMessageNotFound,
@@ -2954,6 +4010,8 @@ impl ExportFailure {
             "BOOKMARKS_LIMIT" => ExportFailure::BookmarksLimit,
             "GITHUB_FEEDS_LIMIT" => ExportFailure::GithubFeedsLimit,
             "INCOMING_WEBHOOKS_LIMIT" => ExportFailure::IncomingWebhooksLimit,
+            "OUTGOING_WEBHOOKS_LIMIT" => ExportFailure::OutgoingWebhooksLimit,
+            "OUTGOING_WEBHOOK_NOT_FOUND" => ExportFailure::OutgoingWebhookNotFound,
             "ATTACHMENT_ID_CONFLICT" => ExportFailure::AttachmentIdConflict,
             "ATTACHMENT_NOT_FOUND" => ExportFailure::AttachmentNotFound,
             "SESSION_NOT_FOUND" => ExportFailure::SessionNotFound,
@@ -3156,6 +4214,8 @@ pub struct FileQuery {
 pub struct FindGroup {
     pub source: String,
     pub hits: Vec<FindHit>,
+    #[serde(default)]
+    pub more: bool,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -3179,6 +4239,8 @@ pub struct FindQuery {
 pub struct FindResponse {
     pub groups: Vec<FindGroup>,
     pub skipped: Vec<SkippedSource>,
+    #[serde(default)]
+    pub partial: bool,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Default)]
@@ -4362,6 +5424,22 @@ pub struct GitHubWorkLink {
     pub url: String,
 }
 
+pub type GuestChannelIds = Vec<Uuid>;
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Default)]
+pub struct GuestInvitationAvailability {
+    pub enabled: bool,
+    pub email: bool,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Default)]
+pub struct GuestMembershipAccess {
+    #[serde(rename = "historySince")]
+    pub history_since: Timestamp,
+    #[serde(rename = "expiresAt", default)]
+    pub expires_at: Option<Timestamp>,
+}
+
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct InboxEntry {
     pub id: Uuid,
@@ -4645,6 +5723,12 @@ pub struct IncomingWebhook {
     pub created_at: Timestamp,
     #[serde(rename = "lastUsedAt", default)]
     pub last_used_at: Option<Timestamp>,
+    #[serde(rename = "lastRequestAt", default, skip_serializing_if = "Option::is_none")]
+    pub last_request_at: Option<Timestamp>,
+    #[serde(rename = "lastStatus", default, skip_serializing_if = "Option::is_none")]
+    pub last_status: Option<i64>,
+    #[serde(rename = "lastError", default, skip_serializing_if = "Option::is_none", with = "crate::double_option")]
+    pub last_error: Option<Option<String>>,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Default)]
@@ -4688,6 +5772,16 @@ pub struct Invitation {
     pub created_at: Timestamp,
     #[serde(rename = "expiresAt")]
     pub expires_at: Timestamp,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub guest: Option<InvitationGuest>,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Default)]
+pub struct InvitationGuest {
+    #[serde(rename = "channelCount")]
+    pub channel_count: i64,
+    #[serde(rename = "accessExpiresAt", default)]
+    pub access_expires_at: Option<Timestamp>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -4823,6 +5917,14 @@ pub struct InvitationDeliveryPage {
     pub next_cursor: Option<Uuid>,
 }
 
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Default)]
+pub struct InvitationGuestAccess {
+    #[serde(rename = "channelCount")]
+    pub channel_count: i64,
+    #[serde(rename = "accessExpiresAt", default)]
+    pub access_expires_at: Option<Timestamp>,
+}
+
 #[derive(Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum InvitationMailOutcome {
     /// `queued`
@@ -4904,6 +6006,16 @@ pub struct InvitationPreview {
     #[serde(rename = "expiresAt")]
     pub expires_at: Timestamp,
     pub member: bool,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub guest: Option<InvitationPreviewGuest>,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Default)]
+pub struct InvitationPreviewGuest {
+    #[serde(rename = "channelCount")]
+    pub channel_count: i64,
+    #[serde(rename = "accessExpiresAt", default)]
+    pub access_expires_at: Option<Timestamp>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -4958,6 +6070,8 @@ pub struct InvitationRecipient {
     pub id: Uuid,
     pub status: InvitationRecipientStatus,
     pub address: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub guest: Option<InvitationRecipientGuest>,
     #[serde(rename = "createdAt")]
     pub created_at: Timestamp,
     #[serde(rename = "requestedAt", default)]
@@ -4967,6 +6081,14 @@ pub struct InvitationRecipient {
     #[serde(default)]
     pub admission: Option<InvitationRecipientAdmission>,
     pub latest: InvitationDelivery,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Default)]
+pub struct InvitationRecipientGuest {
+    #[serde(rename = "channelCount")]
+    pub channel_count: i64,
+    #[serde(rename = "accessExpiresAt", default)]
+    pub access_expires_at: Option<Timestamp>,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Default)]
@@ -5301,6 +6423,10 @@ pub struct MarkUnreadRequest {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MeResponse {
     pub user: CurrentUser,
+    #[serde(rename = "companyWorkspaceId", default, skip_serializing_if = "Option::is_none")]
+    pub company_workspace_id: Option<Uuid>,
+    #[serde(rename = "companySignInAvailable", default, skip_serializing_if = "Option::is_none")]
+    pub company_sign_in_available: Option<bool>,
     pub profile: Profile,
     pub memberships: Vec<Membership>,
     #[serde(rename = "mayCreateWorkspace")]
@@ -5322,21 +6448,127 @@ pub struct MeResponse {
 pub struct Membership {
     pub workspace: Workspace,
     pub role: UserRole,
+    #[serde(rename = "workspaceCapabilities", default, skip_serializing_if = "Option::is_none")]
+    pub workspace_capabilities: Option<Vec<WorkspaceAccessAction>>,
+    #[serde(rename = "channelCapabilities", default, skip_serializing_if = "Option::is_none")]
+    pub channel_capabilities: Option<Vec<ChannelAccessAction>>,
     #[serde(rename = "joinedAt")]
     pub joined_at: Timestamp,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub access: Option<MembershipAccess>,
     #[serde(rename = "deepWorkUntil", default)]
     pub deep_work_until: Option<Timestamp>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub modules: Option<Vec<ModuleId>>,
 }
 
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Default)]
+pub struct MembershipAccessMember {
+}
+
+/// Tagged by `kind`.
+#[derive(Debug, Clone, PartialEq)]
+pub enum MembershipAccess {
+    /// `kind: "member"`
+    Member(MembershipAccessMember),
+    /// `kind: "guest"`
+    GuestMembershipAccess(GuestMembershipAccess),
+    /// A member this build does not know; kept whole.
+    Unknown(Value),
+}
+
+impl MembershipAccess {
+    pub const TAG: &'static str = "kind";
+}
+
+impl<'de> Deserialize<'de> for MembershipAccess {
+    fn deserialize<D: serde::Deserializer<'de>>(d: D) -> Result<Self, D::Error> {
+        use serde::de::Error;
+        let v = Value::deserialize(d)?;
+        let tag = v.get("kind").cloned().unwrap_or(Value::Null);
+        if tag == serde_json::json!("member") {
+            let mut errs: Vec<String> = Vec::new();
+            match serde_json::from_value::<MembershipAccessMember>(v.clone()) { Ok(x) => return Ok(MembershipAccess::Member(x)), Err(e) => errs.push(e.to_string()) }
+            return Err(D::Error::custom(format!("MembershipAccess {}: {}", tag, errs.join("; "))));
+        }
+        if tag == serde_json::json!("guest") {
+            let mut errs: Vec<String> = Vec::new();
+            match serde_json::from_value::<GuestMembershipAccess>(v.clone()) { Ok(x) => return Ok(MembershipAccess::GuestMembershipAccess(x)), Err(e) => errs.push(e.to_string()) }
+            return Err(D::Error::custom(format!("MembershipAccess {}: {}", tag, errs.join("; "))));
+        }
+        Ok(MembershipAccess::Unknown(v))
+    }
+}
+
+impl Serialize for MembershipAccess {
+    fn serialize<S: serde::Serializer>(&self, s: S) -> Result<S::Ok, S::Error> {
+        use serde::ser::Error;
+        let (mut v, tag) = match self {
+            MembershipAccess::Member(x) => (serde_json::to_value(x).map_err(S::Error::custom)?, serde_json::json!("member")),
+            MembershipAccess::GuestMembershipAccess(x) => (serde_json::to_value(x).map_err(S::Error::custom)?, serde_json::json!("guest")),
+            MembershipAccess::Unknown(v) => return v.serialize(s),
+        };
+        if let Value::Object(m) = &mut v {
+            m.insert("kind".to_string(), tag);
+        }
+        v.serialize(s)
+    }
+}
+
 pub type MembershipList = Vec<Membership>;
+
+#[derive(Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
+pub enum MessagePriority2 {
+    /// `important`
+    Important,
+    /// `urgent`
+    Urgent,
+    /// A value this build does not know (the server may add values).
+    Unknown(String),
+}
+
+impl MessagePriority2 {
+    pub const ALL: &'static [MessagePriority2] = &[MessagePriority2::Important, MessagePriority2::Urgent];
+    pub fn as_str(&self) -> &str {
+        match self {
+            MessagePriority2::Important => "important",
+            MessagePriority2::Urgent => "urgent",
+            MessagePriority2::Unknown(s) => s,
+        }
+    }
+    pub fn parse(s: &str) -> Self {
+        match s {
+            "important" => MessagePriority2::Important,
+            "urgent" => MessagePriority2::Urgent,
+            other => MessagePriority2::Unknown(other.to_string()),
+        }
+    }
+}
+
+impl std::fmt::Display for MessagePriority2 {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result { f.write_str(self.as_str()) }
+}
+
+impl Serialize for MessagePriority2 {
+    fn serialize<S: serde::Serializer>(&self, s: S) -> Result<S::Ok, S::Error> { s.serialize_str(self.as_str()) }
+}
+
+impl<'de> Deserialize<'de> for MessagePriority2 {
+    fn deserialize<D: serde::Deserializer<'de>>(d: D) -> Result<Self, D::Error> {
+        let s = std::borrow::Cow::<'de, str>::deserialize(d)?;
+        Ok(MessagePriority2::parse(&s))
+    }
+}
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Default)]
 pub struct Message {
     pub id: Uuid,
     #[serde(rename = "channelId")]
     pub channel_id: Uuid,
+    #[serde(rename = "historyHidden", default, skip_serializing_if = "Option::is_none")]
+    pub history_hidden: Option<bool>,
+    #[serde(rename = "replyAllowed", default, skip_serializing_if = "Option::is_none")]
+    pub reply_allowed: Option<bool>,
     #[serde(default)]
     pub sender: Option<User>,
     #[serde(rename = "githubEvent", default)]
@@ -5359,6 +6591,8 @@ pub struct Message {
     pub reactions: Vec<Reaction>,
     pub mentions: Vec<Uuid>,
     pub attachments: Vec<Attachment>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub priority: Option<MessagePriority2>,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -5401,6 +6635,53 @@ pub struct MessagePage {
     pub data: Vec<Message>,
     #[serde(rename = "nextCursor", default)]
     pub next_cursor: Option<Uuid>,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
+pub enum MessagePriority {
+    /// `normal`
+    Normal,
+    /// `important`
+    Important,
+    /// `urgent`
+    Urgent,
+    /// A value this build does not know (the server may add values).
+    Unknown(String),
+}
+
+impl MessagePriority {
+    pub const ALL: &'static [MessagePriority] = &[MessagePriority::Normal, MessagePriority::Important, MessagePriority::Urgent];
+    pub fn as_str(&self) -> &str {
+        match self {
+            MessagePriority::Normal => "normal",
+            MessagePriority::Important => "important",
+            MessagePriority::Urgent => "urgent",
+            MessagePriority::Unknown(s) => s,
+        }
+    }
+    pub fn parse(s: &str) -> Self {
+        match s {
+            "normal" => MessagePriority::Normal,
+            "important" => MessagePriority::Important,
+            "urgent" => MessagePriority::Urgent,
+            other => MessagePriority::Unknown(other.to_string()),
+        }
+    }
+}
+
+impl std::fmt::Display for MessagePriority {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result { f.write_str(self.as_str()) }
+}
+
+impl Serialize for MessagePriority {
+    fn serialize<S: serde::Serializer>(&self, s: S) -> Result<S::Ok, S::Error> { s.serialize_str(self.as_str()) }
+}
+
+impl<'de> Deserialize<'de> for MessagePriority {
+    fn deserialize<D: serde::Deserializer<'de>>(d: D) -> Result<Self, D::Error> {
+        let s = std::borrow::Cow::<'de, str>::deserialize(d)?;
+        Ok(MessagePriority::parse(&s))
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -5446,6 +6727,53 @@ pub struct MessageSendFrame {
     pub payload: MessageSendFramePayload,
 }
 
+#[derive(Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
+pub enum MessageSendFramePayloadPriority {
+    /// `normal`
+    Normal,
+    /// `important`
+    Important,
+    /// `urgent`
+    Urgent,
+    /// A value this build does not know (the server may add values).
+    Unknown(String),
+}
+
+impl MessageSendFramePayloadPriority {
+    pub const ALL: &'static [MessageSendFramePayloadPriority] = &[MessageSendFramePayloadPriority::Normal, MessageSendFramePayloadPriority::Important, MessageSendFramePayloadPriority::Urgent];
+    pub fn as_str(&self) -> &str {
+        match self {
+            MessageSendFramePayloadPriority::Normal => "normal",
+            MessageSendFramePayloadPriority::Important => "important",
+            MessageSendFramePayloadPriority::Urgent => "urgent",
+            MessageSendFramePayloadPriority::Unknown(s) => s,
+        }
+    }
+    pub fn parse(s: &str) -> Self {
+        match s {
+            "normal" => MessageSendFramePayloadPriority::Normal,
+            "important" => MessageSendFramePayloadPriority::Important,
+            "urgent" => MessageSendFramePayloadPriority::Urgent,
+            other => MessageSendFramePayloadPriority::Unknown(other.to_string()),
+        }
+    }
+}
+
+impl std::fmt::Display for MessageSendFramePayloadPriority {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result { f.write_str(self.as_str()) }
+}
+
+impl Serialize for MessageSendFramePayloadPriority {
+    fn serialize<S: serde::Serializer>(&self, s: S) -> Result<S::Ok, S::Error> { s.serialize_str(self.as_str()) }
+}
+
+impl<'de> Deserialize<'de> for MessageSendFramePayloadPriority {
+    fn deserialize<D: serde::Deserializer<'de>>(d: D) -> Result<Self, D::Error> {
+        let s = std::borrow::Cow::<'de, str>::deserialize(d)?;
+        Ok(MessageSendFramePayloadPriority::parse(&s))
+    }
+}
+
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MessageSendFramePayload {
     #[serde(rename = "channelId")]
@@ -5455,6 +6783,8 @@ pub struct MessageSendFramePayload {
     pub parent_id: Option<Uuid>,
     #[serde(rename = "attachmentIds", default, skip_serializing_if = "Option::is_none")]
     pub attachment_ids: Option<Vec<Uuid>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub priority: Option<MessageSendFramePayloadPriority>,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Default)]
@@ -5827,6 +7157,33 @@ impl<'de> Deserialize<'de> for OpenIncidentStatus {
     }
 }
 
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Default)]
+pub struct OutgoingWebhook {
+    pub id: Uuid,
+    #[serde(rename = "channelId")]
+    pub channel_id: Uuid,
+    pub name: String,
+    pub url: String,
+    pub events: Vec<WebhookEventType>,
+    pub paused: bool,
+    #[serde(rename = "createdAt")]
+    pub created_at: Timestamp,
+}
+
+pub type OutgoingWebhookList = Vec<OutgoingWebhook>;
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct OutgoingWebhookRequest {
+    pub name: IncomingWebhookName,
+    pub url: String,
+    pub events: Vec<WebhookEventType>,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Default)]
+pub struct OutgoingWebhookUpdate {
+    pub paused: bool,
+}
+
 #[derive(Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum OwnAdmissionState {
     /// `approved`
@@ -6003,6 +7360,10 @@ pub struct Profile {
     pub time_zone: Option<String>,
     #[serde(default)]
     pub status: Option<String>,
+    #[serde(rename = "statusEmoji", default, skip_serializing_if = "Option::is_none", with = "crate::double_option")]
+    pub status_emoji: Option<Option<StatusEmoji>>,
+    #[serde(rename = "statusUntil", default, skip_serializing_if = "Option::is_none", with = "crate::double_option")]
+    pub status_until: Option<Option<Timestamp>>,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Default)]
@@ -6902,6 +8263,53 @@ pub struct SearchQuery {
 
 pub type SendContent = String;
 
+#[derive(Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
+pub enum SendMessageRequestPriority {
+    /// `normal`
+    Normal,
+    /// `important`
+    Important,
+    /// `urgent`
+    Urgent,
+    /// A value this build does not know (the server may add values).
+    Unknown(String),
+}
+
+impl SendMessageRequestPriority {
+    pub const ALL: &'static [SendMessageRequestPriority] = &[SendMessageRequestPriority::Normal, SendMessageRequestPriority::Important, SendMessageRequestPriority::Urgent];
+    pub fn as_str(&self) -> &str {
+        match self {
+            SendMessageRequestPriority::Normal => "normal",
+            SendMessageRequestPriority::Important => "important",
+            SendMessageRequestPriority::Urgent => "urgent",
+            SendMessageRequestPriority::Unknown(s) => s,
+        }
+    }
+    pub fn parse(s: &str) -> Self {
+        match s {
+            "normal" => SendMessageRequestPriority::Normal,
+            "important" => SendMessageRequestPriority::Important,
+            "urgent" => SendMessageRequestPriority::Urgent,
+            other => SendMessageRequestPriority::Unknown(other.to_string()),
+        }
+    }
+}
+
+impl std::fmt::Display for SendMessageRequestPriority {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result { f.write_str(self.as_str()) }
+}
+
+impl Serialize for SendMessageRequestPriority {
+    fn serialize<S: serde::Serializer>(&self, s: S) -> Result<S::Ok, S::Error> { s.serialize_str(self.as_str()) }
+}
+
+impl<'de> Deserialize<'de> for SendMessageRequestPriority {
+    fn deserialize<D: serde::Deserializer<'de>>(d: D) -> Result<Self, D::Error> {
+        let s = std::borrow::Cow::<'de, str>::deserialize(d)?;
+        Ok(SendMessageRequestPriority::parse(&s))
+    }
+}
+
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SendMessageRequest {
     pub id: Uuid,
@@ -6910,6 +8318,8 @@ pub struct SendMessageRequest {
     pub attachment_ids: Option<Vec<Uuid>>,
     #[serde(rename = "parentId", default, skip_serializing_if = "Option::is_none")]
     pub parent_id: Option<Uuid>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub priority: Option<SendMessageRequestPriority>,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Default)]
@@ -8340,6 +9750,10 @@ pub struct ServerModuleStatus {
     pub suspended_at: Option<Timestamp>,
     #[serde(rename = "suspendedBy", default)]
     pub suspended_by: Option<Uuid>,
+    #[serde(rename = "stopsWith")]
+    pub stops_with: Vec<String>,
+    #[serde(rename = "stopNeedsForce")]
+    pub stop_needs_force: bool,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -9349,6 +10763,8 @@ pub struct SetMissedMailRequest {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetNotificationLevelRequest {
     pub level: NotificationLevel,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub until: Option<Timestamp>,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Default)]
@@ -9561,6 +10977,393 @@ pub struct SetupVerifyRequest {
     pub token: String,
 }
 
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct SharedFileItem {
+    #[serde(rename = "messageId")]
+    pub message_id: Uuid,
+    #[serde(rename = "parentId", default)]
+    pub parent_id: Option<Uuid>,
+    #[serde(rename = "channelId")]
+    pub channel_id: Uuid,
+    #[serde(default)]
+    pub sender: Option<User>,
+    #[serde(rename = "sourceName", default)]
+    pub source_name: Option<IncomingWebhookName>,
+    #[serde(rename = "sentAt")]
+    pub sent_at: Timestamp,
+    pub attachment: Attachment,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
+pub enum SharedFileType {
+    /// `image`
+    Image,
+    /// `pdf`
+    Pdf,
+    /// `video`
+    Video,
+    /// `audio`
+    Audio,
+    /// `other`
+    Other,
+    /// A value this build does not know (the server may add values).
+    Unknown(String),
+}
+
+impl SharedFileType {
+    pub const ALL: &'static [SharedFileType] = &[SharedFileType::Image, SharedFileType::Pdf, SharedFileType::Video, SharedFileType::Audio, SharedFileType::Other];
+    pub fn as_str(&self) -> &str {
+        match self {
+            SharedFileType::Image => "image",
+            SharedFileType::Pdf => "pdf",
+            SharedFileType::Video => "video",
+            SharedFileType::Audio => "audio",
+            SharedFileType::Other => "other",
+            SharedFileType::Unknown(s) => s,
+        }
+    }
+    pub fn parse(s: &str) -> Self {
+        match s {
+            "image" => SharedFileType::Image,
+            "pdf" => SharedFileType::Pdf,
+            "video" => SharedFileType::Video,
+            "audio" => SharedFileType::Audio,
+            "other" => SharedFileType::Other,
+            other => SharedFileType::Unknown(other.to_string()),
+        }
+    }
+}
+
+impl std::fmt::Display for SharedFileType {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result { f.write_str(self.as_str()) }
+}
+
+impl Serialize for SharedFileType {
+    fn serialize<S: serde::Serializer>(&self, s: S) -> Result<S::Ok, S::Error> { s.serialize_str(self.as_str()) }
+}
+
+impl<'de> Deserialize<'de> for SharedFileType {
+    fn deserialize<D: serde::Deserializer<'de>>(d: D) -> Result<Self, D::Error> {
+        let s = std::borrow::Cow::<'de, str>::deserialize(d)?;
+        Ok(SharedFileType::parse(&s))
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
+pub enum SharedFiltersView {
+    /// `files`
+    Files,
+    /// `links`
+    Links,
+    /// A value this build does not know (the server may add values).
+    Unknown(String),
+}
+
+impl SharedFiltersView {
+    pub const ALL: &'static [SharedFiltersView] = &[SharedFiltersView::Files, SharedFiltersView::Links];
+    pub fn as_str(&self) -> &str {
+        match self {
+            SharedFiltersView::Files => "files",
+            SharedFiltersView::Links => "links",
+            SharedFiltersView::Unknown(s) => s,
+        }
+    }
+    pub fn parse(s: &str) -> Self {
+        match s {
+            "files" => SharedFiltersView::Files,
+            "links" => SharedFiltersView::Links,
+            other => SharedFiltersView::Unknown(other.to_string()),
+        }
+    }
+}
+
+impl std::fmt::Display for SharedFiltersView {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result { f.write_str(self.as_str()) }
+}
+
+impl Serialize for SharedFiltersView {
+    fn serialize<S: serde::Serializer>(&self, s: S) -> Result<S::Ok, S::Error> { s.serialize_str(self.as_str()) }
+}
+
+impl<'de> Deserialize<'de> for SharedFiltersView {
+    fn deserialize<D: serde::Deserializer<'de>>(d: D) -> Result<Self, D::Error> {
+        let s = std::borrow::Cow::<'de, str>::deserialize(d)?;
+        Ok(SharedFiltersView::parse(&s))
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
+pub enum SharedFiltersType {
+    /// `image`
+    Image,
+    /// `pdf`
+    Pdf,
+    /// `video`
+    Video,
+    /// `audio`
+    Audio,
+    /// `other`
+    Other,
+    /// A value this build does not know (the server may add values).
+    Unknown(String),
+}
+
+impl SharedFiltersType {
+    pub const ALL: &'static [SharedFiltersType] = &[SharedFiltersType::Image, SharedFiltersType::Pdf, SharedFiltersType::Video, SharedFiltersType::Audio, SharedFiltersType::Other];
+    pub fn as_str(&self) -> &str {
+        match self {
+            SharedFiltersType::Image => "image",
+            SharedFiltersType::Pdf => "pdf",
+            SharedFiltersType::Video => "video",
+            SharedFiltersType::Audio => "audio",
+            SharedFiltersType::Other => "other",
+            SharedFiltersType::Unknown(s) => s,
+        }
+    }
+    pub fn parse(s: &str) -> Self {
+        match s {
+            "image" => SharedFiltersType::Image,
+            "pdf" => SharedFiltersType::Pdf,
+            "video" => SharedFiltersType::Video,
+            "audio" => SharedFiltersType::Audio,
+            "other" => SharedFiltersType::Other,
+            other => SharedFiltersType::Unknown(other.to_string()),
+        }
+    }
+}
+
+impl std::fmt::Display for SharedFiltersType {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result { f.write_str(self.as_str()) }
+}
+
+impl Serialize for SharedFiltersType {
+    fn serialize<S: serde::Serializer>(&self, s: S) -> Result<S::Ok, S::Error> { s.serialize_str(self.as_str()) }
+}
+
+impl<'de> Deserialize<'de> for SharedFiltersType {
+    fn deserialize<D: serde::Deserializer<'de>>(d: D) -> Result<Self, D::Error> {
+        let s = std::borrow::Cow::<'de, str>::deserialize(d)?;
+        Ok(SharedFiltersType::parse(&s))
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct SharedFilters {
+    pub view: SharedFiltersView,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub q: Option<String>,
+    #[serde(rename = "channelId", default, skip_serializing_if = "Option::is_none")]
+    pub channel_id: Option<Uuid>,
+    #[serde(rename = "senderId", default, skip_serializing_if = "Option::is_none")]
+    pub sender_id: Option<Uuid>,
+    #[serde(rename = "type", default, skip_serializing_if = "Option::is_none")]
+    pub r#type: Option<SharedFiltersType>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub since: Option<Timestamp>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub until: Option<Timestamp>,
+}
+
+/// Tagged by `kind`.
+#[derive(Debug, Clone, PartialEq)]
+pub enum SharedItem {
+    /// `kind: "file"`
+    SharedFileItem(SharedFileItem),
+    /// `kind: "link"`
+    SharedLinkItem(SharedLinkItem),
+    /// A member this build does not know; kept whole.
+    Unknown(Value),
+}
+
+impl SharedItem {
+    pub const TAG: &'static str = "kind";
+}
+
+impl<'de> Deserialize<'de> for SharedItem {
+    fn deserialize<D: serde::Deserializer<'de>>(d: D) -> Result<Self, D::Error> {
+        use serde::de::Error;
+        let v = Value::deserialize(d)?;
+        let tag = v.get("kind").cloned().unwrap_or(Value::Null);
+        if tag == serde_json::json!("file") {
+            let mut errs: Vec<String> = Vec::new();
+            match serde_json::from_value::<SharedFileItem>(v.clone()) { Ok(x) => return Ok(SharedItem::SharedFileItem(x)), Err(e) => errs.push(e.to_string()) }
+            return Err(D::Error::custom(format!("SharedItem {}: {}", tag, errs.join("; "))));
+        }
+        if tag == serde_json::json!("link") {
+            let mut errs: Vec<String> = Vec::new();
+            match serde_json::from_value::<SharedLinkItem>(v.clone()) { Ok(x) => return Ok(SharedItem::SharedLinkItem(x)), Err(e) => errs.push(e.to_string()) }
+            return Err(D::Error::custom(format!("SharedItem {}: {}", tag, errs.join("; "))));
+        }
+        Ok(SharedItem::Unknown(v))
+    }
+}
+
+impl Serialize for SharedItem {
+    fn serialize<S: serde::Serializer>(&self, s: S) -> Result<S::Ok, S::Error> {
+        use serde::ser::Error;
+        let (mut v, tag) = match self {
+            SharedItem::SharedFileItem(x) => (serde_json::to_value(x).map_err(S::Error::custom)?, serde_json::json!("file")),
+            SharedItem::SharedLinkItem(x) => (serde_json::to_value(x).map_err(S::Error::custom)?, serde_json::json!("link")),
+            SharedItem::Unknown(v) => return v.serialize(s),
+        };
+        if let Value::Object(m) = &mut v {
+            m.insert("kind".to_string(), tag);
+        }
+        v.serialize(s)
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Default)]
+pub struct SharedLink {
+    pub url: String,
+    pub label: String,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct SharedLinkItem {
+    #[serde(rename = "messageId")]
+    pub message_id: Uuid,
+    #[serde(rename = "parentId", default)]
+    pub parent_id: Option<Uuid>,
+    #[serde(rename = "channelId")]
+    pub channel_id: Uuid,
+    #[serde(default)]
+    pub sender: Option<User>,
+    #[serde(rename = "sourceName", default)]
+    pub source_name: Option<IncomingWebhookName>,
+    #[serde(rename = "sentAt")]
+    pub sent_at: Timestamp,
+    pub key: String,
+    pub link: SharedLink,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Default)]
+pub struct SharedPage {
+    pub data: Vec<SharedItem>,
+    #[serde(rename = "nextCursor", default)]
+    pub next_cursor: Option<String>,
+    pub indexing: bool,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
+pub enum SharedQueryView {
+    /// `files`
+    Files,
+    /// `links`
+    Links,
+    /// A value this build does not know (the server may add values).
+    Unknown(String),
+}
+
+impl SharedQueryView {
+    pub const ALL: &'static [SharedQueryView] = &[SharedQueryView::Files, SharedQueryView::Links];
+    pub fn as_str(&self) -> &str {
+        match self {
+            SharedQueryView::Files => "files",
+            SharedQueryView::Links => "links",
+            SharedQueryView::Unknown(s) => s,
+        }
+    }
+    pub fn parse(s: &str) -> Self {
+        match s {
+            "files" => SharedQueryView::Files,
+            "links" => SharedQueryView::Links,
+            other => SharedQueryView::Unknown(other.to_string()),
+        }
+    }
+}
+
+impl std::fmt::Display for SharedQueryView {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result { f.write_str(self.as_str()) }
+}
+
+impl Serialize for SharedQueryView {
+    fn serialize<S: serde::Serializer>(&self, s: S) -> Result<S::Ok, S::Error> { s.serialize_str(self.as_str()) }
+}
+
+impl<'de> Deserialize<'de> for SharedQueryView {
+    fn deserialize<D: serde::Deserializer<'de>>(d: D) -> Result<Self, D::Error> {
+        let s = std::borrow::Cow::<'de, str>::deserialize(d)?;
+        Ok(SharedQueryView::parse(&s))
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
+pub enum SharedQueryType {
+    /// `image`
+    Image,
+    /// `pdf`
+    Pdf,
+    /// `video`
+    Video,
+    /// `audio`
+    Audio,
+    /// `other`
+    Other,
+    /// A value this build does not know (the server may add values).
+    Unknown(String),
+}
+
+impl SharedQueryType {
+    pub const ALL: &'static [SharedQueryType] = &[SharedQueryType::Image, SharedQueryType::Pdf, SharedQueryType::Video, SharedQueryType::Audio, SharedQueryType::Other];
+    pub fn as_str(&self) -> &str {
+        match self {
+            SharedQueryType::Image => "image",
+            SharedQueryType::Pdf => "pdf",
+            SharedQueryType::Video => "video",
+            SharedQueryType::Audio => "audio",
+            SharedQueryType::Other => "other",
+            SharedQueryType::Unknown(s) => s,
+        }
+    }
+    pub fn parse(s: &str) -> Self {
+        match s {
+            "image" => SharedQueryType::Image,
+            "pdf" => SharedQueryType::Pdf,
+            "video" => SharedQueryType::Video,
+            "audio" => SharedQueryType::Audio,
+            "other" => SharedQueryType::Other,
+            other => SharedQueryType::Unknown(other.to_string()),
+        }
+    }
+}
+
+impl std::fmt::Display for SharedQueryType {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result { f.write_str(self.as_str()) }
+}
+
+impl Serialize for SharedQueryType {
+    fn serialize<S: serde::Serializer>(&self, s: S) -> Result<S::Ok, S::Error> { s.serialize_str(self.as_str()) }
+}
+
+impl<'de> Deserialize<'de> for SharedQueryType {
+    fn deserialize<D: serde::Deserializer<'de>>(d: D) -> Result<Self, D::Error> {
+        let s = std::borrow::Cow::<'de, str>::deserialize(d)?;
+        Ok(SharedQueryType::parse(&s))
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct SharedQuery {
+    pub view: SharedQueryView,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub q: Option<String>,
+    #[serde(rename = "channelId", default, skip_serializing_if = "Option::is_none")]
+    pub channel_id: Option<Uuid>,
+    #[serde(rename = "senderId", default, skip_serializing_if = "Option::is_none")]
+    pub sender_id: Option<Uuid>,
+    #[serde(rename = "type", default, skip_serializing_if = "Option::is_none")]
+    pub r#type: Option<SharedQueryType>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub since: Option<Timestamp>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub until: Option<Timestamp>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub before: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+}
+
 #[derive(Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum SignInFailure {
     /// `cancelled`
@@ -9739,6 +11542,8 @@ pub struct SkippedSource {
     pub source: String,
     pub reason: SkippedSourceReason,
 }
+
+pub type StatusEmoji = String;
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Default)]
 pub struct StopMissedMailRequest {
@@ -10049,6 +11854,14 @@ pub struct UpdateChannelRequest {
     pub only_admins_post: Option<bool>,
 }
 
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Default)]
+pub struct UpdateGuestAccessRequest {
+    #[serde(rename = "channelIds", default, skip_serializing_if = "Option::is_none")]
+    pub channel_ids: Option<Vec<Uuid>>,
+    #[serde(rename = "accessExpiresAt", default, skip_serializing_if = "Option::is_none", with = "crate::double_option")]
+    pub access_expires_at: Option<Option<Timestamp>>,
+}
+
 #[derive(Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum UpdateIssueRequestStatus {
     /// `open`
@@ -10119,11 +11932,26 @@ pub struct UpdateProfileRequest {
     pub time_zone: Option<Option<String>>,
     #[serde(default, skip_serializing_if = "Option::is_none", with = "crate::double_option")]
     pub status: Option<Option<String>>,
+    #[serde(rename = "statusEmoji", default, skip_serializing_if = "Option::is_none", with = "crate::double_option")]
+    pub status_emoji: Option<Option<StatusEmoji>>,
+    #[serde(rename = "statusUntil", default, skip_serializing_if = "Option::is_none", with = "crate::double_option")]
+    pub status_until: Option<Option<Timestamp>>,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Default)]
 pub struct UpdateWorkspaceRequest {
     pub name: String,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct UpdatedGuestAccess {
+    #[serde(rename = "joinedAt")]
+    pub joined_at: Timestamp,
+    pub access: GuestMembershipAccess,
+    #[serde(rename = "channelIds")]
+    pub channel_ids: Vec<Uuid>,
+    #[serde(rename = "hiddenChannelCount")]
+    pub hidden_channel_count: i64,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Default)]
@@ -10267,12 +12095,339 @@ pub struct WebhookAnswer {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Default)]
+pub struct WebhookAttempt {
+    pub id: Uuid,
+    #[serde(rename = "attemptedAt")]
+    pub attempted_at: Timestamp,
+    #[serde(rename = "durationMs")]
+    pub duration_ms: i64,
+    #[serde(default)]
+    pub status: Option<i64>,
+    #[serde(default)]
+    pub error: Option<String>,
+}
+
+pub type WebhookAttemptList = Vec<WebhookAttempt>;
+
+#[derive(Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
+pub enum WebhookDeliveryState {
+    /// `pending`
+    Pending,
+    /// `sending`
+    Sending,
+    /// `succeeded`
+    Succeeded,
+    /// `failed`
+    Failed,
+    /// `cancelled`
+    Cancelled,
+    /// A value this build does not know (the server may add values).
+    Unknown(String),
+}
+
+impl WebhookDeliveryState {
+    pub const ALL: &'static [WebhookDeliveryState] = &[WebhookDeliveryState::Pending, WebhookDeliveryState::Sending, WebhookDeliveryState::Succeeded, WebhookDeliveryState::Failed, WebhookDeliveryState::Cancelled];
+    pub fn as_str(&self) -> &str {
+        match self {
+            WebhookDeliveryState::Pending => "pending",
+            WebhookDeliveryState::Sending => "sending",
+            WebhookDeliveryState::Succeeded => "succeeded",
+            WebhookDeliveryState::Failed => "failed",
+            WebhookDeliveryState::Cancelled => "cancelled",
+            WebhookDeliveryState::Unknown(s) => s,
+        }
+    }
+    pub fn parse(s: &str) -> Self {
+        match s {
+            "pending" => WebhookDeliveryState::Pending,
+            "sending" => WebhookDeliveryState::Sending,
+            "succeeded" => WebhookDeliveryState::Succeeded,
+            "failed" => WebhookDeliveryState::Failed,
+            "cancelled" => WebhookDeliveryState::Cancelled,
+            other => WebhookDeliveryState::Unknown(other.to_string()),
+        }
+    }
+}
+
+impl std::fmt::Display for WebhookDeliveryState {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result { f.write_str(self.as_str()) }
+}
+
+impl Serialize for WebhookDeliveryState {
+    fn serialize<S: serde::Serializer>(&self, s: S) -> Result<S::Ok, S::Error> { s.serialize_str(self.as_str()) }
+}
+
+impl<'de> Deserialize<'de> for WebhookDeliveryState {
+    fn deserialize<D: serde::Deserializer<'de>>(d: D) -> Result<Self, D::Error> {
+        let s = std::borrow::Cow::<'de, str>::deserialize(d)?;
+        Ok(WebhookDeliveryState::parse(&s))
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct WebhookDelivery {
+    pub id: Uuid,
+    #[serde(rename = "eventId")]
+    pub event_id: Uuid,
+    #[serde(rename = "eventType")]
+    pub event_type: String,
+    pub state: WebhookDeliveryState,
+    #[serde(rename = "attemptCount")]
+    pub attempt_count: i64,
+    #[serde(rename = "createdAt")]
+    pub created_at: Timestamp,
+    #[serde(rename = "nextAttemptAt")]
+    pub next_attempt_at: Timestamp,
+    #[serde(rename = "lastStatus", default)]
+    pub last_status: Option<i64>,
+    #[serde(rename = "lastError", default)]
+    pub last_error: Option<String>,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Default)]
+pub struct WebhookDeliveryPage {
+    pub data: Vec<WebhookDelivery>,
+    #[serde(rename = "nextCursor", default)]
+    pub next_cursor: Option<Uuid>,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Default)]
+pub struct WebhookDeliveryQuery {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub before: Option<Uuid>,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
+pub enum WebhookEventType {
+    /// `message.created`
+    MessageCreated,
+    /// `thread.resolved`
+    ThreadResolved,
+    /// `thread.reopened`
+    ThreadReopened,
+    /// A value this build does not know (the server may add values).
+    Unknown(String),
+}
+
+impl WebhookEventType {
+    pub const ALL: &'static [WebhookEventType] = &[WebhookEventType::MessageCreated, WebhookEventType::ThreadResolved, WebhookEventType::ThreadReopened];
+    pub fn as_str(&self) -> &str {
+        match self {
+            WebhookEventType::MessageCreated => "message.created",
+            WebhookEventType::ThreadResolved => "thread.resolved",
+            WebhookEventType::ThreadReopened => "thread.reopened",
+            WebhookEventType::Unknown(s) => s,
+        }
+    }
+    pub fn parse(s: &str) -> Self {
+        match s {
+            "message.created" => WebhookEventType::MessageCreated,
+            "thread.resolved" => WebhookEventType::ThreadResolved,
+            "thread.reopened" => WebhookEventType::ThreadReopened,
+            other => WebhookEventType::Unknown(other.to_string()),
+        }
+    }
+}
+
+impl std::fmt::Display for WebhookEventType {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result { f.write_str(self.as_str()) }
+}
+
+impl Serialize for WebhookEventType {
+    fn serialize<S: serde::Serializer>(&self, s: S) -> Result<S::Ok, S::Error> { s.serialize_str(self.as_str()) }
+}
+
+impl<'de> Deserialize<'de> for WebhookEventType {
+    fn deserialize<D: serde::Deserializer<'de>>(d: D) -> Result<Self, D::Error> {
+        let s = std::borrow::Cow::<'de, str>::deserialize(d)?;
+        Ok(WebhookEventType::parse(&s))
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
+pub enum WebhookPayloadType {
+    /// `message.created`
+    MessageCreated,
+    /// `thread.resolved`
+    ThreadResolved,
+    /// `thread.reopened`
+    ThreadReopened,
+    /// `webhook.test`
+    WebhookTest,
+    /// A value this build does not know (the server may add values).
+    Unknown(String),
+}
+
+impl WebhookPayloadType {
+    pub const ALL: &'static [WebhookPayloadType] = &[WebhookPayloadType::MessageCreated, WebhookPayloadType::ThreadResolved, WebhookPayloadType::ThreadReopened, WebhookPayloadType::WebhookTest];
+    pub fn as_str(&self) -> &str {
+        match self {
+            WebhookPayloadType::MessageCreated => "message.created",
+            WebhookPayloadType::ThreadResolved => "thread.resolved",
+            WebhookPayloadType::ThreadReopened => "thread.reopened",
+            WebhookPayloadType::WebhookTest => "webhook.test",
+            WebhookPayloadType::Unknown(s) => s,
+        }
+    }
+    pub fn parse(s: &str) -> Self {
+        match s {
+            "message.created" => WebhookPayloadType::MessageCreated,
+            "thread.resolved" => WebhookPayloadType::ThreadResolved,
+            "thread.reopened" => WebhookPayloadType::ThreadReopened,
+            "webhook.test" => WebhookPayloadType::WebhookTest,
+            other => WebhookPayloadType::Unknown(other.to_string()),
+        }
+    }
+}
+
+impl std::fmt::Display for WebhookPayloadType {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result { f.write_str(self.as_str()) }
+}
+
+impl Serialize for WebhookPayloadType {
+    fn serialize<S: serde::Serializer>(&self, s: S) -> Result<S::Ok, S::Error> { s.serialize_str(self.as_str()) }
+}
+
+impl<'de> Deserialize<'de> for WebhookPayloadType {
+    fn deserialize<D: serde::Deserializer<'de>>(d: D) -> Result<Self, D::Error> {
+        let s = std::borrow::Cow::<'de, str>::deserialize(d)?;
+        Ok(WebhookPayloadType::parse(&s))
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct WebhookPayload {
+    pub id: Uuid,
+    #[serde(rename = "type")]
+    pub r#type: WebhookPayloadType,
+    pub version: i64,
+    #[serde(rename = "occurredAt")]
+    pub occurred_at: Timestamp,
+    #[serde(rename = "workspaceId")]
+    pub workspace_id: Uuid,
+    #[serde(rename = "channelId")]
+    pub channel_id: Uuid,
+    pub data: WebhookPayloadData,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Default)]
+pub struct WebhookPayloadData {
+    #[serde(rename = "messageId", default)]
+    pub message_id: Option<Uuid>,
+    pub content: String,
+    #[serde(rename = "senderId", default)]
+    pub sender_id: Option<Uuid>,
+    #[serde(rename = "parentId", default)]
+    pub parent_id: Option<Uuid>,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Default)]
 pub struct Workspace {
     pub id: Uuid,
     pub name: String,
     pub slug: String,
     #[serde(rename = "avatarUrl", default)]
     pub avatar_url: Option<String>,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Default)]
+pub struct WorkspaceAccessMember {
+}
+
+/// Tagged by `kind`.
+#[derive(Debug, Clone, PartialEq)]
+pub enum WorkspaceAccess {
+    /// `kind: "member"`
+    Member(WorkspaceAccessMember),
+    /// `kind: "guest"`
+    GuestMembershipAccess(GuestMembershipAccess),
+    /// A member this build does not know; kept whole.
+    Unknown(Value),
+}
+
+impl WorkspaceAccess {
+    pub const TAG: &'static str = "kind";
+}
+
+impl<'de> Deserialize<'de> for WorkspaceAccess {
+    fn deserialize<D: serde::Deserializer<'de>>(d: D) -> Result<Self, D::Error> {
+        use serde::de::Error;
+        let v = Value::deserialize(d)?;
+        let tag = v.get("kind").cloned().unwrap_or(Value::Null);
+        if tag == serde_json::json!("member") {
+            let mut errs: Vec<String> = Vec::new();
+            match serde_json::from_value::<WorkspaceAccessMember>(v.clone()) { Ok(x) => return Ok(WorkspaceAccess::Member(x)), Err(e) => errs.push(e.to_string()) }
+            return Err(D::Error::custom(format!("WorkspaceAccess {}: {}", tag, errs.join("; "))));
+        }
+        if tag == serde_json::json!("guest") {
+            let mut errs: Vec<String> = Vec::new();
+            match serde_json::from_value::<GuestMembershipAccess>(v.clone()) { Ok(x) => return Ok(WorkspaceAccess::GuestMembershipAccess(x)), Err(e) => errs.push(e.to_string()) }
+            return Err(D::Error::custom(format!("WorkspaceAccess {}: {}", tag, errs.join("; "))));
+        }
+        Ok(WorkspaceAccess::Unknown(v))
+    }
+}
+
+impl Serialize for WorkspaceAccess {
+    fn serialize<S: serde::Serializer>(&self, s: S) -> Result<S::Ok, S::Error> {
+        use serde::ser::Error;
+        let (mut v, tag) = match self {
+            WorkspaceAccess::Member(x) => (serde_json::to_value(x).map_err(S::Error::custom)?, serde_json::json!("member")),
+            WorkspaceAccess::GuestMembershipAccess(x) => (serde_json::to_value(x).map_err(S::Error::custom)?, serde_json::json!("guest")),
+            WorkspaceAccess::Unknown(v) => return v.serialize(s),
+        };
+        if let Value::Object(m) = &mut v {
+            m.insert("kind".to_string(), tag);
+        }
+        v.serialize(s)
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
+pub enum WorkspaceAccessAction {
+    /// `members.invite`
+    MembersInvite,
+    /// `members.manage_nonowners`
+    MembersManageNonowners,
+    /// `audit.read`
+    AuditRead,
+    /// A value this build does not know (the server may add values).
+    Unknown(String),
+}
+
+impl WorkspaceAccessAction {
+    pub const ALL: &'static [WorkspaceAccessAction] = &[WorkspaceAccessAction::MembersInvite, WorkspaceAccessAction::MembersManageNonowners, WorkspaceAccessAction::AuditRead];
+    pub fn as_str(&self) -> &str {
+        match self {
+            WorkspaceAccessAction::MembersInvite => "members.invite",
+            WorkspaceAccessAction::MembersManageNonowners => "members.manage_nonowners",
+            WorkspaceAccessAction::AuditRead => "audit.read",
+            WorkspaceAccessAction::Unknown(s) => s,
+        }
+    }
+    pub fn parse(s: &str) -> Self {
+        match s {
+            "members.invite" => WorkspaceAccessAction::MembersInvite,
+            "members.manage_nonowners" => WorkspaceAccessAction::MembersManageNonowners,
+            "audit.read" => WorkspaceAccessAction::AuditRead,
+            other => WorkspaceAccessAction::Unknown(other.to_string()),
+        }
+    }
+}
+
+impl std::fmt::Display for WorkspaceAccessAction {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result { f.write_str(self.as_str()) }
+}
+
+impl Serialize for WorkspaceAccessAction {
+    fn serialize<S: serde::Serializer>(&self, s: S) -> Result<S::Ok, S::Error> { s.serialize_str(self.as_str()) }
+}
+
+impl<'de> Deserialize<'de> for WorkspaceAccessAction {
+    fn deserialize<D: serde::Deserializer<'de>>(d: D) -> Result<Self, D::Error> {
+        let s = std::borrow::Cow::<'de, str>::deserialize(d)?;
+        Ok(WorkspaceAccessAction::parse(&s))
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -10299,12 +12454,86 @@ pub struct WorkspaceExport {
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct WorkspaceGuest {
+    pub user: User,
+    #[serde(rename = "joinedAt")]
+    pub joined_at: Timestamp,
+    pub access: GuestMembershipAccess,
+    #[serde(rename = "channelIds")]
+    pub channel_ids: Vec<Uuid>,
+    #[serde(rename = "hiddenChannelCount")]
+    pub hidden_channel_count: i64,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Default)]
+pub struct WorkspaceGuestPage {
+    pub data: Vec<WorkspaceGuest>,
+    #[serde(rename = "nextCursor", default)]
+    pub next_cursor: Option<Uuid>,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Default)]
+pub struct WorkspaceGuestQuery {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub before: Option<Uuid>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub q: Option<String>,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
+pub enum WorkspaceMemberAccessKind {
+    /// `member`
+    Member,
+    /// `guest`
+    Guest,
+    /// A value this build does not know (the server may add values).
+    Unknown(String),
+}
+
+impl WorkspaceMemberAccessKind {
+    pub const ALL: &'static [WorkspaceMemberAccessKind] = &[WorkspaceMemberAccessKind::Member, WorkspaceMemberAccessKind::Guest];
+    pub fn as_str(&self) -> &str {
+        match self {
+            WorkspaceMemberAccessKind::Member => "member",
+            WorkspaceMemberAccessKind::Guest => "guest",
+            WorkspaceMemberAccessKind::Unknown(s) => s,
+        }
+    }
+    pub fn parse(s: &str) -> Self {
+        match s {
+            "member" => WorkspaceMemberAccessKind::Member,
+            "guest" => WorkspaceMemberAccessKind::Guest,
+            other => WorkspaceMemberAccessKind::Unknown(other.to_string()),
+        }
+    }
+}
+
+impl std::fmt::Display for WorkspaceMemberAccessKind {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result { f.write_str(self.as_str()) }
+}
+
+impl Serialize for WorkspaceMemberAccessKind {
+    fn serialize<S: serde::Serializer>(&self, s: S) -> Result<S::Ok, S::Error> { s.serialize_str(self.as_str()) }
+}
+
+impl<'de> Deserialize<'de> for WorkspaceMemberAccessKind {
+    fn deserialize<D: serde::Deserializer<'de>>(d: D) -> Result<Self, D::Error> {
+        let s = std::borrow::Cow::<'de, str>::deserialize(d)?;
+        Ok(WorkspaceMemberAccessKind::parse(&s))
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct WorkspaceMember {
     pub user: User,
     pub role: UserRole,
     #[serde(rename = "joinedAt")]
     pub joined_at: Timestamp,
     pub profile: Profile,
+    #[serde(rename = "accessKind", default, skip_serializing_if = "Option::is_none")]
+    pub access_kind: Option<WorkspaceMemberAccessKind>,
 }
 
 pub type WorkspaceMemberList = Vec<WorkspaceMember>;
@@ -10321,5 +12550,7 @@ pub struct WorkspaceUpdatedFrame {
 pub struct WorkspaceUpdatedFrameData {
     #[serde(rename = "workspaceId")]
     pub workspace_id: Uuid,
+    #[serde(rename = "accessChanged", default, skip_serializing_if = "Option::is_none")]
+    pub access_changed: Option<bool>,
 }
 
