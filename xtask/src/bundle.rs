@@ -117,7 +117,7 @@ pub fn fetch(root: &Path, tag: Option<&str>) -> Result<()> {
     std::fs::create_dir_all(&download)?;
     let pattern = format!("purlay-contract-{tag}.tar.gz*");
     let status = Command::new("gh")
-        .args(["release", "download", &tag, "--repo", "doancan/purlay", "--clobber", "-p", &pattern, "-D"])
+        .args(["release", "download", &tag, "--repo", "purlay/purlay", "--clobber", "-p", &pattern, "-D"])
         .arg(&download)
         .status()
         .context("run gh (GitHub CLI)")?;
