@@ -38,6 +38,46 @@ impl MsgCtx {
     }
 }
 
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub(crate) enum Priority {
+    Important,
+    Urgent,
+}
+
+impl Priority {
+    pub(crate) fn label(self) -> &'static str {
+        t(match self {
+            Self::Important => "msg.priority.important",
+            Self::Urgent => "msg.priority.urgent",
+        })
+    }
+}
+
+pub(crate) fn visible_priority(message: &Message) -> Option<Priority> {
+    if message.deleted_at.is_some() || message.history_hidden == Some(true) || message.hidden_for_me == Some(true) {
+        return None;
+    }
+    match message.priority.as_ref()? {
+        MessagePriority2::Important => Some(Priority::Important),
+        MessagePriority2::Urgent => Some(Priority::Urgent),
+        MessagePriority2::Unknown(_) => None,
+    }
+}
+
+pub(crate) fn priority_badge(priority: Priority, cx: &App) -> Div {
+    let k = c(cx);
+    let (background, foreground) = match priority {
+        Priority::Important => (k.warning_subtle, k.warning_text),
+        Priority::Urgent => (k.danger_subtle, k.danger_text),
+    };
+    div()
+        .flex_none()
+        .px(px(6.))
+        .rounded_full()
+        .bg(background)
+        .child(caption(priority.label(), cx).text_color(foreground).font_weight(FontWeight::SEMIBOLD))
+}
+
 fn sender_name(m: &Message) -> String {
     if let Some(s) = &m.sender {
         return s.display_name.clone();
@@ -93,6 +133,9 @@ pub fn message_row(m: &Message, ctx: &MsgCtx, compact: bool, highlight: bool, cx
     if deleted {
         content = content.child(muted(t("msg.deleted"), cx).italic());
     } else {
+        if let Some(priority) = visible_priority(m) {
+            content = content.child(h_flex().child(priority_badge(priority, cx)));
+        }
         content = content.child(
             div()
                 .text_color(k.ink)
@@ -564,6 +607,31 @@ fn collect_links(blocks: &[purlay_core::markdown::Block], out: &mut Vec<String>)
                 }
             }
             _ => {}
+        }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::{visible_priority, Message, MessagePriority2, Priority, Timestamp};
+
+    #[test]
+    fn marks_only_known_priorities_on_visible_messages() {
+        let mut message = Message::default();
+        assert_eq!(visible_priority(&message), None);
+        message.priority = Some(MessagePriority2::Unknown("future".into()));
+        assert_eq!(visible_priority(&message), None);
+        message.priority = Some(MessagePriority2::Important);
+        assert_eq!(visible_priority(&message), Some(Priority::Important));
+        message.priority = Some(MessagePriority2::Urgent);
+        assert_eq!(visible_priority(&message), Some(Priority::Urgent));
+
+        for unavailable in [
+            Message { deleted_at: Some(Timestamp::default()), ..message.clone() },
+            Message { history_hidden: Some(true), ..message.clone() },
+            Message { hidden_for_me: Some(true), ..message.clone() },
+        ] {
+            assert_eq!(visible_priority(&unavailable), None);
         }
     }
 }
